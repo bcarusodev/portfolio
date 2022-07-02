@@ -4,10 +4,6 @@ export const NAV_ITEMS: Array<NavItem> = [
     href: "#",
   },
   {
-    label: "Inspiration",
-    href: "#",
-  },
-  {
     label: "Projects",
     children: [
       {
