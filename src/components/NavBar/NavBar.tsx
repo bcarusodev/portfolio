@@ -23,7 +23,6 @@ import {
 } from "@chakra-ui/icons";
 import { DarkModeSwitch } from "../DarkModeSwitch";
 import { NAV_ITEMS } from "../../../data/NavItems";
-import { useEffect } from "react";
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
@@ -174,6 +173,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
 };
 
 export default function NavBar() {
+  // TODO: change bcaruso fontsize & check responsiveness
   const { isOpen, onToggle } = useDisclosure();
 
   return (
