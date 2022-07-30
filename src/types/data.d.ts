@@ -1,13 +1,13 @@
 import { IconType } from "react-icons";
 
-interface NavItem {
+export interface NavItem {
   label: string;
   subLabel?: string;
   children?: Array<NavItem>;
   href?: string;
 }
 
-interface SkillItem {
+export interface SkillItem {
   title: string;
   icon: IconType;
   description: string;

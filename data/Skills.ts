@@ -1,7 +1,7 @@
 import { TbWorld } from "react-icons/tb";
 import { BiCodeAlt, BiTestTube } from "react-icons/bi";
 import { FaServer } from "react-icons/fa";
-import { SkillItem } from "../src/types/global";
+import { SkillItem } from "../src/types/data";
 import { CgArrowsMergeAltH } from "react-icons/cg";
 
 export const SKILLS_ITEMS: Array<SkillItem> = [

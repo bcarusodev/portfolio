@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/icons";
 import { DarkModeSwitch } from "../../Atoms/DarkModeSwitch";
 import { NAV_ITEMS } from "../../../../data/NavItems";
+import { NavItem } from "../../../types/data";
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
