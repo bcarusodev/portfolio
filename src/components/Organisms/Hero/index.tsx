@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import TextTransition, { presets } from "react-text-transition";
-import { HERO_TEXTS } from "../../../data/Hero";
+import { HERO_TEXTS } from "../../../../data/Hero";
 import Link from "next/link";
 
 export default function Hero() {

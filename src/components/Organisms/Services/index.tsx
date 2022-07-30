@@ -1,6 +1,6 @@
 import { Box, Icon, Flex, Heading, VStack, Container } from "@chakra-ui/react";
-import { SKILLS_ITEMS } from "../../data/Skills";
-import Feature from "../components/Atoms/Feature";
+import { SKILLS_ITEMS } from "../../../../data/Skills";
+import Feature from "../../Atoms/Feature";
 
 export const Services = () => {
   return (
