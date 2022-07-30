@@ -1,13 +1,13 @@
 import { useColorModeValue, Text, Stack, Flex } from "@chakra-ui/react";
 import { ReactElement } from "react";
 
-interface SkillProps {
+interface FeatureProps {
   title: string;
   text: string;
   icon: ReactElement;
 }
 
-export default function Skill({ title, text, icon }: SkillProps) {
+export default function Feature({ title, text, icon }: FeatureProps) {
   return (
     <Stack
       alignItems={{ base: "center", md: "flex-start" }}

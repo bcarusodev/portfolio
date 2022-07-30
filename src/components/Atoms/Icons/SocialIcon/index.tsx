@@ -1,12 +1,7 @@
 import { ReactNode } from "react";
-import {
-  chakra,
-  Tooltip,
-  useColorModeValue,
-  VisuallyHidden,
-} from "@chakra-ui/react";
+import { chakra, useColorModeValue, VisuallyHidden } from "@chakra-ui/react";
 
-export const SocialButton = ({
+export const SocialIcon = ({
   children,
   label,
   href,

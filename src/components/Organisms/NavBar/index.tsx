@@ -21,7 +21,7 @@ import {
   CloseIcon,
   HamburgerIcon,
 } from "@chakra-ui/icons";
-import { DarkModeSwitch } from "../../DarkModeSwitch";
+import { DarkModeSwitch } from "../../Atoms/DarkModeSwitch";
 import { NAV_ITEMS } from "../../../../data/NavItems";
 
 const DesktopNav = () => {

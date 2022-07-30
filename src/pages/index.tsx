@@ -1,19 +1,12 @@
-import NavBar from "../components/NavBar/NavBar";
-import Hero from "../components/Hero";
+import NavBar from "../components/Organisms/NavBar";
 import React from "react";
-import Footer from "../components/Footer";
-import { Services } from "./services";
-import { Container } from "@chakra-ui/react";
-
-// TODO: make dark mode automatically with mobile device modes
+import Footer from "../components/Organisms/Footer";
+import { Home } from "../components/Templates/Home";
 
 const Index = () => (
   <>
     <NavBar />
-    <Container maxW={"7xl"}>
-      <Hero />
-      <Services />
-    </Container>
+    <Home />
     <Footer />
   </>
 );

@@ -9,7 +9,7 @@ import {
 import { FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { SiChakraui } from "react-icons/si";
 import { TbBrandNextjs, TbBrandVercel } from "react-icons/tb";
-import { SocialIcon } from "./Atoms/Icons/SocialIcon";
+import { SocialIcon } from "../Atoms/Icons/SocialIcon";
 
 export default function Footer() {
   return (
