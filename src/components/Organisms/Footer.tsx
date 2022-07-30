@@ -9,7 +9,7 @@ import {
 import { FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { SiChakraui } from "react-icons/si";
 import { TbBrandNextjs, TbBrandVercel } from "react-icons/tb";
-import { SocialButton } from "./SocialIcon";
+import { SocialIcon } from "./Atoms/Icons/SocialIcon";
 
 export default function Footer() {
   return (
@@ -69,24 +69,24 @@ export default function Footer() {
           </Stack>
         </Stack>
         <Stack direction={"row"} spacing={6}>
-          <SocialButton
+          <SocialIcon
             label={"LinkedIn"}
             href={"https://www.linkedin.com/in/brunocarusok"}
           >
             <FaLinkedinIn />
-          </SocialButton>
-          <SocialButton
+          </SocialIcon>
+          <SocialIcon
             label={"YouTube"}
             href={"https://www.youtube.com/user/silvergraphs"}
           >
             <FaYoutube />
-          </SocialButton>
-          <SocialButton
+          </SocialIcon>
+          <SocialIcon
             label={"Instagram"}
             href={"https://www.instagram.com/brunofcaruso"}
           >
             <FaInstagram />
-          </SocialButton>
+          </SocialIcon>
         </Stack>
       </Container>
     </Box>

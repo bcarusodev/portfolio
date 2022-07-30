@@ -21,8 +21,8 @@ import {
   CloseIcon,
   HamburgerIcon,
 } from "@chakra-ui/icons";
-import { DarkModeSwitch } from "../DarkModeSwitch";
-import { NAV_ITEMS } from "../../../data/NavItems";
+import { DarkModeSwitch } from "../../DarkModeSwitch";
+import { NAV_ITEMS } from "../../../../data/NavItems";
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
