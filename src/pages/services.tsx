@@ -1,15 +1,4 @@
-import { ReactElement } from "react";
-import {
-  Box,
-  Icon,
-  Text,
-  Stack,
-  Flex,
-  useColorModeValue,
-  Heading,
-  VStack,
-  Container,
-} from "@chakra-ui/react";
+import { Box, Icon, Flex, Heading, VStack, Container } from "@chakra-ui/react";
 import { SKILLS_ITEMS } from "../../data/Skills";
 import Skill from "../components/Skill";
 
