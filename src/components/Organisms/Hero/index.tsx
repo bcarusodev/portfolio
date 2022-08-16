@@ -2,11 +2,9 @@ import {
   Container,
   Stack,
   Flex,
-  Box,
   Heading,
   Text,
   Button,
-  Image,
   useColorModeValue,
   SlideFade,
 } from "@chakra-ui/react";
@@ -14,6 +12,7 @@ import React from "react";
 import TextTransition, { presets } from "react-text-transition";
 import { HERO_TEXTS } from "../../../../data/Hero";
 import Link from "next/link";
+import { Spaceman } from "../../Atoms/Lotties/Spaceman";
 
 export default function Hero() {
   const [index, setIndex] = React.useState(0);
@@ -30,11 +29,14 @@ export default function Hero() {
   }, []);
 
   return (
-    <Container maxW={"7xl"}>
+    <Container
+      maxW={"7xl"}
+      display={{ base: "unset", md: "flex" }}
+      height={"95vh"}
+    >
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 10, md: 28 }}
         direction={{ base: "column", md: "row" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
@@ -109,23 +111,7 @@ export default function Hero() {
             offsetY="30px"
             transition={{ enter: { duration: 1.3 } }}
           >
-            <Box
-              position={"relative"}
-              height={"400px"}
-              rounded={"2xl"}
-              boxShadow={"2xl"}
-              width={"full"}
-              overflow={"hidden"}
-            >
-              <Image
-                loading={"eager"}
-                fit={"cover"}
-                align={"center"}
-                w={"100%"}
-                h={"100%"}
-                src={"/assets/images/hero.png"}
-              />
-            </Box>
+            <Spaceman />
           </SlideFade>
         </Flex>
       </Stack>
