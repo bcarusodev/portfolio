@@ -37,7 +37,7 @@ export default function Hero() {
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}
-        direction={{ base: "column", md: "row" }}
+        direction={{ base: "column-reverse", md: "row" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <SlideFade
