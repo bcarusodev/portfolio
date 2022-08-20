@@ -22,12 +22,12 @@ export const NAV_ITEMS: Array<NavItem> = [
         enabled: true,
       },
     ],
-    enabled: true,
+    enabled: false,
   },
   {
     label: "About",
     href: "#",
-    enabled: true,
+    enabled: false,
   },
   {
     label: "Dashboard",
