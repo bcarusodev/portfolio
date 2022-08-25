@@ -1,13 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  VStack,
-  Container,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, VStack, Container } from "@chakra-ui/react";
 import { Me } from "../../Molecules/Me";
 
 export const AboutMe = () => {
