@@ -1,5 +1,5 @@
 import { SocialIcon } from "../../Atoms/Icons/SocialIcon";
-import { FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import { FaInstagram, FaLinkedinIn, FaYoutube, FaGithub } from "react-icons/fa";
 import { Stack } from "@chakra-ui/react";
 
 export const SocialIcons = () => (
@@ -9,6 +9,9 @@ export const SocialIcons = () => (
       href={"https://www.linkedin.com/in/brunocarusok"}
     >
       <FaLinkedinIn />
+    </SocialIcon>
+    <SocialIcon label={"GitHub"} href={"https://www.github.com/silvergraphs"}>
+      <FaGithub />
     </SocialIcon>
     <SocialIcon
       label={"YouTube"}
