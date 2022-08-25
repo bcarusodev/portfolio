@@ -4,15 +4,14 @@ import {
   Flex,
   Heading,
   Text,
-  Button,
   useColorModeValue,
   SlideFade,
 } from "@chakra-ui/react";
 import React from "react";
 import TextTransition, { presets } from "react-text-transition";
 import { HERO_TEXTS } from "../../../../data/Hero";
-import Link from "next/link";
 import { Spaceman } from "../../Atoms/Lotties/Spaceman";
+import { ContactButtons } from "../../Molecules/ContactButtons";
 
 export default function Hero() {
   const [index, setIndex] = React.useState(0);
@@ -90,13 +89,7 @@ export default function Hero() {
             offsetY="30px"
             transition={{ enter: { duration: 1.1 } }}
           >
-            <Stack direction={{ base: "column", sm: "row" }}>
-              <Link href={"mailto:brunofcaruso@gmail.com"}>
-                <Button size={"lg"} fontWeight={"normal"} px={6}>
-                  Get in touch
-                </Button>
-              </Link>
-            </Stack>
+            <ContactButtons />
           </SlideFade>
         </Stack>
         <Flex
