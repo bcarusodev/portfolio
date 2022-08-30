@@ -75,10 +75,7 @@ export default function Hero() {
             offsetY="30px"
             transition={{ enter: { duration: 0.9 } }}
           >
-            <Text
-              fontSize={"xl"}
-              color={useColorModeValue("gray.500", "white")}
-            >
+            <Text fontSize={"xl"} color={"gray.500"}>
               Welcome to my portfolio! My name is Bruno, self-taught by nature
               and constantly learning about development & technology. 💡😙
             </Text>
