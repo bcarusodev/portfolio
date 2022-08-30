@@ -4,7 +4,6 @@ import {
   Flex,
   Heading,
   Text,
-  useColorModeValue,
   SlideFade,
 } from "@chakra-ui/react";
 import React from "react";
