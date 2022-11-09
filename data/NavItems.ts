@@ -3,7 +3,7 @@ import { NavItem } from "../src/types/data";
 export const NAV_ITEMS: Array<NavItem> = [
   {
     label: "Home",
-    href: "#",
+    href: "/",
     enabled: true,
   },
   {
@@ -26,8 +26,8 @@ export const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "About",
-    href: "#",
-    enabled: false,
+    href: "/about",
+    enabled: true,
   },
   {
     label: "Dashboard",

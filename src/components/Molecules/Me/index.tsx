@@ -1,10 +1,6 @@
 import { Box, Flex, Heading, Image, Link, Stack, Text } from "@chakra-ui/react";
 
-interface IMeProps {
-  minified: boolean;
-}
-
-export const Me = ({ minified }: IMeProps) => {
+export const Me = () => {
   return (
     <Stack
       align={"center"}
@@ -38,7 +34,7 @@ export const Me = ({ minified }: IMeProps) => {
         borderRadius={"full"}
         align={"center"}
         boxShadow={"2xl"}
-        css={{ "object-view-box": "inset(0% -16% 21% 0%)" }}
+        css={{ objectViewBox: "inset(0% -16% 21% 0%)" }}
         boxSize={"250px"}
         src={"/assets/images/hero.jpg"}
       />

@@ -8,6 +8,7 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { NAV_ITEMS } from "../../../../data/NavItems";
 import { DarkModeSwitch } from "../../Atoms/DarkModeSwitch";
 import { DesktopSubNav } from "./DesktopSubNav";
@@ -15,6 +16,7 @@ import { DesktopSubNav } from "./DesktopSubNav";
 export const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
+  const router = useRouter();
 
   return (
     <Stack direction={"row"} spacing={4} alignItems={"center"}>
@@ -27,7 +29,7 @@ export const DesktopNav = () => {
                   <PopoverTrigger>
                     <Button
                       key={`navlink-${index}`}
-                      // href={navItem.href ?? '#'}
+                      onClick={() => router.push(navItem.href)}
                       fontSize={"sm"}
                       fontWeight={500}
                       variant={"ghost"}

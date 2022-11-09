@@ -1,13 +1,18 @@
-import NavBar from "../components/Organisms/NavBar";
 import React from "react";
-import Footer from "../components/Organisms/Footer";
-import { Home } from "../components/Templates/Home";
+import { Container, VStack } from "@chakra-ui/react";
+import { AboutMe } from "../components/Organisms/AboutMe";
+import Hero from "../components/Organisms/Hero";
+import { Services } from "../components/Organisms/Services";
 
 const Index = () => (
   <>
-    <NavBar />
-    <Home />
-    <Footer />
+    <Container maxW={"7xl"}>
+      <Hero />
+      <VStack spacing={10}>
+        <Services />
+        <AboutMe />
+      </VStack>
+    </Container>
   </>
 );
 

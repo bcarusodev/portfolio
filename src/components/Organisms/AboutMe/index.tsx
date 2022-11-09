@@ -11,7 +11,7 @@ export const AboutMe = () => {
           </Heading>
           <Box id={"about-me"}>
             <Flex gap={5} justifyContent={"center"} flexWrap={"wrap"}>
-              <Me minified />
+              <Me />
             </Flex>
           </Box>
         </VStack>

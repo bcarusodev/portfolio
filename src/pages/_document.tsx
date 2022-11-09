@@ -6,7 +6,6 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head>
-          <title>Portfolio - Bruno Caruso</title>
           <link
             rel="icon"
             type="image/svg+xml"

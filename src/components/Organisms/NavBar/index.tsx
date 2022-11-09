@@ -12,7 +12,6 @@ import { DesktopNav } from "../../Molecules/DesktopNav";
 import { MobileNav } from "../../Molecules/MobileNav";
 
 export default function NavBar() {
-  // TODO: change bcaruso fontsize & check responsiveness
   const { isOpen, onToggle } = useDisclosure();
 
   return (
