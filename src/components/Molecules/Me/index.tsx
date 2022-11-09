@@ -13,8 +13,8 @@ export const Me = () => {
             Bruno Fabrizio Caruso
           </Heading>
           <Text as={"span"}>
-            Full Stack Developer @{" "}
-            <Link href={"https://www.modo.com.ar"}>MODO</Link>
+            D2 Software Developer @{" "}
+            <Link href={"https://www.chubut.it"}>Chubut IT</Link>
           </Text>
         </Box>
         <Flex maxW={"40rem"}>
