@@ -91,7 +91,7 @@ const About = () => {
           <Container justifyContent={"center"} maxW={"full"}>
             <VStack spacing={20}>
               <VStack>
-                <Heading fontWeight={600} fontSize={"4xl"} pb={6}>
+                <Heading fontWeight={600} fontSize={"4xl"} pb={8}>
                   technologies
                 </Heading>
                 <Box id={"services"}>
