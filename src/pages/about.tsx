@@ -20,7 +20,12 @@ import {
 import { AboutMe } from "../components/Organisms/AboutMe";
 import { MdLanguage } from "react-icons/md";
 import { TimelineItem } from "../components/Molecules/TimelineItem";
-import { FaGoogleDrive, FaMedal, FaWindows } from "react-icons/fa";
+import {
+  FaGoogleDrive,
+  FaMedal,
+  FaWindows,
+  FaGraduationCap,
+} from "react-icons/fa";
 import { ExperienceTimeline } from "../components/Organisms/ExperienceTimeline";
 import { SiMacos } from "react-icons/si";
 import { useRouter } from "next/router";
@@ -44,19 +49,20 @@ const About = () => {
                   icon={<Icon as={MdLanguage} w={8} h={8} />}
                   title="EF SET C1 Advanced"
                   subtitle="EF International Campuses"
-                  fromDate={new Date("2022-07-1")}
+                  fromDate={new Date("2022-07-02")}
                 />
                 <TimelineItem
                   icon={<Icon as={FaMedal} w={8} h={8} />}
                   title="Software Olympics"
                   subtitle="INET"
-                  fromDate={new Date("2018-11-1")}
+                  fromDate={new Date("2018-11-02")}
                 />
                 <TimelineItem
-                  icon={<Icon as={FaMedal} w={8} h={8} />}
+                  icon={<Icon as={FaGraduationCap} w={8} h={8} />}
                   title="IT Technician"
                   subtitle="EEST N8"
-                  fromDate={new Date("2018-11-1")}
+                  fromDate={new Date("2012-01-02")}
+                  toDate={new Date("2018-11-02")}
                 />
               </VStack>
             </VStack>
