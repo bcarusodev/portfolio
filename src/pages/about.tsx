@@ -41,7 +41,12 @@ const About = () => {
 
           <Stack direction={["column", "row"]} spacing={[10, 20]}>
             <VStack>
-              <Heading fontWeight={300} fontSize={"2xl"} pb={4}>
+              <Heading
+                fontWeight={300}
+                fontFamily={"subtitle"}
+                fontSize={"2xl"}
+                pb={4}
+              >
                 education & certs.
               </Heading>
               <VStack spacing={10}>
@@ -68,7 +73,12 @@ const About = () => {
             </VStack>
 
             <VStack>
-              <Heading fontWeight={300} fontSize={"2xl"} pb={4}>
+              <Heading
+                fontWeight={300}
+                fontFamily={"subtitle"}
+                fontSize={"2xl"}
+                pb={4}
+              >
                 experience
               </Heading>
               <ExperienceTimeline />
@@ -91,7 +101,12 @@ const About = () => {
           <Container justifyContent={"center"} maxW={"full"}>
             <VStack spacing={20}>
               <VStack>
-                <Heading fontWeight={600} fontSize={"4xl"} pb={8}>
+                <Heading
+                  fontWeight={600}
+                  fontSize={"4xl"}
+                  pb={8}
+                  letterSpacing={"-1px"}
+                >
                   technologies
                 </Heading>
                 <Box id={"services"}>
@@ -111,7 +126,7 @@ const About = () => {
             </VStack>
           </Container>
 
-          <Heading fontWeight={600} fontSize={"4xl"}>
+          <Heading fontWeight={600} fontSize={"4xl"} letterSpacing={"-1px"}>
             my workstation
           </Heading>
           <Text align="center" color={"gray.500"}>

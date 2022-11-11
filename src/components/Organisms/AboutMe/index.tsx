@@ -6,7 +6,12 @@ export const AboutMe = () => {
     <Container justifyContent={"center"} maxW={"full"}>
       <VStack spacing={20}>
         <VStack>
-          <Heading fontWeight={600} fontSize={"4xl"} pb={4}>
+          <Heading
+            fontWeight={600}
+            fontSize={"4xl"}
+            letterSpacing={"-1px"}
+            pb={4}
+          >
             about me
           </Heading>
           <Box id={"about-me"}>

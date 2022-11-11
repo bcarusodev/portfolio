@@ -19,15 +19,22 @@ export const TimelineItem = ({
       {icon}
       <Container minWidth={230}>
         <VStack alignItems={"flex-start"}>
-          <Heading color={"gray.500"} fontSize="xs" textTransform={"uppercase"}>
+          <Heading
+            color={"gray.500"}
+            fontSize="xs"
+            textTransform={"uppercase"}
+            fontFamily="body"
+          >
             {/* From Date */}
             {`${parseDate(fromDate)}`}
             {/* To Date (if set) */}
             {toDate &&
               ` - ${toDate instanceof Date ? parseDate(toDate) : "Present"}`}
           </Heading>
-          <Heading size="md">{title}</Heading>
-          <Heading color={"gray.500"} size="xs">
+          <Heading size="md" fontFamily="body">
+            {title}
+          </Heading>
+          <Heading color={"gray.500"} size="xs" fontFamily="body">
             {subtitle}
           </Heading>
           {description && <Text color="gray.500">{description}</Text>}

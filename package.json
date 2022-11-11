@@ -12,6 +12,7 @@
     "@chakra-ui/react": "1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@fontsource/plus-jakarta-sans": "^4.5.10",
     "framer-motion": "^6",
     "lottie-react": "^2.3.1",
     "next": "latest",

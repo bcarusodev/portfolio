@@ -7,7 +7,12 @@ export const Services = () => {
     <Container justifyContent={"center"} maxW={"full"}>
       <VStack spacing={20}>
         <VStack>
-          <Heading fontWeight={600} fontSize={"4xl"} pb={4}>
+          <Heading
+            fontWeight={600}
+            fontSize={"4xl"}
+            pb={4}
+            letterSpacing={"-1px"}
+          >
             services
           </Heading>
           <Box id={"services"}>

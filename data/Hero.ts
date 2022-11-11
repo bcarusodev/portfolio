@@ -1,6 +1,6 @@
 export const HERO_TEXTS = [
-  "full stack developer",
-  "technology enthusiast",
+  "software developer",
+  "tech enthusiast",
   "hackintosher",
   "cryptonaut",
 ];

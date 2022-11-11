@@ -9,7 +9,7 @@ export const Me = () => {
     >
       <Stack spacing={8}>
         <Box>
-          <Heading fontSize={"3xl"} fontWeight={800} fontFamily={"body"}>
+          <Heading fontSize={"3xl"} fontWeight={700} fontFamily={"body"}>
             Bruno Fabrizio Caruso
           </Heading>
           <Text as={"span"}>

@@ -45,7 +45,8 @@ export default function Hero() {
           >
             <Heading
               lineHeight={1.1}
-              fontWeight={600}
+              fontWeight={700}
+              letterSpacing={"-2px"}
               fontSize={{ base: "4xl", sm: "5xl", lg: "6xl" }}
             >
               <Text as={"span"} fontWeight={700}>
@@ -74,7 +75,7 @@ export default function Hero() {
             offsetY="30px"
             transition={{ enter: { duration: 0.9 } }}
           >
-            <Text fontSize={"xl"} color={"gray.500"}>
+            <Text fontSize={"xl"} color={"gray.500"} fontWeight={400}>
               Welcome to my portfolio! My name is Bruno, self-taught by nature
               and constantly learning about development & technology. 💡😙
             </Text>
