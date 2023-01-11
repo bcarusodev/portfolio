@@ -19,7 +19,7 @@ export const Me = () => {
         </Box>
         <Flex maxW={"40rem"}>
           <Text color={"gray.500"}>
-            +2 years working with JavaScript & top-tier technologies like React,
+            +3 years working with JavaScript & top-tier technologies like React,
             NodeJS, REST. Passionate Developer & technology enthusiast.
             User-centered mentality building high-quality-grade solutions. I
             also like finances, fitness, hackintoshing and entrepreneurial
