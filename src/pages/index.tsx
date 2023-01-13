@@ -4,11 +4,12 @@ import { AboutMe } from "../components/Organisms/AboutMe";
 import Hero from "../components/Organisms/Hero";
 import { Services } from "../components/Organisms/Services";
 import { useRouter } from "next/router";
+import Layout from "../components/Atoms/Layout";
 
 const Index = () => {
   const router = useRouter();
   return (
-    <>
+    <Layout>
       <Container maxW={"7xl"}>
         <Hero />
         <VStack spacing={10}>
@@ -23,7 +24,7 @@ const Index = () => {
           </Button>
         </VStack>
       </Container>
-    </>
+    </Layout>
   );
 };
 
