@@ -2,7 +2,6 @@ import React from "react";
 import {
   Badge,
   Container,
-  Fade,
   Heading,
   HStack,
   Stack,
@@ -30,11 +29,12 @@ import { ExperienceTimeline } from "../components/Organisms/ExperienceTimeline";
 import { SiMacos } from "react-icons/si";
 import { useRouter } from "next/router";
 import { TECHNOLOGIES } from "../../data/Technologies";
+import Layout from "../components/Atoms/Layout";
 
 const About = () => {
   const router = useRouter();
   return (
-    <Fade in={true}>
+    <Layout>
       <Container maxW={"7xl"}>
         <VStack spacing={10} pt={10}>
           <AboutMe />
@@ -161,7 +161,7 @@ const About = () => {
           </Show>
         </VStack>
       </Container>
-    </Fade>
+    </Layout>
   );
 };
 
