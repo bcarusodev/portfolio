@@ -8,21 +8,22 @@ export const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Projects",
-    children: [
-      {
-        label: "Work",
-        subLabel: "Projects done on my daily work",
-        href: "#",
-        enabled: true,
-      },
-      {
-        label: "Personal",
-        subLabel: "Own personal projects",
-        href: "#",
-        enabled: true,
-      },
-    ],
-    enabled: false,
+    // children: [
+    //   {
+    //     label: "Work",
+    //     subLabel: "Projects done on my daily work",
+    //     href: "#",
+    //     enabled: true,
+    //   },
+    //   {
+    //     label: "Personal",
+    //     subLabel: "Own personal projects",
+    //     href: "#",
+    //     enabled: true,
+    //   },
+    // ],
+    href: "/projects",
+    enabled: true,
   },
   {
     label: "About",
