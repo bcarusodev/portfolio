@@ -1,4 +1,3 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import {
   Container,
   Stack,
@@ -6,10 +5,7 @@ import {
   Heading,
   Text,
   SlideFade,
-  Button,
-  HStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React from "react";
 import TextTransition, { presets } from "react-text-transition";
 import { HERO_TEXTS } from "../../../../data/Hero";
@@ -18,7 +14,6 @@ import { ContactButtons } from "../../Molecules/ContactButtons";
 
 export default function Hero() {
   const [index, setIndex] = React.useState(0);
-  const router = useRouter();
 
   // TODO: add transition to brunocaruso -> bcaruso.dev
 
