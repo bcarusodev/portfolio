@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       animate="enter"
       exit="exit"
       variants={variants}
-      transition={{ type: "linear" }}
+      transition={{ duration: 0.2, type: "tween" }}
     >
       {children}
     </motion.main>
