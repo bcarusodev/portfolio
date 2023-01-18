@@ -3,7 +3,6 @@ import {
   Collapse,
   Flex,
   IconButton,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
