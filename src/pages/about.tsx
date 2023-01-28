@@ -111,13 +111,13 @@ const About = () => {
                 </Heading>
                 <Box id={"services"}>
                   <Flex gap={2} justifyContent={"center"} flexWrap={"wrap"}>
-                    {TECHNOLOGIES.map((tech, index) => (
+                    {Object.keys(TECHNOLOGIES).map((key, index) => (
                       <Badge
-                        key={`tech-${index}`}
-                        colorScheme={tech.colorScheme}
+                        key={`tech-${key}`}
+                        colorScheme={TECHNOLOGIES[key].colorScheme}
                         px={2}
                       >
-                        {tech.name}
+                        {TECHNOLOGIES[key].name}
                       </Badge>
                     ))}
                   </Flex>
