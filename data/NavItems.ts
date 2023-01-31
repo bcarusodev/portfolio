@@ -7,11 +7,11 @@ export const NAV_ITEMS: Array<NavItem> = [
     enabled: true,
   },
   {
-    label: "Projects",
+    label: "Work",
     // children: [
     //   {
     //     label: "Work",
-    //     subLabel: "Projects done on my daily work",
+    //     subLabel: "Work done on my daily work",
     //     href: "#",
     //     enabled: true,
     //   },
@@ -22,7 +22,7 @@ export const NAV_ITEMS: Array<NavItem> = [
     //     enabled: true,
     //   },
     // ],
-    href: "/projects",
+    href: "/work",
     enabled: true,
   },
   {

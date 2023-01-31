@@ -27,3 +27,12 @@ export interface Technology {
   name: string;
   colorScheme?: ThemeTypings["colorSchemes"];
 }
+
+export interface Project {
+  name: string;
+  topic: string;
+  description: string;
+  techsUsed: Technology[];
+  workedOn: string;
+  imgSrc: string;
+}

@@ -27,7 +27,7 @@ export const ContactButtons = () => {
               size={"lg"}
               w={{ base: "full" }}
               fontWeight={"normal"}
-              px={3}
+              px={4}
               onClick={onToggle}
             >
               Get in touch
@@ -36,11 +36,11 @@ export const ContactButtons = () => {
               size={"lg"}
               rightIcon={<ArrowForwardIcon />}
               fontWeight={"normal"}
-              px={8}
+              px={5}
               w={{ base: "full" }}
-              onClick={() => router.push("/projects")}
+              onClick={() => router.push("/work")}
             >
-              See Projects
+              See Work
             </Button>
           </HStack>
         </SlideFade>
