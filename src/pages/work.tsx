@@ -42,7 +42,8 @@ const Work = () => {
           justifyContent={"center"}
           flexWrap={"wrap"}
           minHeight="70vh"
-          p={20}
+          py={20}
+          px={4}
           alignItems="center"
         >
           {Object.keys(PROJECTS).map((key) => (

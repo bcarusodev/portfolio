@@ -36,7 +36,7 @@ const About = () => {
   return (
     <Layout>
       <Container maxW={"7xl"}>
-        <VStack spacing={10} pt={10}>
+        <VStack spacing={10} pt={10} pb={28}>
           <AboutMe />
 
           <Stack direction={["column", "row"]} spacing={[10, 20]}>
@@ -111,7 +111,7 @@ const About = () => {
                 </Heading>
                 <Box id={"services"}>
                   <Flex gap={2} justifyContent={"center"} flexWrap={"wrap"}>
-                    {Object.keys(TECHNOLOGIES).map((key, index) => (
+                    {Object.keys(TECHNOLOGIES).map((key) => (
                       <Badge
                         key={`tech-${key}`}
                         colorScheme={TECHNOLOGIES[key].colorScheme}

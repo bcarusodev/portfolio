@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { Box } from "@chakra-ui/react";
 
 type LayoutProps = {
   children: ReactNode;
@@ -20,7 +21,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       variants={variants}
       transition={{ duration: 0.2, type: "tween" }}
     >
-      {children}
+      <Box minH="calc(90vh - 44px)">{children}</Box>
     </motion.main>
   </>
 );
