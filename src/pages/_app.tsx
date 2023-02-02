@@ -23,8 +23,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <NavBar />
       <AnimatePresence
         mode="wait"
-        initial={false}
-        onExitComplete={() => window.scrollTo(0, 0)}
+        initial={true}
+        // onExitComplete={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
         <Component {...pageProps} canonical={url} key={url} />
       </AnimatePresence>
