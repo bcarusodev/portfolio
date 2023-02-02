@@ -3,13 +3,18 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
 interface ProjectCardProps {
-  id: string;
+  key: string;
   title: string;
   topic: string;
   imgSrc: string;
 }
 
-export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
+export const ProjectCard = ({
+  key,
+  title,
+  topic,
+  imgSrc,
+}: ProjectCardProps) => {
   const router = useRouter();
   return (
     <motion.div
@@ -22,7 +27,7 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
         w={300}
         h={300}
         borderRadius={15}
-        onClick={() => router.push("projects/" + id)}
+        onClick={() => router.push("projects/" + key)}
       >
         <CardHeader position="absolute" zIndex={2}>
           <Text

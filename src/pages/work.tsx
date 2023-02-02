@@ -1,27 +1,10 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Card,
-  Text,
-  CardHeader,
-  Container,
-  Heading,
-  Image,
-  VStack,
-  Flex,
-} from "@chakra-ui/react";
-import { AboutMe } from "../components/Organisms/AboutMe";
-import Hero from "../components/Organisms/Hero";
-import { Services } from "../components/Organisms/Services";
-import { useRouter } from "next/router";
+import { Box, Text, Heading, Flex } from "@chakra-ui/react";
 import Layout from "../components/Atoms/Layout";
 import { ProjectCard } from "../components/Molecules/ProjectCard";
-import { PROJECTS } from "../../data/Work";
-import { Project } from "../types/data";
+import { allProjects } from "contentlayer/generated";
 
 const Work = () => {
-  const router = useRouter();
   return (
     <Layout>
       <Flex display="column" alignItems={"center"}>
@@ -46,13 +29,12 @@ const Work = () => {
           px={4}
           alignItems="center"
         >
-          {Object.keys(PROJECTS).map((key) => (
+          {allProjects.map((project) => (
             <ProjectCard
-              key={PROJECTS[key].name}
-              id={key}
-              title={PROJECTS[key].name}
-              topic={PROJECTS[key].topic}
-              imgSrc={PROJECTS[key].imgSrc}
+              key={project.id}
+              title={project.title}
+              topic={project.topic}
+              imgSrc={project.thumbnail}
             />
           ))}
         </Flex>
