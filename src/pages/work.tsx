@@ -32,6 +32,7 @@ const Work = () => {
           {allProjects.map((project) => (
             <ProjectCard
               key={project.id}
+              id={project.id}
               title={project.title}
               topic={project.topic}
               imgSrc={project.thumbnail}

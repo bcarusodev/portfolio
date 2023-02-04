@@ -19,6 +19,7 @@ in the entire process of development.
 - Atomic Design pattern
 - Prettier, husky pre-commit
 - Framer Motion transitions
+- ContentLayer
 
 ---
 
