@@ -16,7 +16,8 @@ export const Me = () => {
           <Text as={"span"}>
             D2 Software Developer @{" "}
             <Link href={"https://www.chubut.it"} isExternal>
-              Chubut IT <ExternalLinkIcon mx="2px" mt="-4px" />
+              Chubut IT
+              <ExternalLinkIcon mx="4px" mt="-4px" />
             </Link>
           </Text>
         </Box>
