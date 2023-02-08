@@ -21,11 +21,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <title>Portfolio - Bruno Caruso</title>
       </Head>
       <NavBar />
-      <AnimatePresence
-        mode="wait"
-        initial={true}
-        // onExitComplete={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
+      <AnimatePresence mode="wait" initial={true}>
         <Component {...pageProps} canonical={url} key={url} />
       </AnimatePresence>
       <Footer />
