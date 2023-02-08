@@ -10,8 +10,9 @@ export const Project = defineDocumentType(() => ({
     projectLink: { type: "string", required: true },
     description: { type: "string", required: true },
     topic: { type: "string", required: true },
-    workedOn: { type: "string", required: true },
+    client: { type: "string", required: true },
     thumbnail: { type: "string", required: true },
+    role: { type: "string", required: true },
     stacks: { type: "list", of: { type: "string" } },
   },
   computedFields: {

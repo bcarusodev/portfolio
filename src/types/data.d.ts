@@ -33,6 +33,6 @@ export interface Project {
   topic: string;
   description: string;
   techsUsed: Technology[];
-  workedOn: string;
+  client: string;
   imgSrc: string;
 }

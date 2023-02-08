@@ -1,11 +1,18 @@
 ---
 title: ALLY
 projectLink: https://jobs.allyenergy.com
-description: Online job board with thousands of clean energy industry jobs
+description: Online job board with thousands of clean energy industry jobs.
+
 topic: Clean Energy
-workedOn: ITCrowd
+client: IT Crowd
+
 thumbnail: "assets/images/projects/ally/cover.jpg"
+role: Full Stack Developer
+
 stacks:
-  - nextjs
-  - chakra-ui
+  - materialui
+  - nodejs
+  - react
+  - serverless
+  - aws
 ---

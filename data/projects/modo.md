@@ -1,11 +1,19 @@
 ---
 title: MODO
-projectLink: https://www.modo.com.ar
-description: Argentina's recognized wallet for digital banking
+projectLink: https://modo.com.ar
+
+description: Argentina's recognized wallet for digital banking.
+
 topic: Fintech
-workedOn: Chubut IT
+client: Chubut IT
+
 thumbnail: "assets/images/projects/modo/cover.jpeg"
+role: Backend Engineer
+
 stacks:
-  - nextjs
-  - chakra-ui
+  - nodejs
+  - expressjs
+  - datadog
+  - mysql
+  - postgres
 ---
