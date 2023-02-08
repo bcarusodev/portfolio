@@ -6,7 +6,7 @@ import { SocialIcons } from "../../Molecules/SocialIcons";
 export default function Footer() {
   return (
     <Box
-      mt={28}
+      // mt={28}
       bg={useColorModeValue("gray.100", "gray.900")}
       color={useColorModeValue("gray.700", "gray.200")}
     >

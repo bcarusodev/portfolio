@@ -35,3 +35,6 @@ yarn-error.log*
 
 # IDEA
 .idea
+
+# Contentlayer
+.contentlayer

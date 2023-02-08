@@ -7,37 +7,67 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import { ArrowForwardIcon, EmailIcon } from "@chakra-ui/icons";
+import {
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  CalendarIcon,
+  EmailIcon,
+} from "@chakra-ui/icons";
+import { useRouter } from "next/router";
 
 export const ContactButtons = () => {
   const { isOpen, onToggle } = useDisclosure();
+  const router = useRouter();
   return (
     <Stack direction={{ base: "column", sm: "row" }}>
       {!isOpen && (
-        <Button size={"lg"} fontWeight={"normal"} px={6} onClick={onToggle}>
-          Get in touch
-        </Button>
+        <SlideFade in={!isOpen} hidden={isOpen}>
+          <HStack>
+            <Button
+              size={"lg"}
+              w={{ base: "full" }}
+              fontWeight={"normal"}
+              px={4}
+              onClick={onToggle}
+            >
+              Get in touch
+            </Button>
+            <Button
+              size={"lg"}
+              rightIcon={<ArrowForwardIcon />}
+              fontWeight={"normal"}
+              px={5}
+              w={{ base: "full" }}
+              onClick={() => router.push("/work")}
+            >
+              See Work
+            </Button>
+          </HStack>
+        </SlideFade>
       )}
-      <SlideFade in={isOpen}>
+      <SlideFade in={isOpen} hidden={!isOpen}>
         <HStack spacing={2}>
+          <Button size={"lg"} fontWeight={"normal"} onClick={onToggle}>
+            <ArrowBackIcon />
+          </Button>
           <Link href={"mailto:brunofcaruso@gmail.com"}>
             <Button
-              leftIcon={<EmailIcon />}
+              rightIcon={<EmailIcon />}
               size={"lg"}
               w={"full"}
               fontWeight={"normal"}
-              px={6}
+              px={4}
             >
               Email
             </Button>
           </Link>
           <Link href={"https://www.calendly.com/brunofcaruso"}>
             <Button
-              rightIcon={<ArrowForwardIcon />}
+              rightIcon={<CalendarIcon />}
               size={"lg"}
               w={"full"}
               fontWeight={"normal"}
-              px={6}
+              px={8}
             >
               Calendly
             </Button>

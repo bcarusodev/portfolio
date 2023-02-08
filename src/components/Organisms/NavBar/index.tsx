@@ -3,7 +3,6 @@ import {
   Collapse,
   Flex,
   IconButton,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
@@ -16,14 +15,7 @@ export default function NavBar() {
 
   return (
     <Box>
-      <Flex
-        bg={useColorModeValue("white", "gray.800")}
-        color={useColorModeValue("gray.600", "white")}
-        minH={"60px"}
-        py={{ base: 2 }}
-        px={{ base: 4 }}
-        align={"center"}
-      >
+      <Flex minH={"60px"} py={{ base: 2 }} px={{ base: 4 }} align={"center"}>
         <Flex
           flex={{ base: 1 }}
           justify={"space-between"}

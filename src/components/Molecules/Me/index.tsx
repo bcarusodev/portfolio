@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Image, Link, Stack, Text } from "@chakra-ui/react";
 
 export const Me = () => {
@@ -14,7 +15,10 @@ export const Me = () => {
           </Heading>
           <Text as={"span"}>
             D2 Software Developer @{" "}
-            <Link href={"https://www.chubut.it"}>Chubut IT</Link>
+            <Link href={"https://www.chubut.it"} isExternal>
+              Chubut IT
+              <ExternalLinkIcon mx="4px" mt="-4px" />
+            </Link>
           </Text>
         </Box>
         <Flex maxW={"40rem"}>

@@ -12,7 +12,7 @@ const Index = () => {
     <Layout>
       <Container maxW={"7xl"}>
         <Hero />
-        <VStack spacing={10}>
+        <VStack spacing={10} pb={28}>
           <Services />
           <AboutMe />
           <Button

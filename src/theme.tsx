@@ -1,5 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
-import { createBreakpoints } from "@chakra-ui/theme-tools";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const fonts = {
   subtitle:
@@ -8,15 +7,21 @@ const fonts = {
     'Plus Jakarta Sans,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"',
 };
 
-const breakpoints = createBreakpoints({
+const breakpoints = {
   sm: "40em",
   md: "52em",
   lg: "64em",
   xl: "80em",
-});
+};
+
+const themeConfig: ThemeConfig = {
+  initialColorMode: "system",
+  useSystemColorMode: true,
+  disableTransitionOnChange: false,
+};
 
 const theme = extendTheme({
-  config: { initialColorMode: "system", useSystemColorMode: true },
+  config: themeConfig,
   semanticTokens: {
     colors: {
       text: {
