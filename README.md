@@ -4,9 +4,7 @@ Using [Chakra UI](https://github.com/chakra-ui/chakra-ui) as component library w
 
 ### Idea
 
-This showcase app will be used to display some of my services, projects, and
-some things about me, also im learning new things and techniques
-in the entire process of development.
+Portfolio project used to display some of my services, projects, and some things about me.
 
 ### Commands to run
 
