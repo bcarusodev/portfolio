@@ -16,4 +16,5 @@ stacks:
   - datadog
   - mysql
   - postgres
+  - jest
 ---
