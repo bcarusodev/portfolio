@@ -78,7 +78,11 @@ const Project = ({ projectData }: ProjectDetailProps) => {
                 <Heading size="sm" textTransform={"uppercase"} pb={2}>
                   URL
                 </Heading>
-                <Link color="gray.500" href={projectData.projectLink}>
+                <Link
+                  color="gray.500"
+                  href={projectData.projectLink}
+                  isExternal
+                >
                   {projectData.projectLink.replace(/^https?:\/\//i, "")}
                   <ExternalLinkIcon mx="4px" mt="-4px" />
                 </Link>
