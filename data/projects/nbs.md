@@ -8,6 +8,7 @@ topic: Intelligence
 client: IT Crowd
 
 thumbnail: "assets/images/projects/nbs/cover.jpg"
+detailImage: "/assets/images/projects/nbs/detail.png"
 role: Frontend Developer
 
 stacks:

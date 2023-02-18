@@ -9,6 +9,7 @@ import {
   Box,
   Link,
   Badge,
+  Image,
 } from "@chakra-ui/react";
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
@@ -31,6 +32,9 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           </Button>
           <Heading>{projectData.title}</Heading>
           <Text color="gray.500">{projectData.description}</Text>
+          {projectData.detailImage && (
+            <Image src={projectData.detailImage}></Image>
+          )}
           {/* <Heading size="md">responsabilities</Heading>
           <Text color="gray.500">{projectData.responsabilities}</Text> */}
           <Heading size="md">technologies</Heading>
