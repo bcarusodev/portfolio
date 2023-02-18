@@ -69,15 +69,17 @@ const Project = ({ projectData }: ProjectDetailProps) => {
               </Heading>
               <Text color="gray.500">{projectData.client}</Text>
             </Box>
-            <Box>
-              <Heading size="sm" textTransform={"uppercase"} pb={2}>
-                URL
-              </Heading>
-              <Link color="gray.500" href={projectData.projectLink}>
-                {projectData.projectLink.replace(/^https?:\/\//i, "")}
-                <ExternalLinkIcon mx="4px" mt="-4px" />
-              </Link>
-            </Box>
+            {projectData.projectLink && (
+              <Box>
+                <Heading size="sm" textTransform={"uppercase"} pb={2}>
+                  URL
+                </Heading>
+                <Link color="gray.500" href={projectData.projectLink}>
+                  {projectData.projectLink.replace(/^https?:\/\//i, "")}
+                  <ExternalLinkIcon mx="4px" mt="-4px" />
+                </Link>
+              </Box>
+            )}
           </HStack>
         </VStack>
       </Container>

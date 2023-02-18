@@ -7,7 +7,7 @@ export const Project = defineDocumentType(() => ({
   filePathPattern: "projects/*.md",
   fields: {
     title: { type: "string", required: true },
-    projectLink: { type: "string", required: true },
+    projectLink: { type: "string", required: false },
     description: { type: "string", required: true },
     topic: { type: "string", required: true },
     client: { type: "string", required: true },

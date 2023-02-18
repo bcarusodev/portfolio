@@ -5,6 +5,8 @@ import {
   SiChakraui,
   SiDatadog,
   SiExpress,
+  SiJava,
+  SiJest,
   SiMaterialui,
   SiMysql,
   SiNextdotjs,
@@ -12,6 +14,7 @@ import {
   SiPostgresql,
   SiReact,
   SiServerless,
+  SiSpringboot,
   SiStorybook,
 } from "react-icons/si";
 import { ProjectStackProps } from "./types";
@@ -29,6 +32,9 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   nextjs: { name: "Next", icon: SiNextdotjs, colorScheme: "gray" },
   chakra: { name: "Chakra UI", icon: SiChakraui, colorScheme: "teal" },
   storybook: { name: "Storybook", icon: SiStorybook, colorScheme: "pink" },
+  java: { name: "Java", icon: SiJava, colorScheme: "orange" },
+  springboot: { name: "SpringBoot", icon: SiSpringboot, colorScheme: "green" },
+  jest: { name: "Jest", icon: SiJest, colorScheme: "red" },
 };
 
 export const projectIdParams = allProjects.map((project) => ({
