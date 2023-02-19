@@ -11,7 +11,6 @@ import {
   Text,
   Image,
   Show,
-  Link,
   Button,
   Box,
   Flex,
@@ -27,12 +26,10 @@ import {
 } from "react-icons/fa";
 import { ExperienceTimeline } from "../components/Organisms/ExperienceTimeline";
 import { SiMacos } from "react-icons/si";
-import { useRouter } from "next/router";
 import { TECHNOLOGIES } from "../../data/Technologies";
 import Layout from "../components/Atoms/Layout";
 
 const About = () => {
-  const router = useRouter();
   return (
     <Layout>
       <Container maxW={"7xl"}>
@@ -85,18 +82,19 @@ const About = () => {
             </VStack>
           </Stack>
 
-          <Button
-            size={"lg"}
-            fontWeight={"normal"}
-            leftIcon={<FaGoogleDrive />}
-            onClick={() =>
-              router.push(
-                "https://drive.google.com/file/d/1GcJ7z8lU_nnlA4cSd-axYvbGflDlMNMV/view?usp=sharing"
-              )
-            }
+          <a
+            href="https://drive.google.com/file/d/1GcJ7z8lU_nnlA4cSd-axYvbGflDlMNMV/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Full Resume
-          </Button>
+            <Button
+              size={"lg"}
+              fontWeight={"normal"}
+              leftIcon={<FaGoogleDrive />}
+            >
+              Full Resume
+            </Button>
+          </a>
 
           <Container justifyContent={"center"} maxW={"full"}>
             <VStack spacing={20}>
@@ -148,7 +146,7 @@ const About = () => {
             </HStack>
           </Show>
           <Show above="md">
-            <Link href="/assets/images/desktop_workstation.png" isExternal>
+            <a href="/assets/images/desktop_workstation.png" target="_blank">
               <Image
                 loading={"eager"}
                 fit={"cover"}
@@ -157,7 +155,7 @@ const About = () => {
                 width={700}
                 src={"/assets/images/desktop_workstation.png"}
               />
-            </Link>
+            </a>
           </Show>
         </VStack>
       </Container>

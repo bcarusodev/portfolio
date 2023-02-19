@@ -61,7 +61,11 @@ export const ContactButtons = () => {
               Email
             </Button>
           </Link>
-          <Link href={"https://www.calendly.com/brunofcaruso"}>
+          <a
+            href={"https://www.calendly.com/brunofcaruso"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button
               rightIcon={<CalendarIcon />}
               size={"lg"}
@@ -71,7 +75,7 @@ export const ContactButtons = () => {
             >
               Calendly
             </Button>
-          </Link>
+          </a>
         </HStack>
       </SlideFade>
     </Stack>
