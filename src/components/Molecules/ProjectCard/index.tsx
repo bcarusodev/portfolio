@@ -43,6 +43,7 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           h="full"
           objectFit={"cover"}
           src={imgSrc}
+          priority
         ></Image>
       </Card>
     </motion.div>
