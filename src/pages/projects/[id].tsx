@@ -20,7 +20,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
   return (
     <Layout>
-      <Container maxW={"8xl"}>
+      <Container maxW={"7xl"}>
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
             size={"md"}
@@ -34,7 +34,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           <Text color="gray.500">{projectData.description}</Text>
           {projectData.detailImage && (
             <Image
-              w={1400}
+              w={"full"}
               objectFit="cover"
               src={projectData.detailImage}
             ></Image>
