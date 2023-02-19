@@ -8,6 +8,7 @@ topic: Marketing
 client: StoryDots
 
 thumbnail: "assets/images/projects/sd/cover.png"
+detailImage: "/assets/images/projects/sd/detail.png"
 role: Full Stack Developer
 
 stacks:

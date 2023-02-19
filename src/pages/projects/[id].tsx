@@ -20,7 +20,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
   return (
     <Layout>
-      <Container maxW={"7xl"}>
+      <Container maxW={"8xl"}>
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
             size={"md"}
@@ -33,7 +33,11 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           <Heading>{projectData.title}</Heading>
           <Text color="gray.500">{projectData.description}</Text>
           {projectData.detailImage && (
-            <Image src={projectData.detailImage}></Image>
+            <Image
+              w={1400}
+              objectFit="cover"
+              src={projectData.detailImage}
+            ></Image>
           )}
           {/* <Heading size="md">responsabilities</Heading>
           <Text color="gray.500">{projectData.responsabilities}</Text> */}

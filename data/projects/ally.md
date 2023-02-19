@@ -7,6 +7,7 @@ topic: Clean Energy
 client: IT Crowd
 
 thumbnail: "assets/images/projects/ally/cover.jpg"
+detailImage: "/assets/images/projects/ally/detail.png"
 role: Full Stack Developer
 
 stacks:
