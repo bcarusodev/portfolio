@@ -3,6 +3,7 @@ import { GetStaticProps } from "next";
 import { FaAws } from "react-icons/fa";
 import {
   SiChakraui,
+  SiChartdotjs,
   SiDatadog,
   SiExpress,
   SiJava,
@@ -16,6 +17,7 @@ import {
   SiServerless,
   SiSpringboot,
   SiStorybook,
+  SiTypescript,
 } from "react-icons/si";
 import { ProjectStackProps } from "./types";
 
@@ -35,6 +37,8 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   java: { name: "Java", icon: SiJava, colorScheme: "orange" },
   springboot: { name: "SpringBoot", icon: SiSpringboot, colorScheme: "green" },
   jest: { name: "Jest", icon: SiJest, colorScheme: "red" },
+  typescript: { name: "TypeScript", icon: SiTypescript, colorScheme: "blue" },
+  chartjs: { name: "Chart.js", icon: SiChartdotjs, colorScheme: "pink" },
 };
 
 export const projectIdParams = allProjects.map((project) => ({
