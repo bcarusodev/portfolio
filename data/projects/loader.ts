@@ -2,18 +2,23 @@ import { allProjects, Project } from "contentlayer/generated";
 import { GetStaticProps } from "next";
 import { FaAws } from "react-icons/fa";
 import {
+  SiAngular,
   SiChakraui,
   SiChartdotjs,
   SiDatadog,
+  SiDotnet,
   SiExpress,
   SiJava,
   SiJest,
   SiMaterialui,
+  SiMicrosoftazure,
+  SiMicrosoftsqlserver,
   SiMysql,
   SiNextdotjs,
   SiNodedotjs,
   SiPostgresql,
   SiReact,
+  SiReactivex,
   SiServerless,
   SiSpringboot,
   SiStorybook,
@@ -39,6 +44,15 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   jest: { name: "Jest", icon: SiJest, colorScheme: "red" },
   typescript: { name: "TypeScript", icon: SiTypescript, colorScheme: "blue" },
   chartjs: { name: "Chart.js", icon: SiChartdotjs, colorScheme: "pink" },
+  dotnet: { name: ".NET Framework", icon: SiDotnet, colorScheme: "cyan" },
+  angular: { name: "Angular", icon: SiAngular, colorScheme: "red" },
+  sqlserver: {
+    name: "SQL Server",
+    icon: SiMicrosoftsqlserver,
+    colorScheme: "red",
+  },
+  azure: { name: "Azure", icon: SiMicrosoftazure, colorScheme: "blue" },
+  rxjs: { name: "RxJS", icon: SiReactivex, colorScheme: "pink" },
 };
 
 export const projectIdParams = allProjects.map((project) => ({
