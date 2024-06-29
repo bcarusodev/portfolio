@@ -51,7 +51,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
                     px={2}
                     py={1}
                     variant="subtle"
-                    colorScheme={stack.colorScheme}
+                    colorScheme={stack?.colorScheme ?? "gray"}
                   >
                     <HStack>
                       <stack.icon size={"35px"} />

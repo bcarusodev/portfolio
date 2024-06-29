@@ -14,6 +14,7 @@ import {
   SiMicrosoftazure,
   SiMicrosoftsqlserver,
   SiMysql,
+  SiNestjs,
   SiNextdotjs,
   SiNodedotjs,
   SiPostgresql,
@@ -52,6 +53,8 @@ export const stacksMap: Record<string, ProjectStackProps> = {
     colorScheme: "red",
   },
   azure: { name: "Azure", icon: SiMicrosoftazure, colorScheme: "blue" },
+  nest: { name: "NestJS", icon: SiNestjs, colorScheme: "red" },
+  nextui: { name: "NextUI", icon: SiNextdotjs, colorScheme: "gray" },
   rxjs: { name: "RxJS", icon: SiReactivex, colorScheme: "pink" },
 };
 
