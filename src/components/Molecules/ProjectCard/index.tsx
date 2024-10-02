@@ -1,4 +1,4 @@
-import { Card, CardHeader, Heading, Text, Image } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, Text, Image, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
@@ -22,7 +22,12 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
         w={300}
         h={300}
         borderRadius={15}
-        onClick={() => router.push("projects/" + id)}
+        as={Link}
+        href={"projects/" + id}
+        onClick={(e) => {
+          e.preventDefault();
+          router.push("projects/" + id);
+        }}
       >
         <CardHeader position="absolute" zIndex={2}>
           <Text

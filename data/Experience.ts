@@ -18,8 +18,8 @@ export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
   },
   {
     icon: IoMdBriefcase,
-    fromDate: new Date("2020-12-02"),
-    toDate: new Date("2021-07-02"),
+    fromDate: new Date("2020-09-02"),
+    toDate: new Date("2021-04-02"),
     title: "Frontend Developer",
     subtitle: "MerlionTechs",
   },
