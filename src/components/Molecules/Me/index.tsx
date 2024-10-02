@@ -13,21 +13,14 @@ export const Me = () => {
           <Heading fontSize={"3xl"} fontWeight={700} fontFamily={"body"}>
             Bruno Fabrizio Caruso
           </Heading>
-          <Text as={"span"}>
-            D2 Software Developer @{" "}
-            <Link href={"https://www.chubut.it"} isExternal>
-              Chubut IT
-              <ExternalLinkIcon mx="4px" mt="-4px" />
-            </Link>
-          </Text>
+          <Text as={"span"}>Full Stack Engineer</Text>
         </Box>
         <Flex maxW={"40rem"}>
           <Text color={"gray.500"}>
-            +3 years working with JavaScript & top-tier technologies like React,
-            NodeJS, REST. Passionate Developer & technology enthusiast.
-            User-centered mentality building high-quality-grade solutions. I
-            also like finances, fitness, hackintoshing and entrepreneurial
-            spirit. Self-taught by nature and constantly learning.
+            I'm a self-taught Full Stack Engineer with +3 years of experience in
+            various projects (fintech, ad-tech, ERP, B2B, B2C) working with
+            React, NextJS, Node, and AWS (also Azure & GCP). Interested in
+            crypto/fintech-related industries.
           </Text>
         </Flex>
       </Stack>
