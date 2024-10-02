@@ -1,5 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading, Image, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
 
 export const Me = () => {
   return (
