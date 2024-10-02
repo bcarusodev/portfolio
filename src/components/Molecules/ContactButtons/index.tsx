@@ -27,7 +27,7 @@ export const ContactButtons = () => {
               size={"lg"}
               w={{ base: "full" }}
               fontWeight={"normal"}
-              px={4}
+              px={5}
               onClick={onToggle}
             >
               Get in touch
@@ -50,28 +50,28 @@ export const ContactButtons = () => {
           <Button size={"lg"} fontWeight={"normal"} onClick={onToggle}>
             <ArrowBackIcon />
           </Button>
-          <Link href={"mailto:brunofcaruso@gmail.com"}>
+          <a href={"mailto:hello@bcaruso.dev"}>
             <Button
-              rightIcon={<EmailIcon />}
+              leftIcon={<EmailIcon />}
               size={"lg"}
               w={"full"}
               fontWeight={"normal"}
-              px={4}
+              px={6}
             >
-              Email
+              hello@bcaruso.dev
             </Button>
-          </Link>
+          </a>
           <a
             href={"https://www.calendly.com/brunofcaruso"}
             target="_blank"
             rel="noopener noreferrer"
           >
             <Button
-              rightIcon={<CalendarIcon />}
+              leftIcon={<CalendarIcon />}
               size={"lg"}
               w={"full"}
               fontWeight={"normal"}
-              px={8}
+              px={6}
             >
               Calendly
             </Button>

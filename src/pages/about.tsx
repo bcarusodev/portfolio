@@ -137,7 +137,7 @@ const About = () => {
               Blue 7200rpm HDD
             </p>
             <p>Corsair Carbide 100R</p>
-            <p>Windows 11 & macOS Big Sur dual-boot (OpenCore)</p>
+            <p>Windows 11 & macOS Sonoma dual-boot (OpenCore)</p>
           </Text>
           <Show below="md">
             <HStack spacing={10}>
