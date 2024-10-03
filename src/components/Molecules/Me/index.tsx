@@ -16,10 +16,10 @@ export const Me = () => {
         </Box>
         <Flex maxW={"40rem"}>
           <Text color={"gray.500"}>
-            I'm a self-taught Full Stack Engineer with +3 years of experience in
-            various projects (fintech, ad-tech, ERP, B2B, B2C) working with
-            React, NextJS, Node, and AWS (also Azure & GCP). Interested in
-            crypto/fintech-related industries.
+            I{"'"}m a self-taught Full Stack Engineer with +3 years of
+            experience in various projects (fintech, ad-tech, ERP, B2B, B2C)
+            working with React, NextJS, Node, and AWS (also Azure & GCP).
+            Interested in crypto/fintech-related industries.
           </Text>
         </Flex>
       </Stack>
