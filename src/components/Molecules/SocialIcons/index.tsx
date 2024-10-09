@@ -10,7 +10,7 @@ export const SocialIcons = () => (
     >
       <FaLinkedinIn />
     </SocialIcon>
-    <SocialIcon label={"GitHub"} href={"https://www.github.com/silvergraphs"}>
+    <SocialIcon label={"GitHub"} href={"https://www.github.com/bcarusodev"}>
       <FaGithub />
     </SocialIcon>
     <SocialIcon
