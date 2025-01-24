@@ -24,6 +24,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
             size={"xs"}
+            variant={"outline"}
             fontWeight={"normal"}
             leftIcon={<ArrowBackIcon />}
             onClick={() => router.back()}

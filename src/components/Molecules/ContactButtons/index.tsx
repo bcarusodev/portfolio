@@ -23,10 +23,11 @@ export const ContactButtons = () => {
         <SlideFade in={!isOpen} hidden={isOpen}>
           <HStack>
             <Button
-              size={"lg"}
+              size={"md"}
               w={{ base: "full" }}
               fontWeight={"normal"}
               px={5}
+              variant={"outline"}
               onClick={onToggle}
             >
               Get in touch
@@ -36,14 +37,15 @@ export const ContactButtons = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button size={"lg"} fontWeight={"normal"}>
+              <Button size={"md"} fontWeight={"normal"} variant={"outline"}>
                 Resume
               </Button>
             </a>
             <Button
-              size={"lg"}
+              size={"md"}
               rightIcon={<ArrowForwardIcon />}
               fontWeight={"normal"}
+              variant={"outline"}
               px={5}
               w={{ base: "full" }}
               onClick={() => router.push("/work")}
@@ -55,14 +57,20 @@ export const ContactButtons = () => {
       )}
       <SlideFade in={isOpen} hidden={!isOpen}>
         <HStack spacing={2}>
-          <Button size={"lg"} fontWeight={"normal"} onClick={onToggle}>
+          <Button
+            size={"md"}
+            variant={"outline"}
+            fontWeight={"normal"}
+            onClick={onToggle}
+          >
             <ArrowBackIcon />
           </Button>
           <a href={"mailto:hello@bcaruso.dev"}>
             <Button
               leftIcon={<EmailIcon />}
-              size={"lg"}
+              size={"md"}
               w={"full"}
+              variant={"outline"}
               fontWeight={"normal"}
               px={6}
             >
@@ -76,8 +84,9 @@ export const ContactButtons = () => {
           >
             <Button
               leftIcon={<CalendarIcon />}
-              size={"lg"}
+              size={"md"}
               w={"full"}
+              variant={"outline"}
               fontWeight={"normal"}
               px={6}
             >
