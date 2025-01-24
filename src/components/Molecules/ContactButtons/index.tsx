@@ -13,7 +13,6 @@ import {
   EmailIcon,
 } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
-import { FaGoogleDrive } from "react-icons/fa";
 
 export const ContactButtons = () => {
   const { isOpen, onToggle } = useDisclosure();
