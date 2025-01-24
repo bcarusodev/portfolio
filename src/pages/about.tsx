@@ -128,16 +128,14 @@ const About = () => {
             my workstation
           </Heading>
           <Text align="center" color={"gray.500"}>
-            <p>ASRock X370M-HDV R4.0</p>
-            <p>AMD Ryzen 5 1600 AF @ 4.0 GHz - Thermaltake Contac Silent 12</p>
-            <p>16GB RAM XPG Hunter DDR4 @ 3000 MHz</p>
-            <p>ASRock Phantom Gaming D RX 570 4G</p>
-            <p>
-              1x XPG S40G Spectrix NVMe + 1x Kingston UV400 SSD + 2x WD Caviar
-              Blue 7200rpm HDD
-            </p>
+            <p>Gigabyte B550 AORUS ELITE AX V2</p>
+            <p>AMD Ryzen 7 5700X - Thermaltake Contac Silent 12</p>
+            <p>16GB RAM XPG Hunter DDR4 @ 3200 MHz</p>
+            <p>Sapphire Nitro+ RX 6700 XT 12G</p>
+            <p>WD Blue SN580 1TB NVMe</p>
+            <p>XPG S40G Spectrix 256GB NVMe</p>
             <p>Corsair Carbide 100R</p>
-            <p>Windows 11 & macOS Sonoma dual-boot (OpenCore)</p>
+            <p>Windows 11 & macOS dual-boot (OpenCore)</p>
           </Text>
           <Show below="md">
             <HStack spacing={10}>
