@@ -23,7 +23,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
       <Container maxW={"1200px"}>
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
-            size={"md"}
+            size={"xs"}
             fontWeight={"normal"}
             leftIcon={<ArrowBackIcon />}
             onClick={() => router.back()}

@@ -84,7 +84,8 @@ const About = () => {
             rel="noopener noreferrer"
           >
             <Button
-              size={"lg"}
+              variant={"outline"}
+              size={"md"}
               fontWeight={"normal"}
               rightIcon={<ExternalLinkIcon />}
             >

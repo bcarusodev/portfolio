@@ -16,7 +16,8 @@ const Index = () => {
           <Services />
           <AboutMe />
           <Button
-            size={"lg"}
+            variant={"outline"}
+            size={"md"}
             fontWeight={"normal"}
             onClick={() => router.push("/about")}
           >
