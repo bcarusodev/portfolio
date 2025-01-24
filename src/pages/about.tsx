@@ -18,16 +18,12 @@ import {
 import { AboutMe } from "../components/Organisms/AboutMe";
 import { MdLanguage } from "react-icons/md";
 import { TimelineItem } from "../components/Molecules/TimelineItem";
-import {
-  FaGoogleDrive,
-  FaMedal,
-  FaWindows,
-  FaGraduationCap,
-} from "react-icons/fa";
+import { FaMedal, FaWindows, FaGraduationCap } from "react-icons/fa";
 import { ExperienceTimeline } from "../components/Organisms/ExperienceTimeline";
 import { SiMacos } from "react-icons/si";
 import { TECHNOLOGIES } from "../../data/Technologies";
 import Layout from "../components/Atoms/Layout";
+import { RiExternalLinkLine } from "react-icons/all";
 
 const About = () => {
   return (
@@ -83,16 +79,16 @@ const About = () => {
           </Stack>
 
           <a
-            href="https://drive.google.com/file/d/1GcJ7z8lU_nnlA4cSd-axYvbGflDlMNMV/view?usp=sharing"
+            href="https://drive.google.com/file/d/1Ah-AHDGnKmbtHz2wUOUdlReLaUwcjefY/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Button
               size={"lg"}
               fontWeight={"normal"}
-              leftIcon={<FaGoogleDrive />}
+              rightIcon={<RiExternalLinkLine />}
             >
-              Full Resume
+              Resume
             </Button>
           </a>
 
