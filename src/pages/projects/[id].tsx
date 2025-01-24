@@ -20,7 +20,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
   return (
     <Layout>
-      <Container maxW={"7xl"}>
+      <Container maxW={"1200px"}>
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
             size={"md"}

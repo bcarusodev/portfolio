@@ -19,7 +19,7 @@ export default function Footer() {
         justify={{ base: "center", md: "space-between" }}
         align={{ base: "center", md: "center" }}
       >
-        <Brand />
+        <Brand size={"md"} />
         <FooterNotes />
         <SocialIcons />
       </Container>
