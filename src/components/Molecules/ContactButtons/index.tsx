@@ -13,6 +13,7 @@ import {
   EmailIcon,
 } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
+import { FaGoogleDrive } from "react-icons/fa";
 
 export const ContactButtons = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -31,6 +32,15 @@ export const ContactButtons = () => {
             >
               Get in touch
             </Button>
+            <a
+              href="https://drive.google.com/file/d/1Ah-AHDGnKmbtHz2wUOUdlReLaUwcjefY/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size={"lg"} fontWeight={"normal"}>
+                Resume
+              </Button>
+            </a>
             <Button
               size={"lg"}
               rightIcon={<ArrowForwardIcon />}
