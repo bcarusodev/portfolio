@@ -41,7 +41,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           )}
           {/* <Heading size="md">responsabilities</Heading>
           <Text color="gray.500">{projectData.responsabilities}</Text> */}
-          <Heading size="md">technologies</Heading>
+          <Heading size="md">technologies used</Heading>
           <HStack spacing={5}>
             {projectData.stacks.map((stackId) => {
               const stack = stacksMap[stackId];

@@ -23,7 +23,7 @@ import { ExperienceTimeline } from "../components/Organisms/ExperienceTimeline";
 import { SiMacos } from "react-icons/si";
 import { TECHNOLOGIES } from "../../data/Technologies";
 import Layout from "../components/Atoms/Layout";
-import { RiExternalLinkLine } from "react-icons/all";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 const About = () => {
   return (
@@ -86,7 +86,7 @@ const About = () => {
             <Button
               size={"lg"}
               fontWeight={"normal"}
-              rightIcon={<RiExternalLinkLine />}
+              rightIcon={<ExternalLinkIcon />}
             >
               Resume
             </Button>
