@@ -9,6 +9,7 @@ import "../styles/globals.css";
 import React from "react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { AnimatedBackground } from "@/components/Molecules/AnimatedBackground";
+import { Toaster } from "@/components/ui/sonner";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const url = `https://bcaruso.dev${router.route}`;
@@ -24,6 +25,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <AnimatePresence mode="wait" initial={true}>
           <Component {...pageProps} canonical={url} key={url} />
         </AnimatePresence>
+        <Toaster position={"bottom-center"} />
         <Footer />
       </ChakraProvider>
     </ThemeProvider>

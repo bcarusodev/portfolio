@@ -25,7 +25,6 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       transition={{ duration: 0.2, type: "tween" }}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
-      <Toaster className={"z-20"} />
       <Box minH="calc(90vh - 44px)">{children}</Box>
     </motion.main>
   </>
