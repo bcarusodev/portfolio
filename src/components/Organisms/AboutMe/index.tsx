@@ -1,19 +1,13 @@
-import { Box, Flex, Heading, VStack, Container } from "@chakra-ui/react";
+import { Box, Flex, VStack, Container } from "@chakra-ui/react";
 import { Me } from "../../Molecules/Me";
+import Title from "@/components/Atoms/Title/title";
 
 export const AboutMe = () => {
   return (
-    <Container justifyContent={"center"} maxW={"full"}>
+    <Container justifyContent={"center"} maxW={"3xl"} padding={0}>
       <VStack spacing={20}>
         <VStack>
-          <Heading
-            fontWeight={600}
-            fontSize={"4xl"}
-            letterSpacing={"-1px"}
-            pb={4}
-          >
-            about me
-          </Heading>
+          <Title>About Me</Title>
           <Box id={"about-me"}>
             <Flex gap={5} justifyContent={"center"} flexWrap={"wrap"}>
               <Me />

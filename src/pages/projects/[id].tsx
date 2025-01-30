@@ -1,10 +1,9 @@
-import { ProjectDetailProps } from "../../../data/projects/types";
+import { ProjectDetailProps } from "@data/projects/types";
 import {
   Container,
   Heading,
   VStack,
   Text,
-  Button,
   HStack,
   Box,
   Link,
@@ -14,7 +13,8 @@ import {
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
 import { ArrowBackIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import { stacksMap } from "../../../data/projects/loader";
+import { stacksMap } from "@data/projects/loader";
+import { Button } from "@/components/ui/button";
 
 const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
@@ -23,13 +23,11 @@ const Project = ({ projectData }: ProjectDetailProps) => {
       <Container maxW={"1200px"}>
         <VStack spacing={10} pt={10} pb={28} textAlign="center">
           <Button
-            size={"xs"}
             variant={"outline"}
-            fontWeight={"normal"}
-            leftIcon={<ArrowBackIcon />}
+            className={"text-xs h-7 px-2"}
             onClick={() => router.back()}
           >
-            All Projects
+            <ArrowBackIcon /> All Projects
           </Button>
           <Heading>{projectData.title}</Heading>
           <Text color="gray.500">{projectData.description}</Text>

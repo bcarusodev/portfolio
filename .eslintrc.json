@@ -27,6 +27,12 @@
       "rules": {
         "no-undef": "off"
       }
+    },
+    {
+      "files": ["src/components/ui/**/*.{ts,tsx}"],
+      "rules": {
+        "react/prop-types": "off"
+      }
     }
   ],
   "settings": {

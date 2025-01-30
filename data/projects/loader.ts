@@ -1,6 +1,6 @@
 import { allProjects, Project } from "contentlayer/generated";
 import { GetStaticProps } from "next";
-import { FaAws } from "react-icons/fa";
+import { FaAws, FaJava } from "react-icons/fa";
 import {
   SiAngular,
   SiChakraui,
@@ -8,9 +8,8 @@ import {
   SiDatadog,
   SiDotnet,
   SiExpress,
-  SiJava,
   SiJest,
-  SiMaterialui,
+  SiMaterialdesign,
   SiMicrosoftazure,
   SiMicrosoftsqlserver,
   SiMysql,
@@ -28,7 +27,11 @@ import {
 import { ProjectStackProps } from "./types";
 
 export const stacksMap: Record<string, ProjectStackProps> = {
-  materialui: { name: "Material UI", icon: SiMaterialui, colorScheme: "teal" },
+  materialui: {
+    name: "Material UI",
+    icon: SiMaterialdesign,
+    colorScheme: "teal",
+  },
   nodejs: { name: "NodeJS", icon: SiNodedotjs, colorScheme: "green" },
   react: { name: "React", icon: SiReact, colorScheme: "cyan" },
   serverless: { name: "Serverless", icon: SiServerless, colorScheme: "red" },
@@ -40,7 +43,7 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   nextjs: { name: "Next", icon: SiNextdotjs, colorScheme: "gray" },
   chakra: { name: "Chakra UI", icon: SiChakraui, colorScheme: "teal" },
   storybook: { name: "Storybook", icon: SiStorybook, colorScheme: "pink" },
-  java: { name: "Java", icon: SiJava, colorScheme: "orange" },
+  java: { name: "Java", icon: FaJava, colorScheme: "orange" },
   springboot: { name: "SpringBoot", icon: SiSpringboot, colorScheme: "green" },
   jest: { name: "Jest", icon: SiJest, colorScheme: "red" },
   typescript: { name: "TypeScript", icon: SiTypescript, colorScheme: "blue" },

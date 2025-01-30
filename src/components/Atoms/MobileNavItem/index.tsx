@@ -1,11 +1,10 @@
-import { NavItem } from "../../../types/data";
+import { NavItem } from "@/types/data";
 import {
   Collapse,
   Flex,
   Icon,
   Link,
   Stack,
-  Text,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -15,9 +14,9 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Stack spacing={4} onClick={children && onToggle}>
+    <Stack spacing={8} px={2} onClick={children && onToggle}>
       <Flex
-        py={2}
+        py={3}
         as={Link}
         href={href ?? "#"}
         justify={"space-between"}
@@ -26,12 +25,7 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
           textDecoration: "none",
         }}
       >
-        <Text
-          fontWeight={600}
-          color={useColorModeValue("gray.600", "gray.200")}
-        >
-          {label}
-        </Text>
+        <span className="group inline-flex items-center text-xl">{label}</span>
         {children && (
           <Icon
             as={ChevronDownIcon}

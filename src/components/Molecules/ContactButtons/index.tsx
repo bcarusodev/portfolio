@@ -1,100 +1,44 @@
-import {
-  Button,
-  HStack,
-  SlideFade,
-  Stack,
-  useDisclosure,
-} from "@chakra-ui/react";
 import React from "react";
-import {
-  ArrowBackIcon,
-  ArrowForwardIcon,
-  CalendarIcon,
-  EmailIcon,
-} from "@chakra-ui/icons";
-import { useRouter } from "next/router";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const ContactButtons = () => {
-  const { isOpen, onToggle } = useDisclosure();
-  const router = useRouter();
   return (
-    <Stack direction={{ base: "column", sm: "row" }}>
-      {!isOpen && (
-        <SlideFade in={!isOpen} hidden={isOpen}>
-          <HStack>
+    <div className={"flex justify-center"}>
+      <div
+        className={
+          "flex flex-col justify-center self-center items-center md:flex-row md:max-w-[400px] gap-3 w-full"
+        }
+      >
+        <Link
+          href="/about"
+          rel="noopener noreferrer"
+          className={"w-full md:w-1/2"}
+        >
+          <RainbowButton className={"text-sm w-full h-10"}>
+            Explore My Story
+          </RainbowButton>
+        </Link>
+        <div className={"w-full md:w-1/2"}>
+          <Link href="/work" rel="noopener noreferrer">
             <Button
-              size={"md"}
-              w={{ base: "full" }}
-              fontWeight={"normal"}
-              px={5}
               variant={"outline"}
-              onClick={onToggle}
+              className={
+                "items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 group relative animate-rainbow cursor-pointer bg-[length:200%] text-foreground shadow-sm before:absolute before:bottom-[-20%] before:left-1/2 before:z-[0] before:h-[20%] before:w-[60%] before:-translate-x-1/2 inline-flex h-10 px-8 w-full gap-2 border border-input rounded-xl"
+              }
             >
-              Get in touch
+              Projects{" "}
+              <ChevronRight
+                className={
+                  "w-[16px] lucide lucide-chevron-right ml-1 size-4 shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"
+                }
+              />
             </Button>
-            <a
-              href="https://drive.google.com/file/d/1Ah-AHDGnKmbtHz2wUOUdlReLaUwcjefY/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button size={"md"} fontWeight={"normal"} variant={"outline"}>
-                Resume
-              </Button>
-            </a>
-            <Button
-              size={"md"}
-              rightIcon={<ArrowForwardIcon />}
-              fontWeight={"normal"}
-              variant={"outline"}
-              px={5}
-              w={{ base: "full" }}
-              onClick={() => router.push("/work")}
-            >
-              See Work
-            </Button>
-          </HStack>
-        </SlideFade>
-      )}
-      <SlideFade in={isOpen} hidden={!isOpen}>
-        <HStack spacing={2}>
-          <Button
-            size={"md"}
-            variant={"outline"}
-            fontWeight={"normal"}
-            onClick={onToggle}
-          >
-            <ArrowBackIcon />
-          </Button>
-          <a href={"mailto:hello@bcaruso.dev"}>
-            <Button
-              leftIcon={<EmailIcon />}
-              size={"md"}
-              w={"full"}
-              variant={"outline"}
-              fontWeight={"normal"}
-              px={6}
-            >
-              hello@bcaruso.dev
-            </Button>
-          </a>
-          <a
-            href={"https://www.calendly.com/brunofcaruso"}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              leftIcon={<CalendarIcon />}
-              size={"md"}
-              w={"full"}
-              variant={"outline"}
-              fontWeight={"normal"}
-              px={6}
-            >
-              Calendly
-            </Button>
-          </a>
-        </HStack>
-      </SlideFade>
-    </Stack>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };

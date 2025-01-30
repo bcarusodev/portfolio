@@ -7,7 +7,7 @@ import { CgArrowsMergeAltH } from "react-icons/cg";
 export const SKILLS_ITEMS: Array<SkillItem> = [
   {
     icon: TbWorld,
-    title: "Web Apps",
+    title: "Frontend Web Apps",
     description:
       "Custom, quality-made, flexible and reliable web development for your projects needs.",
   },

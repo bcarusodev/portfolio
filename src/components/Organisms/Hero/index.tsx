@@ -1,109 +1,78 @@
-import {
-  Container,
-  Stack,
-  Flex,
-  Heading,
-  Text,
-  SlideFade,
-} from "@chakra-ui/react";
+import { Container, Stack, Heading } from "@chakra-ui/react";
 import React from "react";
-import TextTransition, { presets } from "react-text-transition";
-import { HERO_TEXTS } from "../../../../data/Hero";
-import { Spaceman } from "../../Atoms/Lotties/Spaceman";
-import { ContactButtons } from "../../Molecules/ContactButtons";
+import constants from "../../../constants";
+import { BlurFade } from "@/components/ui/blur-fade";
+import { ContactButtons } from "@/components/Molecules/ContactButtons";
+import { LineShadowText } from "@/components/ui/line-shadow-text";
+import { useTheme } from "next-themes";
+import { FaReact } from "react-icons/fa";
+import { TbBrandNextjs } from "react-icons/tb";
+import { SiExpress, SiTailwindcss } from "react-icons/si";
 
 export default function Hero() {
-  const [index, setIndex] = React.useState(0);
-
-  // TODO: add transition to brunocaruso -> bcaruso.dev
-
-  React.useEffect(() => {
-    const intervalId = setInterval(
-      () =>
-        setIndex((index) => (index === HERO_TEXTS.length - 1 ? 0 : index + 1)),
-      4500
-    );
-    return () => clearTimeout(intervalId);
-  }, []);
+  const theme = useTheme();
+  const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
 
   return (
     <Container
-      maxW={"7xl"}
+      // maxW={"7xl"}
       display={{ base: "unset", md: "flex" }}
-      height={"95vh"}
+      height={"90vh"}
+      className={"justify-center self-center items-center flex"}
     >
       <Stack
         align={"center"}
-        spacing={{ base: 8, md: 10 }}
-        direction={{ base: "column-reverse", md: "row" }}
+        direction={{ base: "column", md: "row" }}
+        className={"py-10 md:py-0"}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
-          <SlideFade
-            in={true}
-            offsetY="30px"
-            transition={{ enter: { duration: 0.7 } }}
+          <Heading
+            lineHeight={1.1}
+            fontWeight={700}
+            letterSpacing={"-2px"}
+            className={"text-center"}
+            fontSize={{ base: "4xl", sm: "5xl", lg: "6xl" }}
           >
-            <Heading
-              lineHeight={1.1}
-              fontWeight={700}
-              letterSpacing={"-2px"}
-              fontSize={{ base: "4xl", sm: "5xl", lg: "6xl" }}
-            >
-              <Text as={"span"} fontWeight={700}>
-                brunocaruso
-              </Text>
-              <br />
-              <Text
-                as={"span"}
-                position={"relative"}
-                bgGradient="linear(to-l, heroGradientStart, heroGradientEnd)"
-                bgClip="text"
-              >
+            <BlurFade delay={constants.BLUR_FADE_DELAY * 2}>
+              brunocaruso
+            </BlurFade>
+            <BlurFade delay={constants.BLUR_FADE_DELAY * 4}>
+              <span className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-center text-4xl md:text-5xl lg:text-6xl font-bold leading-none tracking-tighter text-transparent">
                 passionate
-              </Text>
-              <br />
-              <Text as={"span"}>
-                <TextTransition springConfig={presets.default} inline>
-                  {HERO_TEXTS[index]}
-                </TextTransition>
-              </Text>
-            </Heading>
-          </SlideFade>
+              </span>
+            </BlurFade>
+            <BlurFade delay={constants.BLUR_FADE_DELAY * 5}>
+              software{" "}
+              <LineShadowText className="italic" shadowColor={shadowColor}>
+                developer
+              </LineShadowText>
+            </BlurFade>
+          </Heading>
 
-          <SlideFade
-            in={true}
-            offsetY="30px"
-            transition={{ enter: { duration: 0.9 } }}
-          >
-            <Text fontSize={"xl"} color={"gray.500"} fontWeight={400}>
+          <BlurFade delay={constants.BLUR_FADE_DELAY * 5}>
+            <p
+              className={
+                "max-w-xl text-balance text-center text-base tracking-tight text-black dark:font-medium dark:text-white md:text-lg "
+              }
+            >
               Welcome to my portfolio! My name is Bruno, self-taught by nature
-              and constantly learning about development & technology. 💡😙
-            </Text>
-          </SlideFade>
+              and constantly learning about development & technology. My main
+              stack is on <b>TypeScript</b> and <b>Node</b>. 💡😙
+            </p>
+          </BlurFade>
+          <BlurFade delay={constants.BLUR_FADE_DELAY * 5}>
+            <div className={"flex justify-center gap-2"}>
+              <FaReact className={"w-[38px] h-[38px]"} />
+              <TbBrandNextjs className={"w-[38px] h-[38px]"} />
+              <SiTailwindcss className={"w-[38px] h-[38px]"} />
+              <SiExpress className={"w-[38px] h-[38px]"} />
+            </div>
+          </BlurFade>
 
-          <SlideFade
-            in={true}
-            offsetY="30px"
-            transition={{ enter: { duration: 1.1 } }}
-          >
+          <BlurFade delay={constants.BLUR_FADE_DELAY * 6}>
             <ContactButtons />
-          </SlideFade>
+          </BlurFade>
         </Stack>
-        <Flex
-          flex={1}
-          justify={"center"}
-          align={"center"}
-          position={"relative"}
-          w={"full"}
-        >
-          <SlideFade
-            in={true}
-            offsetY="30px"
-            transition={{ enter: { duration: 1.3 } }}
-          >
-            <Spaceman />
-          </SlideFade>
-        </Flex>
       </Stack>
     </Container>
   );

@@ -1,21 +1,20 @@
 import {
   Box,
-  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { NAV_ITEMS } from "../../../../data/NavItems";
 import { DarkModeSwitch } from "../../Atoms/DarkModeSwitch";
 import { DesktopSubNav } from "./DesktopSubNav";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
-  const router = useRouter();
 
   return (
     <Stack direction={"row"} spacing={4} alignItems={"center"}>
@@ -25,16 +24,21 @@ export const DesktopNav = () => {
             <Box key={navItem.label}>
               <Popover trigger={"hover"} placement={"bottom-start"}>
                 <PopoverTrigger>
-                  <Button
-                    key={`navlink-${index}`}
-                    onClick={() => router.push(navItem.href)}
-                    fontSize={"sm"}
-                    fontWeight={500}
-                    variant={"ghost"}
-                    color={linkColor}
-                  >
-                    {navItem.label}
-                  </Button>
+                  <Link href={navItem.href}>
+                    <Button
+                      key={`navlink-${index}`}
+                      className={"text-sm"}
+                      variant={"link"}
+                      color={linkColor}
+                      asChild={true}
+                    >
+                      <div className="group w-fit">
+                        <span className="relative cursor-pointer block after:block after:content-[''] after:absolute after:h-[2px] after:mt-1 after:bg-black after:dark:bg-white after:w-full after:scale-x-0 after:transition after:duration-300 after:origin-right group-hover:after:scale-x-100 group-hover:after:origin-left">
+                          {navItem.label}
+                        </span>
+                      </div>
+                    </Button>
+                  </Link>
                 </PopoverTrigger>
 
                 {navItem.children && (

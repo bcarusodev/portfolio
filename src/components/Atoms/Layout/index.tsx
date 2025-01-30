@@ -1,6 +1,9 @@
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Toaster } from "@/components/ui/sonner";
 
 type LayoutProps = {
   children: ReactNode;
@@ -20,7 +23,9 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       exit="exit"
       variants={variants}
       transition={{ duration: 0.2, type: "tween" }}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
+      <Toaster className={"z-20"} />
       <Box minH="calc(90vh - 44px)">{children}</Box>
     </motion.main>
   </>

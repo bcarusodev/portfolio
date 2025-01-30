@@ -1,10 +1,15 @@
 import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import { ColorModeScript } from "@chakra-ui/react";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 export default class Document extends NextDocument {
   render() {
     return (
-      <Html style={{ scrollBehavior: "smooth" }}>
+      <Html
+        style={{ scrollBehavior: "smooth" }}
+        className={`${GeistSans.variable} ${GeistMono.variable}`}
+      >
         <Head>
           <link
             rel="icon"
@@ -15,12 +20,6 @@ export default class Document extends NextDocument {
             rel="icon"
             type="image/png"
             href="/assets/images/favicon.png"
-          ></link>
-          <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-          <link rel="preconnect" href="https://fonts.gstatic.com"></link>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
           ></link>
         </Head>
         <body>

@@ -15,12 +15,13 @@ export interface SkillItem {
   description: string;
 }
 export interface TimelineItem {
-  icon: ReactNode;
+  iconSrc: ReactNode;
   fromDate: Date;
   toDate?: Date | "Present";
   title: string;
   subtitle: string;
   description?: string;
+  url: string;
 }
 
 export interface Technology {

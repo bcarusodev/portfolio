@@ -3,7 +3,7 @@ import { FaInstagram, FaLinkedinIn, FaYoutube, FaGithub } from "react-icons/fa";
 import { Stack } from "@chakra-ui/react";
 
 export const SocialIcons = () => (
-  <Stack direction={"row"} spacing={6}>
+  <Stack direction={"row"} spacing={2}>
     <SocialIcon
       label={"LinkedIn"}
       href={"https://www.linkedin.com/in/brunocarusok"}
