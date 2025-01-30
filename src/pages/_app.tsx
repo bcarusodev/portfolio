@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import { AnimatedBackground } from "@/components/Molecules/AnimatedBackground";
 import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const url = `https://bcaruso.dev${router.route}`;
@@ -25,7 +26,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <NavBar />
         <AnimatePresence mode="wait" initial={true}>
           <Component {...pageProps} canonical={url} key={url} />
-          <GoogleAnalytics gaId="G-LYHVRF7R6V" />
+          <>
+            <GoogleAnalytics gaId="G-LYHVRF7R6V" />
+            <SpeedInsights />
+          </>
         </AnimatePresence>
         <Toaster position={"bottom-center"} />
         <Footer />
