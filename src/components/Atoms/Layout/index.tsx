@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Toaster } from "@/components/ui/sonner";
 
 type LayoutProps = {
   children: ReactNode;
