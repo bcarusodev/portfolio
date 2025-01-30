@@ -8,13 +8,13 @@ import {
   Box,
   Link,
   Badge,
-  Image,
 } from "@chakra-ui/react";
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
 import { ArrowBackIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { stacksMap } from "@data/projects/loader";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
@@ -33,9 +33,11 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           <Text color="gray.500">{projectData.description}</Text>
           {projectData.detailImage && (
             <Image
-              w={"full"}
+              width={1100}
+              height={720}
               objectFit="cover"
               src={projectData.detailImage}
+              alt={projectData.title}
             ></Image>
           )}
           {/* <Heading size="md">responsabilities</Heading>
