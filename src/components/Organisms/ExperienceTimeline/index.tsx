@@ -1,4 +1,4 @@
-import { VStack, Avatar } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { EXPERIENCE_ITEMS } from "../../../../data/Experience";
 import { TimelineItem } from "../../Molecules/TimelineItem";
 import Image from "next/image";
