@@ -9,7 +9,7 @@ export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
     iconSrc: RemiteeLogo,
     fromDate: new Date("2025-03-02"),
     toDate: "Present",
-    title: "Software Developer",
+    title: "Treasury Software Developer",
     subtitle: "Remitee",
     url: "https://www.remitee.com",
   },
