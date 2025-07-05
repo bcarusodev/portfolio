@@ -1,6 +1,7 @@
-import { VStack, Avatar } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { EXPERIENCE_ITEMS } from "../../../../data/Experience";
 import { TimelineItem } from "../../Molecules/TimelineItem";
+import Image from "next/image";
 
 export const ExperienceTimeline = () => {
   return (
@@ -9,12 +10,19 @@ export const ExperienceTimeline = () => {
         <TimelineItem
           key={`timeline-item-${index}`}
           iconSrc={
-            <Avatar
-              src={item.iconSrc.src}
-              width={12}
-              height={12}
-              border={"1px solid #e5e7eb"}
-            />
+            <div
+              className={
+                "border border-gray-300 dark:border-gray-500 rounded-full"
+              }
+            >
+              <Image
+                width={47}
+                height={47}
+                className={"object-cover rounded-full shadow-2xl aspect-square"}
+                src={item.iconSrc.src}
+                alt={item.title}
+              />
+            </div>
           }
           title={item.title}
           subtitle={item.subtitle}

@@ -1,6 +1,7 @@
-import { Card, CardHeader, Heading, Text, Image, Link } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, Text, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface ProjectCardProps {
   id: string;
@@ -43,11 +44,11 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           </Heading>
         </CardHeader>
         <Image
-          borderRadius={15}
-          w="full"
-          h="full"
-          objectFit={"cover"}
-          src={imgSrc}
+          alt={title}
+          width={600}
+          height={600}
+          className={"rounded-xl object-cover w-full h-full"}
+          src={"/" + imgSrc}
           loading="eager"
         ></Image>
       </Card>

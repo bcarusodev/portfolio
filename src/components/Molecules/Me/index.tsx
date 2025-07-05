@@ -1,4 +1,5 @@
-import { Box, Flex, Heading, Image, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
+import Image from "next/image";
 
 export const Me = () => {
   return (
@@ -42,14 +43,14 @@ export const Me = () => {
       </Stack>
 
       <Image
+        width={150}
+        height={150}
+        className={"object-cover rounded-full shadow-2xl aspect-square"}
         loading={"eager"}
-        fit={"cover"}
-        borderRadius={"full"}
-        align={"center"}
-        boxShadow={"2xl"}
-        css={{ objectViewBox: "inset(0% -16% 21% 0%)" }}
-        boxSize={"150px"}
+        // @ts-ignore
+        style={{ objectViewBox: "inset(0% -16% 21% 0%)" }}
         src={"/assets/images/hero.jpg"}
+        alt={"Me"}
       />
     </Stack>
   );
