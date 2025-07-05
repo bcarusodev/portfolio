@@ -8,6 +8,7 @@ import {
   Box,
   Link,
   Badge,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
@@ -59,13 +60,14 @@ const Project = ({ projectData }: ProjectDetailProps) => {
               return (
                 <VStack key={stackId}>
                   <Badge
-                    px={2}
+                    px={1}
                     py={1}
-                    variant="subtle"
+                    variant={useColorModeValue("outline", "solid")}
+                    rounded={"full"}
                     colorScheme={stack?.colorScheme ?? "gray"}
                   >
                     <HStack>
-                      <stack.icon size={"35px"} />
+                      <stack.icon size={"35px"} className={"p-1"} />
                     </HStack>
                   </Badge>
                   <Text color="gray.500" fontSize="xs">
