@@ -39,7 +39,7 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           >
             {topic}
           </Text>
-          <Heading size="lg" color="white">
+          <Heading size="lg" color="white" className={"tracking-tight"}>
             {title}
           </Heading>
         </CardHeader>

@@ -29,8 +29,16 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           >
             <ArrowBackIcon /> All Projects
           </Button>
-          <Heading>{projectData.title}</Heading>
-          <Text color="gray.500">{projectData.description}</Text>
+          <Heading
+            size="lg"
+            fontWeight={"semibold"}
+            className={"tracking-tight"}
+          >
+            {projectData.title}
+          </Heading>
+          <Text color="gray.500" className={"tracking-tight"}>
+            {projectData.description}
+          </Text>
           {projectData.detailImage && (
             <Image
               width={1100}
@@ -42,7 +50,9 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           )}
           {/* <Heading size="md">responsabilities</Heading>
           <Text color="gray.500">{projectData.responsabilities}</Text> */}
-          <Heading size="md">technologies used</Heading>
+          <Heading size="sm" className={"tracking-tight"}>
+            Technologies used
+          </Heading>
           <HStack spacing={5}>
             {projectData.stacks.map((stackId) => {
               const stack = stacksMap[stackId];
