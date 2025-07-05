@@ -18,9 +18,9 @@ export default function Feature({ title, text, icon }: FeatureProps) {
         align={"center"}
         justify={{ base: "center", md: "flex-start" }}
         justifySelf={{ base: "center", md: "flex-start" }}
-        color={useColorModeValue(
+        backgroundColor={useColorModeValue(
           "linear(to-l, heroGradientStart, heroGradientEnd)",
-          "white"
+          "transparent"
         )}
         mb={1}
       >
