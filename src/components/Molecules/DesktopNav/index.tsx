@@ -27,7 +27,7 @@ export const DesktopNav = () => {
                   <Link href={navItem.href}>
                     <Button
                       key={`navlink-${index}`}
-                      className={"text-sm"}
+                      className={"text-sm tracking-tight"}
                       variant={"link"}
                       color={linkColor}
                       asChild={true}

@@ -17,7 +17,7 @@ const Work = () => {
           alignItems={"center"}
           className={"pt-16 md:pt-5"}
         >
-          <Box textAlign={"center"}>
+          <Box textAlign={"center"} className={"tracking-tight"}>
             <BlurFade inView>
               <Title>Work</Title>
             </BlurFade>

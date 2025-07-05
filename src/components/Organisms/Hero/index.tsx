@@ -29,7 +29,7 @@ export default function Hero() {
           <Heading
             lineHeight={1.1}
             fontWeight={700}
-            letterSpacing={"-2px"}
+            letterSpacing={"-0.2rem"}
             className={"text-center"}
             fontSize={{ base: "4xl", sm: "5xl", lg: "6xl" }}
           >
@@ -52,7 +52,7 @@ export default function Hero() {
           <BlurFade delay={constants.BLUR_FADE_DELAY * 5}>
             <p
               className={
-                "max-w-xl text-balance text-center text-base tracking-tight text-black dark:font-medium dark:text-white md:text-lg "
+                "max-w-xl text-balance text-center text-base tracking-tighter text-black dark:font-normal dark:text-white md:text-lg "
               }
             >
               Welcome to my portfolio! My name is Bruno, self-taught by nature

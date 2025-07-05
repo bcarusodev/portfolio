@@ -1,12 +1,10 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 
 const fonts = {
-  navitem: GeistMono.variable,
-  body: `${GeistSans.variable}, sans-serif`,
-  subtitle: `${GeistSans.variable},-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
-  heading: `${GeistSans.variable},-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+  navitem: "GeistSans",
+  body: `'GeistSans', sans-serif`,
+  subtitle: `'GeistSans',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+  heading: `'GeistSans',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
 };
 
 const breakpoints = {

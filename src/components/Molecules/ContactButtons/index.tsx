@@ -17,7 +17,7 @@ export const ContactButtons = () => {
           rel="noopener noreferrer"
           className={"w-full md:w-1/2"}
         >
-          <RainbowButton className={"text-sm w-full h-10"}>
+          <RainbowButton className={"text-sm w-full h-10 tracking-tight"}>
             Explore My Story
           </RainbowButton>
         </Link>
@@ -26,7 +26,7 @@ export const ContactButtons = () => {
             <Button
               variant={"outline"}
               className={
-                "items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 group relative animate-rainbow cursor-pointer bg-[length:200%] text-foreground shadow-sm before:absolute before:bottom-[-20%] before:left-1/2 before:z-[0] before:h-[20%] before:w-[60%] before:-translate-x-1/2 inline-flex h-10 px-8 w-full gap-2 border border-input rounded-xl"
+                "tracking-tight items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 group relative animate-rainbow cursor-pointer bg-[length:200%] text-foreground shadow-sm before:absolute before:bottom-[-20%] before:left-1/2 before:z-[0] before:h-[20%] before:w-[60%] before:-translate-x-1/2 inline-flex h-10 px-8 w-full gap-2 border border-input rounded-xl"
               }
             >
               Projects{" "}
