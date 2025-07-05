@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { DesktopNav } from "../../Molecules/DesktopNav";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/components/Atoms/Brand";
@@ -10,6 +10,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { BlurFade } from "@/components/ui/blur-fade";
 
 export default function NavBar() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       as="header"
@@ -37,14 +38,17 @@ export default function NavBar() {
           </Flex>
 
           <div className={"flex flex-auto flex-end md:hidden justify-end"}>
-            <Drawer>
+            <Drawer open={isOpen} onClose={onClose}>
               <DrawerTrigger asChild>
-                <Button size={"icon"} variant={"ghost"}>
+                <Button size={"icon"} variant={"ghost"} onClick={onOpen}>
                   <HamburgerIcon />
                 </Button>
               </DrawerTrigger>
               <DrawerContent>
-                <div className={"overflow-auto p-6"}>
+                <div
+                  className={"overflow-auto p-6 space-y-2"}
+                  onClick={onClose}
+                >
                   {NAV_ITEMS.map(
                     (navItem) =>
                       navItem.enabled && (
