@@ -7,7 +7,7 @@ description: Argentina's recognized wallet for digital banking.
 topic: Fintech
 client: Chubut IT
 
-thumbnail: "assets/images/projects/modo/cover.jpeg"
+thumbnail: "assets/images/projects/modo/cover.png"
 role: Backend Engineer
 
 stacks:
