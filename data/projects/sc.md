@@ -3,7 +3,7 @@ title: SmartChannel
 projectLink: https://smartchannel.io
 description: Artificial intelligence that helps media deliver the best results individually with custom assessment and the latest technology.
 
-topic: Artificial intelligence
+topic: AI Asset Allocation
 client: Chubut IT
 
 thumbnail: "assets/images/projects/sc/cover.png"

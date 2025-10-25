@@ -12,6 +12,7 @@ import {
   SiMaterialdesign,
   SiMicrosoftazure,
   SiMicrosoftsqlserver,
+  SiMongodb,
   SiMysql,
   SiNestjs,
   SiNextdotjs,
@@ -59,6 +60,7 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   nest: { name: "NestJS", icon: SiNestjs, colorScheme: "red" },
   nextui: { name: "NextUI", icon: SiNextdotjs, colorScheme: "gray" },
   rxjs: { name: "RxJS", icon: SiReactivex, colorScheme: "pink" },
+  mongodb: { name: "MongoDB", icon: SiMongodb, colorScheme: "green" },
 };
 
 export const projectIdParams = allProjects.map((project) => ({
