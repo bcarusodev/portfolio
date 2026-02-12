@@ -8,6 +8,7 @@ topic: Fintech
 client: Chubut IT
 
 thumbnail: "assets/images/projects/modo/cover.png"
+thumbnailBlurhash: "U33vp^Thm|nqf+p0kqjLL#rUc2XMoPQ*Z#b,"
 role: Backend Engineer
 
 stacks:

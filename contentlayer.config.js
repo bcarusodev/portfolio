@@ -12,6 +12,7 @@ export const Project = defineDocumentType(() => ({
     topic: { type: "string", required: true },
     client: { type: "string", required: true },
     thumbnail: { type: "string", required: true },
+    thumbnailBlurhash: { type: "string", required: false },
     detailImage: { type: "string", required: false },
     role: { type: "string", required: true },
     stacks: { type: "list", of: { type: "string" } },

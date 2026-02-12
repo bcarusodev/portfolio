@@ -7,6 +7,7 @@ topic: Clean Energy Job Board
 client: IT Crowd
 
 thumbnail: "assets/images/projects/ally/cover.jpg"
+thumbnailBlurhash: "UsJgUYoLWWo2|#jufRjuWBa}jsfPn+jtfQa}"
 detailImage: "/assets/images/projects/ally/detail.png"
 role: Full Stack Developer
 

@@ -38,3 +38,9 @@ yarn-error.log*
 
 # Contentlayer
 .contentlayer
+
+_bmad
+.agent
+.opencode
+.claude
+.github

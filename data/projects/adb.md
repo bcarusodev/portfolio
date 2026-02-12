@@ -7,6 +7,7 @@ topic: Ad Tech
 client: Chubut IT
 
 thumbnail: "assets/images/projects/adb/cover.png"
+thumbnailBlurhash: "UADf9x07Y,WBxoRRyo.M03_BMgM$k;eTVxN3"
 role: Software Developer
 
 stacks:

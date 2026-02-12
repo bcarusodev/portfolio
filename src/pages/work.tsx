@@ -47,6 +47,7 @@ const Work = () => {
                   title={project.title}
                   topic={project.topic}
                   imgSrc={project.thumbnail}
+                  blurhash={project.thumbnailBlurhash}
                 />
               </BlurFade>
             ))}

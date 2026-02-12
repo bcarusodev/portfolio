@@ -2,16 +2,27 @@ import { Card, CardHeader, Heading, Text, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import useNextBlurhash from "use-next-blurhash";
 
 interface ProjectCardProps {
   id: string;
   title: string;
   topic: string;
   imgSrc: string;
+  blurhash?: string;
 }
 
-export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
+export const ProjectCard = ({
+  id,
+  title,
+  topic,
+  imgSrc,
+  blurhash,
+}: ProjectCardProps) => {
   const router = useRouter();
+  const [blurDataUrl] = useNextBlurhash(
+    blurhash || "LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+  );
   return (
     <motion.div
       whileHover={{ scale: 1.04 }}
@@ -49,6 +60,8 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           height={600}
           className={"rounded-xl object-cover w-full h-full"}
           src={"/" + imgSrc}
+          placeholder="blur"
+          blurDataURL={blurDataUrl}
           loading="eager"
         ></Image>
       </Card>

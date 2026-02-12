@@ -7,6 +7,7 @@ topic: AI Asset Allocation
 client: Chubut IT
 
 thumbnail: "assets/images/projects/sc/cover.png"
+thumbnailBlurhash: "U8AcIOH:Q_s@Q%kjo@ocMotKk8a#RstMjcVy"
 role: Software Developer
 
 stacks:

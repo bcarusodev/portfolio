@@ -8,6 +8,7 @@ topic: Fintech
 client: Chubut IT
 
 thumbnail: "assets/images/projects/nx/cover.png"
+thumbnailBlurhash: "U^Pm^E}8E+smoKjta|jtNxsmoJNxo2jsa|a|"
 role: Software Developer SSR
 
 stacks:
