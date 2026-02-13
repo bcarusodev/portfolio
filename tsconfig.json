@@ -19,7 +19,7 @@
       "@data/*": ["./data/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   },
   "include": [
     "next-env.d.ts",

@@ -20,7 +20,6 @@ export const Project = defineDocumentType(() => ({
   computedFields: {
     id: {
       type: "string",
-      // eslint-disable-next-line no-underscore-dangle
       resolve: (project) =>
         project._raw.sourceFileName.replace(/\.md$|\.mdx$/, ""),
     },
