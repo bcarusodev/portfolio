@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "next --webpack",
     "build": "next build --webpack",
+    "prebuild": "contentlayer build",
     "start": "next start",
     "lint": "eslint",
     "prepare": "husky install"
