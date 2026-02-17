@@ -12,9 +12,11 @@ import Link from "next/link";
 
 export const MobileNavItem = ({ label, children, href }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
+  const handleClick = children ? onToggle : undefined;
 
   return (
-    <Stack spacing={8} px={2} onClick={children && onToggle}>
+    // @ts-expect-error - Chakra UI Stack produces complex union types
+    <Stack spacing={8} px={2} onClick={handleClick}>
       <Flex
         py={3}
         as={Link}

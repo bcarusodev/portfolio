@@ -42,13 +42,14 @@ export const DesktopNav = () => {
                 </PopoverTrigger>
 
                 {navItem.children && (
+                  // @ts-expect-error - Chakra UI PopoverContent produces complex union types
                   <PopoverContent
                     border={0}
-                    boxShadow={"xl"}
+                    boxShadow="xl"
                     bg={popoverContentBgColor}
                     p={4}
-                    rounded={"xl"}
-                    minW={"sm"}
+                    rounded="xl"
+                    minW="sm"
                   >
                     <Stack>
                       {navItem.children.map((child) => (

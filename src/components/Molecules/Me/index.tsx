@@ -10,7 +10,8 @@ export const Me = () => {
     >
       <Stack spacing={8}>
         <Box>
-          <Heading fontSize={"3xl"} fontWeight={700} fontFamily={"body"}>
+          {/* @ts-expect-error - Chakra UI Heading produces complex union types */}
+          <Heading fontSize="3xl" fontWeight={700}>
             Hi, I{"'"}m Bruno 👋
           </Heading>
           <span className={"inline-block max-w-[600px] md:text-xl"}>

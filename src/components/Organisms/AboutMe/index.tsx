@@ -4,7 +4,8 @@ import Title from "@/components/Atoms/Title/title";
 
 export const AboutMe = () => {
   return (
-    <Container justifyContent={"center"} maxW={"3xl"} padding={0}>
+    // @ts-expect-error - Chakra UI Container produces complex union types
+    <Container maxW="3xl" p={0}>
       <VStack spacing={20}>
         <VStack>
           <Title>About Me</Title>

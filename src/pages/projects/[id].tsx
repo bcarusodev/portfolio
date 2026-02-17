@@ -57,17 +57,22 @@ const Project = ({ projectData }: ProjectDetailProps) => {
           <HStack spacing={5}>
             {projectData.stacks.map((stackId) => {
               const stack = stacksMap[stackId];
+              const badgeVariant = useColorModeValue("outline", "solid");
+              const IconComponent = stack?.icon;
               return (
                 <VStack key={stackId}>
+                  {/* @ts-expect-error - Chakra UI Badge produces complex union types */}
                   <Badge
                     px={1}
                     py={1}
-                    variant={useColorModeValue("outline", "solid")}
-                    rounded={"full"}
+                    variant={badgeVariant}
+                    rounded="full"
                     colorScheme={stack?.colorScheme ?? "gray"}
                   >
                     <HStack>
-                      <stack.icon size={"35px"} className={"p-1"} />
+                      {IconComponent && (
+                        <IconComponent size="35px" className="p-1" />
+                      )}
                     </HStack>
                   </Badge>
                   <Text color="gray.500" fontSize="xs">
@@ -95,6 +100,7 @@ const Project = ({ projectData }: ProjectDetailProps) => {
                 <Heading size="sm" textTransform={"uppercase"} pb={2}>
                   URL
                 </Heading>
+                {/* @ts-expect-error - Chakra UI Link produces complex union types */}
                 <Link
                   color="gray.500"
                   href={projectData.projectLink}

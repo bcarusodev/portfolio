@@ -1,4 +1,4 @@
-import { Card, CardHeader, Heading, Text, Link } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -12,24 +12,22 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
   const router = useRouter();
+  const handleClick = () => {
+    router.push("projects/" + id);
+  };
+
   return (
     <motion.div
       whileHover={{ scale: 1.04 }}
       whileTap={{
         scale: 0.99,
       }}
+      onClick={handleClick}
+      style={{ cursor: "pointer" }}
     >
-      <Card
-        w={300}
-        h={300}
-        borderRadius={15}
-        as={Link}
-        href={"projects/" + id}
-        onClick={(e) => {
-          e.preventDefault();
-          router.push("projects/" + id);
-        }}
-      >
+      {/* @ts-expect-error - Chakra UI Card produces complex union types */}
+      <Card w={300} h={300} borderRadius={15}>
+        {/* @ts-expect-error - Chakra UI CardHeader produces complex union types */}
         <CardHeader position="absolute" zIndex={2}>
           <Text
             fontSize={12}
@@ -39,7 +37,7 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           >
             {topic}
           </Text>
-          <Heading size="lg" color="white" className={"tracking-tight"}>
+          <Heading size="lg" color="white" className="tracking-tight">
             {title}
           </Heading>
         </CardHeader>
@@ -47,10 +45,10 @@ export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
           alt={title}
           width={600}
           height={600}
-          className={"rounded-xl object-cover w-full h-full"}
+          className="rounded-xl object-cover w-full h-full"
           src={"/" + imgSrc}
           loading="eager"
-        ></Image>
+        />
       </Card>
     </motion.div>
   );
