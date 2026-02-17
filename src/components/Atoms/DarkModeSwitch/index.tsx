@@ -9,16 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useColorMode } from "@chakra-ui/react";
-
 export function DarkModeSwitch() {
   const { setTheme } = useTheme();
-  const { setColorMode } = useColorMode();
-
-  const handleThemeChange = (theme: string) => {
-    setTheme(theme);
-    setColorMode(theme);
-  };
 
   return (
     <DropdownMenu>
@@ -30,13 +22,13 @@ export function DarkModeSwitch() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleThemeChange("light")}>
+        <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("dark")}>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("system")}>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

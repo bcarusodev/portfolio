@@ -1,35 +1,21 @@
-import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import Image from "next/image";
 
 export const Me = () => {
   return (
-    <Stack
-      align={"center"}
-      spacing={{ base: 8, md: 5 }}
-      direction={{ base: "column-reverse", md: "row" }}
-    >
-      <Stack spacing={8}>
-        <Box>
-          {/* @ts-expect-error - Chakra UI Heading produces complex union types */}
-          <Heading fontSize="3xl" fontWeight={700}>
-            Hi, I{"'"}m Bruno 👋
-          </Heading>
-          <span className={"inline-block max-w-[600px] md:text-xl"}>
+    <div className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-5">
+      <div className="flex flex-col gap-8">
+        <div>
+          <h2 className="text-3xl font-bold">Hi, I{"'"}m Bruno 👋</h2>
+          <span className="inline-block max-w-[600px] md:text-xl">
             Full Stack Engineer
           </span>
-        </Box>
-        <Flex maxW={"full"}>
-          <p
-            className={
-              "prose text-pretty font-sans text-sm text-muted-foreground dark:prose-invert"
-            }
-          >
+        </div>
+        <div className="max-w-full">
+          <p className="prose text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             I started development in 2017 when I created{" "}
             <a
-              href={
-                "https://web.archive.org/web/20170109042450/http://www.mtalpm.com/"
-              }
-              className={"underline"}
+              href="https://web.archive.org/web/20170109042450/http://www.mtalpm.com/"
+              className="underline"
             >
               my first game server using Lua scripting
             </a>
@@ -40,19 +26,19 @@ export const Me = () => {
             Node.js. I{"'"}m open to other frameworks and languages and have a
             strong interest in crypto- and fintech-related industries.
           </p>
-        </Flex>
-      </Stack>
+        </div>
+      </div>
 
       <Image
         width={150}
         height={150}
-        className={"object-cover rounded-full shadow-2xl aspect-square"}
-        loading={"eager"}
+        className="object-cover rounded-full shadow-2xl aspect-square"
+        loading="eager"
         // @ts-ignore
         style={{ objectViewBox: "inset(0% -16% 21% 0%)" }}
-        src={"/assets/images/hero.jpg"}
-        alt={"Me"}
+        src="/assets/images/hero.jpg"
+        alt="Me"
       />
-    </Stack>
+    </div>
   );
 };

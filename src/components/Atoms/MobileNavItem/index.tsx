@@ -1,61 +1,43 @@
 import { NavItem } from "@/types/data";
-import {
-  Collapse,
-  Flex,
-  Icon,
-  Stack,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export const MobileNavItem = ({ label, children, href }: NavItem) => {
-  const { isOpen, onToggle } = useDisclosure();
-  const handleClick = children ? onToggle : undefined;
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClick = children ? () => setIsOpen(!isOpen) : undefined;
 
   return (
-    // @ts-expect-error - Chakra UI Stack produces complex union types
-    <Stack spacing={8} px={2} onClick={handleClick}>
-      <Flex
-        py={3}
-        as={Link}
+    <div className="space-y-8 px-2" onClick={handleClick}>
+      <Link
         href={href ?? "#"}
-        justify={"space-between"}
-        align={"center"}
-        _hover={{
-          textDecoration: "none",
-        }}
+        className="flex py-3 justify-between items-center no-underline hover:no-underline"
       >
         <span className="group inline-flex items-center text-xl">{label}</span>
         {children && (
-          <Icon
-            as={ChevronDownIcon}
-            transition={"all .25s ease-in-out"}
-            transform={isOpen ? "rotate(180deg)" : ""}
-            w={6}
-            h={6}
+          <ChevronDown
+            className={`w-6 h-6 transition-transform duration-250 ease-in-out ${
+              isOpen ? "rotate-180" : ""
+            }`}
           />
         )}
-      </Flex>
+      </Link>
 
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
-        <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
-          borderStyle={"solid"}
-          borderColor={useColorModeValue("gray.200", "gray.700")}
-          align={"start"}
-        >
+      <div
+        className={`overflow-hidden transition-all duration-300 ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+        style={{ marginTop: "0!important" }}
+      >
+        <div className="mt-2 pl-4 border-l border-gray-200 dark:border-gray-700 flex flex-col items-start">
           {children &&
             children.map((child) => (
-              <Link key={child.label} className={"py-2"} href={child.href}>
+              <Link key={child.label} className="py-2" href={child.href}>
                 {child.label}
               </Link>
             ))}
-        </Stack>
-      </Collapse>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 };

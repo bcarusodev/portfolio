@@ -1,119 +1,86 @@
 import { ProjectDetailProps } from "@data/projects/types";
-import {
-  Container,
-  Heading,
-  VStack,
-  Text,
-  HStack,
-  Box,
-  Link,
-  Badge,
-  useColorModeValue,
-} from "@chakra-ui/react";
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
-import { ArrowBackIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { stacksMap } from "@data/projects/loader";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 const Project = ({ projectData }: ProjectDetailProps) => {
   const router = useRouter();
   return (
     <Layout>
-      <Container maxW={"1200px"}>
-        <VStack spacing={10} pt={10} pb={28} textAlign="center">
+      <div className="max-w-[1200px] mx-auto px-4">
+        <div className="flex flex-col items-center gap-10 pt-10 pb-28 text-center">
           <Button
-            variant={"outline"}
-            className={"text-xs h-7 px-2"}
+            variant="outline"
+            className="text-xs h-7 px-2"
             onClick={() => router.back()}
           >
-            <ArrowBackIcon /> All Projects
+            <ArrowLeft className="w-4 h-4 mr-1" /> All Projects
           </Button>
-          <Heading
-            size="lg"
-            fontWeight={"semibold"}
-            className={"tracking-tight"}
-          >
+          <h1 className="text-3xl font-semibold tracking-tight">
             {projectData.title}
-          </Heading>
-          <Text color="gray.500" className={"tracking-tight"}>
+          </h1>
+          <p className="text-gray-500 tracking-tight">
             {projectData.description}
-          </Text>
+          </p>
           {projectData.detailImage && (
             <Image
               width={1100}
               height={720}
-              objectFit="cover"
+              className="object-cover"
               src={projectData.detailImage}
               alt={projectData.title}
-            ></Image>
+            />
           )}
-          {/* <Heading size="md">responsabilities</Heading>
-          <Text color="gray.500">{projectData.responsabilities}</Text> */}
-          <Heading size="sm" className={"tracking-tight"}>
+          <h2 className="text-xl font-medium tracking-tight">
             Technologies used
-          </Heading>
-          <HStack spacing={5}>
+          </h2>
+          <div className="flex gap-5">
             {projectData.stacks.map((stackId) => {
               const stack = stacksMap[stackId];
-              const badgeVariant = useColorModeValue("outline", "solid");
               const IconComponent = stack?.icon;
               return (
-                <VStack key={stackId}>
-                  {/* @ts-expect-error - Chakra UI Badge produces complex union types */}
-                  <Badge
-                    px={1}
-                    py={1}
-                    variant={badgeVariant}
-                    rounded="full"
-                    colorScheme={stack?.colorScheme ?? "gray"}
-                  >
-                    <HStack>
-                      {IconComponent && (
-                        <IconComponent size="35px" className="p-1" />
-                      )}
-                    </HStack>
+                <div key={stackId} className="flex flex-col items-center gap-1">
+                  <Badge variant="outline" className="rounded-full px-1 py-1">
+                    {IconComponent && (
+                      <IconComponent size="35px" className="p-1" />
+                    )}
                   </Badge>
-                  <Text color="gray.500" fontSize="xs">
-                    {stack.name}
-                  </Text>
-                </VStack>
+                  <span className="text-gray-500 text-xs">{stack.name}</span>
+                </div>
               );
             })}
-          </HStack>
-          <HStack spacing={10}>
-            <Box>
-              <Heading size="sm" textTransform={"uppercase"} pb={2}>
-                Role
-              </Heading>
-              <Text color="gray.500">{projectData.role}</Text>
-            </Box>
-            <Box>
-              <Heading size="sm" textTransform={"uppercase"} pb={2}>
-                Client
-              </Heading>
-              <Text color="gray.500">{projectData.client}</Text>
-            </Box>
+          </div>
+          <div className="flex gap-10">
+            <div>
+              <h3 className="text-sm font-medium uppercase pb-2">Role</h3>
+              <p className="text-gray-500">{projectData.role}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium uppercase pb-2">Client</h3>
+              <p className="text-gray-500">{projectData.client}</p>
+            </div>
             {projectData.projectLink && (
-              <Box>
-                <Heading size="sm" textTransform={"uppercase"} pb={2}>
-                  URL
-                </Heading>
-                {/* @ts-expect-error - Chakra UI Link produces complex union types */}
+              <div>
+                <h3 className="text-sm font-medium uppercase pb-2">URL</h3>
                 <Link
-                  color="gray.500"
                   href={projectData.projectLink}
-                  isExternal
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-500 inline-flex items-center hover:underline"
                 >
                   {projectData.projectLink.replace(/^https?:\/\//i, "")}
-                  <ExternalLinkIcon mx="4px" mt="-4px" />
+                  <ExternalLink className="w-4 h-4 ml-1 -mt-1" />
                 </Link>
-              </Box>
+              </div>
             )}
-          </HStack>
-        </VStack>
-      </Container>
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 };

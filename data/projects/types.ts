@@ -1,5 +1,4 @@
 import { IconType } from "react-icons";
-import { ThemeTypings } from "@chakra-ui/react";
 import type { Project } from "contentlayer/generated";
 
 export type ProjectDetailParams = {
@@ -13,5 +12,5 @@ export type ProjectDetailProps = {
 export type ProjectStackProps = {
   name: string;
   icon: IconType;
-  colorScheme: ThemeTypings["colorSchemes"];
+  colorScheme: string;
 };

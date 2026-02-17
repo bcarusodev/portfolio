@@ -1,5 +1,4 @@
 import React from "react";
-import { Container, VStack } from "@chakra-ui/react";
 import { AboutMe } from "../components/Organisms/AboutMe";
 import Hero from "../components/Organisms/Hero";
 import { Services } from "../components/Organisms/Services";
@@ -13,24 +12,24 @@ const Index = () => {
   const router = useRouter();
   return (
     <Layout>
-      <Container maxW={"7xl"} zIndex={2}>
+      <div className="max-w-7xl mx-auto px-4 z-[2]">
         <Hero />
-        <VStack spacing={20} pb={20}>
+        <div className="flex flex-col gap-20 pb-20 items-center">
           <Services />
           <BlurFade delay={constants.BLUR_FADE_DELAY} inView>
             <AboutMe />
           </BlurFade>
           <BlurFade delay={constants.BLUR_FADE_DELAY} inView>
             <Button
-              className={"w-full"}
-              variant={"outline"}
+              className="w-50"
+              variant="outline"
               onClick={() => router.push("/about")}
             >
               See more
             </Button>
           </BlurFade>
-        </VStack>
-      </Container>
+        </div>
+      </div>
     </Layout>
   );
 };

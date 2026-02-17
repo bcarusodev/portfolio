@@ -1,5 +1,4 @@
 import React from "react";
-import { Box, Flex } from "@chakra-ui/react";
 import Layout from "../components/Atoms/Layout";
 import { ProjectCard } from "@/components/Molecules/ProjectCard";
 import { allProjects } from "contentlayer/generated";
@@ -10,32 +9,18 @@ import constants from "@/constants";
 const Work = () => {
   return (
     <Layout>
-      <Box width={"100%"} display={"flex"} justifyContent={"center"}>
-        <Flex
-          maxWidth={"1200px"}
-          display="column"
-          alignItems={"center"}
-          className={"pt-16 md:pt-5"}
-        >
-          <Box textAlign={"center"} className={"tracking-tight"}>
+      <div className="w-full flex justify-center">
+        <div className="max-w-[1200px] flex flex-col items-center pt-16 md:pt-5">
+          <div className="text-center tracking-tight">
             <BlurFade inView>
               <Title>Work</Title>
             </BlurFade>
             <BlurFade>
               <p>Projects in which i was involved</p>
             </BlurFade>
-          </Box>
+          </div>
 
-          <Flex
-            gap={8}
-            justifyContent={"center"}
-            flexWrap={"wrap"}
-            minHeight="70vh"
-            py={10}
-            pb={20}
-            px={4}
-            alignItems="center"
-          >
+          <div className="flex gap-8 justify-center flex-wrap min-h-[70vh] py-10 pb-20 px-4 items-center">
             {allProjects.map((project, index) => (
               <BlurFade
                 key={project.id}
@@ -50,9 +35,9 @@ const Work = () => {
                 />
               </BlurFade>
             ))}
-          </Flex>
-        </Flex>
-      </Box>
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 };

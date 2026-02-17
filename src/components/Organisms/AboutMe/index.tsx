@@ -1,21 +1,19 @@
-import { Box, Flex, VStack, Container } from "@chakra-ui/react";
 import { Me } from "../../Molecules/Me";
 import Title from "@/components/Atoms/Title/title";
 
 export const AboutMe = () => {
   return (
-    // @ts-expect-error - Chakra UI Container produces complex union types
-    <Container maxW="3xl" p={0}>
-      <VStack spacing={20}>
-        <VStack>
+    <div className="max-w-3xl mx-auto p-0">
+      <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-4">
           <Title>About Me</Title>
-          <Box id={"about-me"}>
-            <Flex gap={5} justifyContent={"center"} flexWrap={"wrap"}>
+          <div id="about-me">
+            <div className="flex gap-5 justify-center flex-wrap">
               <Me />
-            </Flex>
-          </Box>
-        </VStack>
-      </VStack>
-    </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
