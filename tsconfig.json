@@ -17,16 +17,11 @@
     "paths": {
       "@/*": ["./src/*"],
       "@data/*": ["./data/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "@velite": ["./.velite/index"],
+      "@velite/*": ["./.velite/*"]
     },
     "jsx": "react-jsx"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".contentlayer/generated",
-    "contentlayer/generated"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".velite"],
   "exclude": ["node_modules"]
 }

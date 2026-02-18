@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../components/Atoms/Layout";
 import { ProjectCard } from "@/components/Molecules/ProjectCard";
-import { allProjects } from "contentlayer/generated";
+import { projects } from "@velite";
 import { BlurFade } from "@/components/ui/blur-fade";
 import Title from "@/components/Atoms/Title/title";
 import constants from "@/constants";
@@ -21,7 +21,7 @@ const Work = () => {
           </div>
 
           <div className="flex gap-8 justify-center flex-wrap min-h-[70vh] py-10 pb-20 px-4 items-center">
-            {allProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <BlurFade
                 key={project.id}
                 inView

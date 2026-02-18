@@ -1,4 +1,6 @@
-import { allProjects, Project } from "contentlayer/generated";
+// Migrated from ContentLayer: changed from "contentlayer/generated" to "@velite"
+// Note: Export renamed from "allProjects" to "projects"
+import { projects, Project } from "@velite";
 import { GetStaticProps } from "next";
 import { FaAws, FaJava } from "react-icons/fa";
 import {
@@ -63,7 +65,7 @@ export const stacksMap: Record<string, ProjectStackProps> = {
   mongodb: { name: "MongoDB", icon: SiMongodb, colorScheme: "green" },
 };
 
-export const projectIdParams = allProjects.map((project) => ({
+export const projectIdParams = projects.map((project) => ({
   params: {
     id: project.id,
   },
@@ -89,9 +91,7 @@ export const getStaticProps: GetStaticProps<
   ProjectDetailProps,
   ProjectDetailParams
 > = async ({ params }) => {
-  const projectData = allProjects.find(
-    ({ id }) => id === (params?.id as string)
-  );
+  const projectData = projects.find(({ id }) => id === (params?.id as string));
 
   if (!projectData) {
     return {

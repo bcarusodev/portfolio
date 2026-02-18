@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import type { Project } from "contentlayer/generated";
+import type { Project } from "@velite";
 
 export type ProjectDetailParams = {
   id: string;
