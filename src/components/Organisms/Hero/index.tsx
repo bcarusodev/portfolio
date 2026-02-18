@@ -16,7 +16,7 @@ export default function Hero() {
     <div className="flex justify-center self-center items-center h-[90vh]">
       <div className="flex flex-col md:flex-row items-center py-10 md:py-0">
         <div className="flex-1 flex flex-col gap-5 md:gap-10">
-          <h1 className="text-center leading-tight font-bold tracking-tight text-4xl sm:text-5xl lg:text-6xl">
+          <h1 className="text-center leading-tight font-bold tracking-tighter text-4xl sm:text-5xl lg:text-6xl">
             <BlurFade delay={constants.BLUR_FADE_DELAY * 2}>
               brunocaruso
             </BlurFade>

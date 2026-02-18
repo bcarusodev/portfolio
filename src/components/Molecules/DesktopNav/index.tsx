@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export const DesktopNav = () => {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-5">
       {NAV_ITEMS.map(
         (navItem, index) =>
           navItem.enabled && (
