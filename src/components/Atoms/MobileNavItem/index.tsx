@@ -1,10 +1,13 @@
 import { NavItem } from "@/types/data";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export const MobileNavItem = ({ label, children, href }: NavItem) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const isActive = router.pathname === href;
   const handleClick = children ? () => setIsOpen(!isOpen) : undefined;
 
   return (
@@ -13,7 +16,13 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
         href={href ?? "#"}
         className="flex py-3 justify-between items-center no-underline hover:no-underline"
       >
-        <span className="group inline-flex items-center text-xl">{label}</span>
+        <span
+          className={`group inline-flex items-center text-xl relative after:block after:content-[''] after:absolute after:h-[2px] after:mt-8 after:bg-black after:dark:bg-white after:w-full after:transition after:duration-300 after:origin-right ${
+            isActive ? "after:scale-x-100 after:origin-left" : "after:scale-x-0"
+          }`}
+        >
+          {label}
+        </span>
         {children && (
           <ChevronDown
             className={`w-6 h-6 transition-transform duration-250 ease-in-out ${

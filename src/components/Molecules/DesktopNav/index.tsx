@@ -8,8 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export const DesktopNav = () => {
+  const router = useRouter();
   return (
     <div className="flex items-center gap-5">
       {NAV_ITEMS.map(
@@ -36,7 +38,13 @@ export const DesktopNav = () => {
               ) : (
                 <Link href={navItem.href}>
                   <div className="group w-fit">
-                    <span className="relative cursor-pointer block text-sm tracking-tight text-gray-600 dark:text-gray-200 after:block after:content-[''] after:absolute after:h-[2px] after:mt-1 after:bg-black after:dark:bg-white after:w-full after:scale-x-0 after:transition after:duration-300 after:origin-right group-hover:after:scale-x-100 group-hover:after:origin-left">
+                    <span
+                      className={`relative cursor-pointer block text-sm tracking-tight text-gray-600 dark:text-gray-200 after:block after:content-[''] after:absolute after:h-[2px] after:mt-1 after:bg-black after:dark:bg-white after:w-full after:transition after:duration-300 after:origin-right ${
+                        router.pathname === navItem.href
+                          ? "after:scale-x-100 after:origin-left"
+                          : "after:scale-x-0 group-hover:after:scale-x-100 group-hover:after:origin-left"
+                      }`}
+                    >
                       {navItem.label}
                     </span>
                   </div>
