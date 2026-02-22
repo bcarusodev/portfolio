@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       animate="enter"
       exit="exit"
       variants={variants}
-      transition={{ duration: 0.2, type: "tween" }}
+      transition={{ duration: 0.16, type: "tween" }}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <div className="min-h-[calc(90vh-44px)]">{children}</div>
