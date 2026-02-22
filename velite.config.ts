@@ -31,6 +31,7 @@ export default defineConfig({
           topic: s.string(),
           client: s.string(),
           thumbnail: s.string(),
+          blurhash: s.string().optional(),
           detailImage: s.string().optional(),
           role: s.string(),
           stacks: s.array(s.string()).default([]),
