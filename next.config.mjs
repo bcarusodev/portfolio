@@ -1,5 +1,7 @@
-import { withContentlayer } from "next-contentlayer";
-
-export default withContentlayer({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   transpilePackages: ["geist"],
-});
+  turbopack: {},
+};
+
+export default nextConfig;

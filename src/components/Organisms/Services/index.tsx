@@ -1,38 +1,37 @@
-import { Box, Icon, Flex, VStack, Container } from "@chakra-ui/react";
 import { SKILLS_ITEMS } from "@data/Skills";
-import Feature from "../../Atoms/Feature";
+import ServiceCard from "../../Atoms/ServiceCard";
 import Title from "@/components/Atoms/Title/title";
 import { BlurFade } from "@/components/ui/blur-fade";
 import constants from "@/constants";
 
 export const Services = () => {
   return (
-    <Container justifyContent={"center"} maxW={"full"}>
-      <VStack spacing={20}>
-        <VStack>
+    <div className="flex justify-center max-w-full">
+      <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-4">
           <BlurFade inView>
             <Title>Services</Title>
           </BlurFade>
-          <Box id={"services"}>
-            <Flex gap={5} justifyContent={"center"} flexWrap={"wrap"}>
+          <div id="services">
+            <div className="flex gap-5 justify-center flex-wrap">
               {SKILLS_ITEMS.map((item, index) => (
                 <BlurFade
                   key={`skill-${index}`}
                   delay={constants.BLUR_FADE_DELAY + index * 0.05}
                   inView
-                  className={"w-full md:w-auto"}
+                  className="w-full md:w-auto"
                 >
-                  <Feature
-                    icon={<Icon as={item.icon} w={10} h={10} />}
+                  <ServiceCard
+                    icon={<item.icon className="w-6 h-6" />}
                     title={item.title}
                     text={item.description}
                   />
                 </BlurFade>
               ))}
-            </Flex>
-          </Box>
-        </VStack>
-      </VStack>
-    </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

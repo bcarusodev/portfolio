@@ -1,0 +1,16 @@
+---
+title: Reditus
+description: Business stock control software that covers the entire production process.
+topic: ERP
+client: MerlionTechs
+thumbnail: assets/images/work/reditus/cover.png
+detailImage: /assets/images/work/reditus/detail.png
+role: Frontend Developer
+stacks:
+  - react
+  - materialui
+  - java
+  - springboot
+  - jest
+blurhash: "L04_|f%Of7%Ox_azj[azfRayfQay"
+---

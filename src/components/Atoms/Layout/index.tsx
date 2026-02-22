@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Box } from "@chakra-ui/react";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 
@@ -21,10 +20,10 @@ const Layout = ({ children }: LayoutProps): JSX.Element => (
       animate="enter"
       exit="exit"
       variants={variants}
-      transition={{ duration: 0.2, type: "tween" }}
+      transition={{ duration: 0.16, type: "tween" }}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
-      <Box minH="calc(90vh - 44px)">{children}</Box>
+      <div className="min-h-[calc(90vh-44px)]">{children}</div>
     </motion.main>
   </>
 );

@@ -1,5 +1,4 @@
 import NextDocument, { Html, Head, Main, NextScript } from "next/document";
-import { ColorModeScript } from "@chakra-ui/react";
 import { GeistSans } from "geist/font/sans";
 
 export default class Document extends NextDocument {
@@ -14,15 +13,10 @@ export default class Document extends NextDocument {
             rel="icon"
             type="image/svg+xml"
             href="/assets/images/favicon.svg"
-          ></link>
-          <link
-            rel="icon"
-            type="image/png"
-            href="/assets/images/favicon.png"
-          ></link>
+          />
+          <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
         </Head>
         <body>
-          <ColorModeScript />
           <Main />
           <NextScript />
         </body>

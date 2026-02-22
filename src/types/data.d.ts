@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { ThemeTypings } from "@chakra-ui/styled-system";
+import { ReactNode } from "react";
 
 export interface NavItem {
   label: string;
@@ -14,6 +14,7 @@ export interface SkillItem {
   icon: IconType;
   description: string;
 }
+
 export interface TimelineItem {
   iconSrc: ReactNode;
   fromDate: Date;
@@ -26,7 +27,7 @@ export interface TimelineItem {
 
 export interface Technology {
   name: string;
-  colorScheme?: ThemeTypings["colorSchemes"];
+  colorScheme?: string;
 }
 
 export interface Project {

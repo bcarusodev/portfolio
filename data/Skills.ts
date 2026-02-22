@@ -3,13 +3,14 @@ import { BiCodeAlt, BiTestTube } from "react-icons/bi";
 import { FaServer } from "react-icons/fa";
 import { SkillItem } from "../src/types/data";
 import { CgArrowsMergeAltH } from "react-icons/cg";
+import { GiBrain } from "react-icons/gi";
 
 export const SKILLS_ITEMS: Array<SkillItem> = [
   {
     icon: TbWorld,
     title: "Frontend Web Apps",
     description:
-      "Custom, quality-made, flexible and reliable web development for your projects needs.",
+      "Custom, quality-made, flexible and reliable web development for your work needs.",
   },
   {
     icon: BiCodeAlt,
@@ -33,5 +34,11 @@ export const SKILLS_ITEMS: Array<SkillItem> = [
     icon: BiTestTube,
     title: "Unit Testing",
     description: "Tests to ensure a reliable and robust solutions.",
+  },
+  {
+    icon: GiBrain,
+    title: "AI-driven Development",
+    description:
+      "I build software leveraging agentic AI, structured workflows, and intelligent planning systems that scale seamlessly.",
   },
 ];
