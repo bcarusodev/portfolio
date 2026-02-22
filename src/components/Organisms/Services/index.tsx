@@ -1,5 +1,5 @@
 import { SKILLS_ITEMS } from "@data/Skills";
-import Feature from "../../Atoms/Feature";
+import ServiceCard from "../../Atoms/ServiceCard";
 import Title from "@/components/Atoms/Title/title";
 import { BlurFade } from "@/components/ui/blur-fade";
 import constants from "@/constants";
@@ -21,8 +21,8 @@ export const Services = () => {
                   inView
                   className="w-full md:w-auto"
                 >
-                  <Feature
-                    icon={<item.icon className="w-10 h-10" />}
+                  <ServiceCard
+                    icon={<item.icon className="w-6 h-6" />}
                     title={item.title}
                     text={item.description}
                   />
