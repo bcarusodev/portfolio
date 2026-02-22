@@ -12,7 +12,7 @@ interface ProjectCardProps {
 export const ProjectCard = ({ id, title, topic, imgSrc }: ProjectCardProps) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push("projects/" + id);
+    router.push("work/" + id);
   };
 
   return (

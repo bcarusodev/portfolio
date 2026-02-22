@@ -7,8 +7,8 @@ description: An intelligence platform that helps large scale investors accelerat
 topic: Intelligence Platform
 client: IT Crowd
 
-thumbnail: "assets/images/projects/nbs/cover.jpg"
-detailImage: "/assets/images/projects/nbs/detail.png"
+thumbnail: "assets/images/work/nbs/cover.jpg"
+detailImage: "/assets/images/work/nbs/detail.png"
 role: Frontend Developer
 
 stacks:

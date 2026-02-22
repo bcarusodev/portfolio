@@ -10,7 +10,7 @@ export const SKILLS_ITEMS: Array<SkillItem> = [
     icon: TbWorld,
     title: "Frontend Web Apps",
     description:
-      "Custom, quality-made, flexible and reliable web development for your projects needs.",
+      "Custom, quality-made, flexible and reliable web development for your work needs.",
   },
   {
     icon: BiCodeAlt,

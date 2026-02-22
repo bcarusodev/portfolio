@@ -5,8 +5,8 @@ description: Business stock control software that covers the entire production p
 topic: ERP
 client: MerlionTechs
 
-thumbnail: "assets/images/projects/reditus/cover.png"
-detailImage: "/assets/images/projects/reditus/detail.png"
+thumbnail: "assets/images/work/reditus/cover.png"
+detailImage: "/assets/images/work/reditus/detail.png"
 role: Frontend Developer
 
 stacks:

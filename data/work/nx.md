@@ -7,7 +7,7 @@ description: Argentinian fintech with wide range of financial services, includin
 topic: Fintech
 client: Chubut IT
 
-thumbnail: "assets/images/projects/nx/cover.png"
+thumbnail: "assets/images/work/nx/cover.png"
 role: Software Developer SSR
 
 stacks:

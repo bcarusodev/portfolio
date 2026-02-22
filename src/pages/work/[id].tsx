@@ -1,7 +1,7 @@
-import { ProjectDetailProps } from "@data/projects/types";
+import { ProjectDetailProps } from "@data/work/types";
 import Layout from "src/components/Atoms/Layout";
 import { useRouter } from "next/router";
-import { stacksMap } from "@data/projects/loader";
+import { stacksMap } from "@data/work/loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -85,5 +85,5 @@ const Project = ({ projectData }: ProjectDetailProps) => {
   );
 };
 
-export { getStaticPaths, getStaticProps } from "../../../data/projects/loader";
+export { getStaticPaths, getStaticProps } from "@data/work/loader";
 export default Project;

@@ -7,8 +7,8 @@ description: Connect athletes with certified specialists.
 topic: Marketplace
 client: Chubut IT
 
-thumbnail: "assets/images/projects/st/cover.png"
-detailImage: "/assets/images/projects/st/detail.png"
+thumbnail: "assets/images/work/st/cover.png"
+detailImage: "/assets/images/work/st/detail.png"
 role: Software Developer
 
 stacks:

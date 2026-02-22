@@ -6,7 +6,7 @@ import { defineConfig, s } from "velite";
  * This configuration replaces the previous ContentLayer setup (contentlayer.config.js).
  * Key changes:
  * - Import from "contentlayer/generated" → "@velite"
- * - Export name changed: allProjects → projects
+ * - Export name changed: allProjects → work
  * - Same schema preserved: title, projectLink, description, topic, client, thumbnail, detailImage, role, stacks
  * - Computed id field derived from filename (same logic as before)
  */
@@ -22,7 +22,7 @@ export default defineConfig({
   collections: {
     projects: {
       name: "Project",
-      pattern: "projects/*.md",
+      pattern: "work/*.md",
       schema: s
         .object({
           title: s.string(),

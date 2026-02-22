@@ -6,7 +6,7 @@ description: Maximization of advertising revenue through proprietary technology 
 topic: Ad Tech
 client: Chubut IT
 
-thumbnail: "assets/images/projects/adb/cover.png"
+thumbnail: "assets/images/work/adb/cover.png"
 role: Software Developer
 
 stacks:

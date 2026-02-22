@@ -1,5 +1,5 @@
 // Migrated from ContentLayer: changed from "contentlayer/generated" to "@velite"
-// Note: Export renamed from "allProjects" to "projects"
+// Note: Export renamed from "allProjects" to "work"
 import { projects, Project } from "@velite";
 import { GetStaticProps } from "next";
 import { FaAws, FaJava } from "react-icons/fa";

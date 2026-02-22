@@ -6,7 +6,7 @@ description: Artificial intelligence that helps media deliver the best results i
 topic: AI Asset Allocation
 client: Chubut IT
 
-thumbnail: "assets/images/projects/sc/cover.png"
+thumbnail: "assets/images/work/sc/cover.png"
 role: Software Developer
 
 stacks:

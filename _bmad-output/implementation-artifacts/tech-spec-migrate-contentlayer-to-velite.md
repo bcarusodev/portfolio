@@ -17,8 +17,8 @@ files_to_modify:
   - .gitignore
   - contentlayer.config.js (delete)
   - velite.config.ts (create)
-  - data/projects/types.ts
-  - data/projects/loader.ts
+  - data/work/types.ts
+  - data/work/loader.ts
   - src/pages/work.tsx
 code_patterns:
   - Document schema definition

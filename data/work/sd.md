@@ -7,8 +7,8 @@ description: Add an experience to customers of a virtual store when a purchase i
 topic: Marketing
 client: StoryDots
 
-thumbnail: "assets/images/projects/sd/cover.png"
-detailImage: "/assets/images/projects/sd/detail.png"
+thumbnail: "assets/images/work/sd/cover.png"
+detailImage: "/assets/images/work/sd/detail.png"
 role: Full Stack Developer
 
 stacks:

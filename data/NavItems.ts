@@ -17,7 +17,7 @@ export const NAV_ITEMS: Array<NavItem> = [
     //   },
     //   {
     //     label: "Personal",
-    //     subLabel: "Own personal projects",
+    //     subLabel: "Own personal work",
     //     href: "#",
     //     enabled: true,
     //   },
