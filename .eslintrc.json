@@ -39,5 +39,12 @@
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".contentlayer/",
+    ".next/",
+    "dist/",
+    "build/"
+  ]
 }

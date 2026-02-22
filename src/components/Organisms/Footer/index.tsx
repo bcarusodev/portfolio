@@ -1,30 +1,15 @@
-import { Box, Container, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Brand } from "../../Atoms/Brand";
 import { FooterNotes } from "../../Molecules/FooterNotes";
 import { SocialIcons } from "../../Molecules/SocialIcons";
 
 export default function Footer() {
   return (
-    <Box
-      bg={"transparent"}
-      color={useColorModeValue("gray.700", "gray.200")}
-      backdropFilter="blur(20px)"
-      boxShadow="2xl"
-      className={"border-t"}
-    >
-      <Container
-        as={Stack}
-        maxW={"6xl"}
-        py={4}
-        direction={{ base: "column", md: "row" }}
-        spacing={4}
-        justify={{ base: "center", md: "space-between" }}
-        align={{ base: "center", md: "center" }}
-      >
+    <footer className="bg-transparent text-gray-700 dark:text-gray-200 backdrop-blur-xl shadow-2xl border-t">
+      <div className="max-w-6xl mx-auto py-4 flex flex-col md:flex-row gap-4 justify-between items-center">
         <Brand onlyLogo />
         <FooterNotes />
         <SocialIcons />
-      </Container>
-    </Box>
+      </div>
+    </footer>
   );
 }

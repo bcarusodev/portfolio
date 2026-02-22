@@ -1,12 +1,8 @@
 import { TimelineItem } from "@/types/data";
-import ChubutItLogo from "../public/assets/images/experiences/chubutit_logo.webp";
-import RemiteeLogo from "../public/assets/images/experiences/remitee_logo.jpeg";
-import MTLogo from "../public/assets/images/experiences/merlion_techs_logo.jpeg";
-import ITCLogo from "../public/assets/images/experiences/it_crowd_argentina_logo.jpeg";
 
 export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
   {
-    iconSrc: RemiteeLogo,
+    iconSrc: "/assets/images/experiences/remitee_logo.jpeg",
     fromDate: new Date("2025-03-02"),
     toDate: "Present",
     title: "Treasury Software Developer",
@@ -14,7 +10,7 @@ export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
     url: "https://www.remitee.com",
   },
   {
-    iconSrc: ChubutItLogo,
+    iconSrc: "/assets/images/experiences/chubutit_logo.webp",
     fromDate: new Date("2022-02-02"),
     toDate: new Date("2025-03-02"),
     title: "Software Developer",
@@ -22,7 +18,7 @@ export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
     url: "https://www.chubut.it",
   },
   {
-    iconSrc: ITCLogo,
+    iconSrc: "/assets/images/experiences/it_crowd_argentina_logo.jpeg",
     fromDate: new Date("2021-04-02"),
     toDate: new Date("2022-02-02"),
     title: "Full Stack Developer",
@@ -30,7 +26,7 @@ export const EXPERIENCE_ITEMS: Array<TimelineItem> = [
     url: "https://www.itcrowd.dev",
   },
   {
-    iconSrc: MTLogo,
+    iconSrc: "/assets/images/experiences/merlion_techs_logo.jpeg",
     fromDate: new Date("2020-09-02"),
     toDate: new Date("2021-04-02"),
     title: "Frontend Developer",
