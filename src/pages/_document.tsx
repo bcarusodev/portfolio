@@ -5,6 +5,7 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html
+        lang="en"
         style={{ scrollBehavior: "smooth" }}
         className={`${GeistSans.className}`}
       >

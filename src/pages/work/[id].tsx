@@ -1,6 +1,6 @@
 import { ProjectDetailProps } from "@data/work/types";
 import Layout from "src/components/Atoms/Layout";
-import { useRouter } from "next/router";
+import Head from "next/head";
 import { stacksMap } from "@data/work/loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,18 +9,35 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 const Project = ({ projectData }: ProjectDetailProps) => {
-  const router = useRouter();
   return (
     <Layout>
+      <Head>
+        <title>{projectData.title} — Bruno Caruso</title>
+        <meta name="description" content={projectData.description} />
+        <meta
+          property="og:title"
+          content={`${projectData.title} — Bruno Caruso`}
+        />
+        <meta property="og:description" content={projectData.description} />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content={`https://bcaruso.dev/work/${projectData.id}`}
+        />
+        <meta property="og:image" content={projectData.thumbnail} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link
+          rel="canonical"
+          href={`https://bcaruso.dev/work/${projectData.id}`}
+        />
+      </Head>
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex flex-col items-center gap-10 pt-10 pb-28 text-center">
-          <Button
-            variant="outline"
-            className="text-xs h-7 px-2"
-            onClick={() => router.back()}
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" /> All Projects
-          </Button>
+          <Link href="/work">
+            <Button variant="outline" className="text-xs h-7 px-2">
+              <ArrowLeft className="w-4 h-4 mr-1" /> All Projects
+            </Button>
+          </Link>
           <h1 className="text-3xl font-semibold tracking-tight">
             {projectData.title}
           </h1>

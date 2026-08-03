@@ -1,6 +1,6 @@
 // Migrated from ContentLayer: changed from "contentlayer/generated" to "@velite"
 // Note: Export renamed from "allProjects" to "work"
-import { projects, Project } from "@velite";
+import { projects } from "@velite";
 import { GetStaticProps } from "next";
 import { FaAws, FaJava } from "react-icons/fa";
 import {
@@ -27,7 +27,11 @@ import {
   SiStorybook,
   SiTypescript,
 } from "react-icons/si";
-import { ProjectStackProps } from "./types";
+import {
+  ProjectDetailParams,
+  ProjectDetailProps,
+  ProjectStackProps,
+} from "./types";
 
 export const stacksMap: Record<string, ProjectStackProps> = {
   materialui: {
@@ -70,14 +74,6 @@ export const projectIdParams = projects.map((project) => ({
     id: project.id,
   },
 }));
-
-export type ProjectDetailParams = {
-  id: string;
-};
-
-export type ProjectDetailProps = {
-  projectData: Project;
-};
 
 export const getStaticPaths = async () => {
   const paths = projectIdParams;

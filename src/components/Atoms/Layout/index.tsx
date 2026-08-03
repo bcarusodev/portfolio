@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 

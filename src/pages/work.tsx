@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Layout from "../components/Atoms/Layout";
 import { ProjectCard } from "@/components/Molecules/ProjectCard";
 import { projects } from "@velite";
@@ -9,6 +10,21 @@ import constants from "@/constants";
 const Work = () => {
   return (
     <Layout>
+      <Head>
+        <title>Work — Bruno Caruso</title>
+        <meta
+          name="description"
+          content="Projects in which Bruno Caruso was involved."
+        />
+        <meta property="og:title" content="Work — Bruno Caruso" />
+        <meta
+          property="og:description"
+          content="Projects in which Bruno Caruso was involved."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bcaruso.dev/work" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <div className="w-full flex justify-center">
         <div className="max-w-[1200px] flex flex-col items-center pt-16 md:pt-5">
           <div className="text-center tracking-tight">
@@ -16,7 +32,7 @@ const Work = () => {
               <Title>Work</Title>
             </BlurFade>
             <BlurFade>
-              <p>Projects in which i was involved</p>
+              <p>Projects in which I was involved</p>
             </BlurFade>
           </div>
 

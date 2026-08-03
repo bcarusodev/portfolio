@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Footer from "../components/Organisms/Footer";
 import NavBar from "../components/Organisms/NavBar";
 import Head from "next/head";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import "../styles/globals.css";
 import React from "react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -11,8 +11,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 function MyApp({ Component, pageProps, router }: AppProps) {
-  const url = `https://bcaruso.dev${router.route}`;
+  const url = `https://bcaruso.dev${router.asPath}`;
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Head>
@@ -22,11 +24,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <NavBar />
       <AnimatePresence mode="wait" initial={true}>
         <Component {...pageProps} canonical={url} key={url} />
-        <>
-          <GoogleAnalytics gaId="G-LYHVRF7R6V" />
-          <SpeedInsights />
-        </>
       </AnimatePresence>
+      <GoogleAnalytics gaId={GA_ID} />
+      <SpeedInsights />
       <Toaster position="bottom-center" />
       <Footer />
     </ThemeProvider>

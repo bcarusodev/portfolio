@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { decode } from "blurhash";
@@ -76,7 +76,7 @@ export const ProjectCard = ({
         height={600}
         className="rounded-xl object-cover w-full h-full"
         src={"/" + imgSrc}
-        loading="eager"
+        loading="lazy"
         placeholder={blurDataURL ? "blur" : "empty"}
         blurDataURL={blurDataURL}
         onLoadingComplete={() => setIsLoaded(true)}
