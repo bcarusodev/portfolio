@@ -7,13 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, ExternalLink } from "lucide-react";
-import Head from "next/head";
-import constants from "@/constants";
 
 const About = () => {
   const handleCopyToClipboard = () => {
     navigator.clipboard
-      .writeText(constants.EMAIL)
+      .writeText("contact@bcaruso.dev")
       .then(() =>
         toast("Copied to clipboard!", {
           action: {
@@ -26,21 +24,6 @@ const About = () => {
   };
   return (
     <Layout>
-      <Head>
-        <title>About — Bruno Caruso</title>
-        <meta
-          name="description"
-          content="About Bruno Caruso — software developer, work experience, skills, and workstation."
-        />
-        <meta property="og:title" content="About — Bruno Caruso" />
-        <meta
-          property="og:description"
-          content="About Bruno Caruso — software developer."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://bcaruso.dev/about" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col gap-8 pt-10 pb-28 max-w-3xl mx-auto">
           <AboutMe />
@@ -54,7 +37,7 @@ const About = () => {
 
           <div className="flex flex-row gap-2">
             <a
-              href={constants.RESUME_URL}
+              href="https://drive.google.com/file/d/1Ah-AHDGnKmbtHz2wUOUdlReLaUwcjefY/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -63,7 +46,7 @@ const About = () => {
               </Button>
             </a>
             <Button variant="outline" onClick={() => handleCopyToClipboard()}>
-              {constants.EMAIL} <Copy className="w-4 h-4 ml-1" />
+              contact@bcaruso.dev <Copy className="w-4 h-4 ml-1" />
             </Button>
           </div>
 

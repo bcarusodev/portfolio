@@ -33,9 +33,10 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
       </Link>
 
       <div
-        className={`mt-0 overflow-hidden transition-all duration-300 ${
+        className={`overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
+        style={{ marginTop: "0!important" }}
       >
         <div className="mt-2 pl-4 border-l border-gray-200 dark:border-gray-700 flex flex-col items-start">
           {children &&

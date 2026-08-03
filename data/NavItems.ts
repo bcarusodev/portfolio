@@ -8,6 +8,20 @@ export const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Work",
+    // children: [
+    //   {
+    //     label: "Work",
+    //     subLabel: "Work done on my daily work",
+    //     href: "#",
+    //     enabled: true,
+    //   },
+    //   {
+    //     label: "Personal",
+    //     subLabel: "Own personal work",
+    //     href: "#",
+    //     enabled: true,
+    //   },
+    // ],
     href: "/work",
     enabled: true,
   },

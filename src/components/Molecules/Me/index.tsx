@@ -34,6 +34,8 @@ export const Me = () => {
         height={150}
         className="object-cover rounded-full shadow-2xl aspect-square"
         loading="eager"
+        // @ts-ignore
+        style={{ objectViewBox: "inset(0% -16% 21% 0%)" }}
         src="/assets/images/hero.jpg"
         alt="Me"
       />
