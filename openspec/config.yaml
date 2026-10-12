@@ -1,0 +1,48 @@
+# OpenSpec Configuration — portfolio
+# Detected: 2026-08-27
+
+context: |
+  Personal portfolio website built with Next.js 16 (Pages Router), TypeScript,
+  Tailwind CSS, shadcn/ui (new-york style), and Velite for markdown content.
+  Atomic design pattern (Atoms/Molecules/Organisms). No test suite configured.
+
+strict_tdd: false
+
+testing:
+  runner: none
+  framework: none
+  command: —
+  layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage:
+    available: false
+    command: —
+  quality_tools:
+    linter: { available: true, command: "npm run lint" }
+    type_checker: { available: true, command: "tsc --noEmit" }
+    formatter: { available: true, command: "prettier" }
+
+phases:
+  proposal:
+    enabled: true
+    output: openspec/changes/
+  spec:
+    enabled: true
+    output: openspec/specs/
+  design:
+    enabled: true
+    output: openspec/changes/
+  tasks:
+    enabled: true
+    output: openspec/changes/
+  apply:
+    enabled: true
+  verify:
+    enabled: true
+    lint: "npm run lint"
+    build: "npm run build"
+  archive:
+    enabled: true
+    output: openspec/changes/archive/
