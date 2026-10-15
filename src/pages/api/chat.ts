@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { validateResponse } from "@/lib/ai/guardrails";
 import { getKnowledgeBase, selectKnowledge } from "@/lib/ai/knowledge";
 import { buildSystemPrompt, trimHistory } from "@/lib/ai/prompt";
+import { GUARDRAIL_EN, GUARDRAIL_ES } from "@/lib/ai/prompt";
 import type { IPromptMessage, ILanguage } from "@/lib/ai/prompt";
 import { checkRateLimit } from "@/lib/ai/rateLimit";
 import { getProvider, ProviderError } from "@/lib/ai/provider";
@@ -11,6 +13,8 @@ import { getProvider, ProviderError } from "@/lib/ai/provider";
  * Pre-stream failures return real JSON status codes (400/429/503);
  * once the stream is open, failures are delivered as in-band `error`
  * events so the widget can show a retry banner (E-01).
+ * Guardrail gate: deltas are buffered after `writeHead` and validated
+ * before any of them reaches the client; violations never stream.
  */
 
 const MAX_MESSAGE_CHARS = 2000;
@@ -192,14 +196,37 @@ export default async function handler(
     "X-Accel-Buffering": "no",
   });
   const stream = res as FlushableResponse;
+  const guardrailLanguage: ILanguage = normalizeLanguage(language) ?? "es";
 
   try {
-    if (!first.done) writeEvent(stream, { type: "delta", delta: first.value });
+    // Buffer-then-validate-then-emit: text cannot be retracted once
+    // written, so nothing reaches the client before validation passes.
+    const buffer: string[] = [];
+    if (!first.done) buffer.push(first.value);
 
     while (true) {
       const result = await iterator.next();
       if (result.done) break;
-      writeEvent(stream, { type: "delta", delta: result.value });
+      buffer.push(result.value);
+    }
+
+    const text = buffer.join("");
+    const verdict = validateResponse(text, { language: guardrailLanguage });
+    if (verdict.ok === false) {
+      console.error("[chat] guardrail violation:", {
+        violation: verdict.violation,
+        chars: text.length,
+        excerpt: text.slice(0, 200),
+      });
+      writeEvent(stream, {
+        type: "delta",
+        delta: guardrailLanguage === "en" ? GUARDRAIL_EN : GUARDRAIL_ES,
+      });
+    } else {
+      // Burst the buffered deltas; the widget coalesces them on arrival.
+      for (const chunk of buffer) {
+        writeEvent(stream, { type: "delta", delta: chunk });
+      }
     }
     writeEvent(stream, { type: "done" });
   } catch (error) {
