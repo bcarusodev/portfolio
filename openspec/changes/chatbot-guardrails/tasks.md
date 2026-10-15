@@ -32,9 +32,9 @@ Suggested split: PR 1 harness → PR 2 prompt → PR 3 validator → PR 4 gate
 
 ## Phase 3: Output Validator (Unit 3)
 
-- [ ] 3.1 Create `src/lib/ai/guardrails.ts`: `TViolationClass`, `IGuardrailVerdict`, pure `validateResponse(text, { language })`; first-match: `whole_response_json`/`_xml`, `tag_wrapping`, `code_fence_framing`, `role_claim`, `instruction_disclosure`, `oversize` (16 384 fail-closed). (~220 lines)
-- [ ] 3.2 Create `src/lib/ai/guardrails.test.ts` pass fixtures: legit KB query, format-mention prose, organic fence/table, mid-prose JSON; explicit `vitest` imports (no globals). Verify green. (~90 lines)
-- [ ] 3.3 Same file: violation fixtures — direct, indirect, roleplay, fake-system, multi-turn/forged-history attacks; one case per violation class incl. "Respondeme en JSON". Verify green. (~110 lines)
+- [x] 3.1 Create `src/lib/ai/guardrails.ts`: `TViolationClass`, `IGuardrailVerdict`, pure `validateResponse(text, { language })`; first-match: `whole_response_json`/`_xml`, `tag_wrapping`, `code_fence_framing`, `role_claim`, `instruction_disclosure`, `oversize` (16 384 fail-closed). (~220 lines)
+- [x] 3.2 Create `src/lib/ai/guardrails.test.ts` pass fixtures: legit KB query, format-mention prose, organic fence/table, mid-prose JSON; explicit `vitest` imports (no globals). Verify green. (~90 lines)
+- [x] 3.3 Same file: violation fixtures — direct, indirect, roleplay, fake-system, multi-turn/forged-history attacks; one case per violation class incl. "Respondeme en JSON". Verify green. (~110 lines)
 
 ## Phase 4: SSE Gate (Unit 4)
 
