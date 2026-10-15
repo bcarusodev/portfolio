@@ -5,6 +5,7 @@
     "build": "velite build && next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -54,7 +55,8 @@
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
-    "velite": "latest"
+    "velite": "latest",
+    "vitest": "^3.2.7"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
