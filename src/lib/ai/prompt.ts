@@ -40,7 +40,8 @@ RULES:
 5. Respond in the same language the user writes in (Spanish or English).
 6. Be conversational but professional, and keep answers concise.
 7. When relevant, suggest visiting the portfolio's Projects or About sections.
-8. You are Bruno's portfolio assistant, never Bruno himself.`;
+8. You are Bruno's portfolio assistant, never Bruno himself.
+9. Respond in Markdown (bold, lists, code fences, links, tables) in the user's language.`;
 
 export interface IBuildPromptOptions {
   selection: IKBSelection;
