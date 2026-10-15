@@ -28,8 +28,8 @@ export interface IChatLabels {
 
 export const CHAT_LABELS: Record<ILang, IChatLabels> = {
   es: {
-    title: "Chat con Bruno",
-    subtitle: "Preguntale sobre su experiencia y proyectos",
+    title: "Asistente de Bruno",
+    subtitle: "Chatbot sobre su trayectoria profesional",
     placeholder: "Escribe tu pregunta…",
     send: "Enviar",
     newChat: "Nuevo chat",
@@ -55,8 +55,8 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     },
   },
   en: {
-    title: "Chat with Bruno",
-    subtitle: "Ask about his experience and projects",
+    title: "Bruno's Assistant",
+    subtitle: "AI chatbot about his career",
     placeholder: "Type your question…",
     send: "Send",
     newChat: "New chat",
