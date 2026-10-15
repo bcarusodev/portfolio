@@ -51,3 +51,4 @@ server.log
 # Agent tooling
 .gga
 .atl/
+.codegraph/
