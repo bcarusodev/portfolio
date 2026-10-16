@@ -38,12 +38,12 @@ Suggested split: PR 1 harness → PR 2 prompt → PR 3 validator → PR 4 gate
 
 ## Phase 4: SSE Gate (Unit 4)
 
-- [ ] 4.1 `src/pages/api/chat.ts`: buffer deltas after `writeHead`; on end `validateResponse` — ok: flush buffered `delta`s; violation: `console.error` + `GUARDRAIL_ES/EN` `delta` (default `es`) + `done`, never `error`. Unchanged: first-delta 429/5xx→HTTP, abort, rate limit, mid-stream `error`. (~55 lines)
-- [ ] 4.2 Create `src/pages/api/chat.test.ts`: local `node:http` OpenAI-SSE mock (`AI_PROVIDER_BASE_URL`, test key) + req/res stubs — pass → `delta`\*+`done`; violation → fallback+`done` (no violating text); 429/5xx pre-first-delta → HTTP; close mid-buffer → abort; over-limit IP → 429. Verify green. (~230 lines)
+- [x] 4.1 `src/pages/api/chat.ts`: buffer deltas after `writeHead`; on end `validateResponse` — ok: flush buffered `delta`s; violation: `console.error` + `GUARDRAIL_ES/EN` `delta` (default `es`) + `done`, never `error`. Unchanged: first-delta 429/5xx→HTTP, abort, rate limit, mid-stream `error`. (~55 lines)
+- [x] 4.2 Create `src/pages/api/chat.test.ts`: local `node:http` OpenAI-SSE mock (`AI_PROVIDER_BASE_URL`, test key) + req/res stubs — pass → `delta`\*+`done`; violation → fallback+`done` (no violating text); 429/5xx pre-first-delta → HTTP; close mid-buffer → abort; over-limit IP → 429. Verify green. (~230 lines)
 
 ## Phase 5: Quality Gates
 
-- [ ] 5.1 Run `npm test`, `npm run lint`, `tsc --noEmit`; all exit 0. (0 lines)
+- [x] 5.1 Run `npm test`, `npm run lint`, `tsc --noEmit`; all exit 0. (0 lines)
 
 ## Review Workload Forecast
 
