@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getClientIp, hashIp } from "@/lib/ai/clientIp";
 import { validateResponse } from "@/lib/ai/guardrails";
 import { getKnowledgeBase, selectKnowledge } from "@/lib/ai/knowledge";
 import { buildSystemPrompt, trimHistory } from "@/lib/ai/prompt";
@@ -31,13 +32,6 @@ interface IChatRequestBody {
   message?: unknown;
   history?: unknown;
   language?: unknown;
-}
-
-function getClientIp(req: NextApiRequest): string {
-  const forwarded = req.headers["x-forwarded-for"];
-  const raw = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-  const first = raw?.split(",")[0]?.trim();
-  return first || req.socket.remoteAddress || "unknown";
 }
 
 function normalizeLanguage(value: unknown): ILanguage | undefined {
@@ -100,6 +94,13 @@ export default async function handler(
   const ip = getClientIp(req);
   const rate = checkRateLimit(ip);
   if (!rate.allowed) {
+    // One structured log per HTTP 429 (R5): reason + hashed IP only —
+    // never the raw IP and never message text.
+    console.info("[chat] rate limited:", {
+      reason: rate.reason ?? "minute",
+      ipHash: hashIp(ip),
+      retryAfter: rate.retryAfter,
+    });
     res.setHeader("Retry-After", String(rate.retryAfter));
     res.status(429).json({
       error: "rate_limit",
@@ -175,6 +176,11 @@ export default async function handler(
       error instanceof ProviderError ? error : new ProviderError("unknown");
     console.error("[chat] provider request failed:", providerError.message);
     if (providerError.status === 429) {
+      console.info("[chat] rate limited:", {
+        reason: "upstream",
+        ipHash: hashIp(ip),
+        retryAfter: 30,
+      });
       res.setHeader("Retry-After", "30");
       res.status(429).json({
         error: "rate_limit",

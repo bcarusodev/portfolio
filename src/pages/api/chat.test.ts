@@ -36,6 +36,9 @@ const VIOLATION_DELTAS = ['{"rol": ', '"hacker"}'];
 let mockMode: TMockMode = "pass";
 let providerSawAbort = false;
 let savedRateMax: string | undefined;
+let savedDailyMax: string | undefined;
+let savedGlobalMax: string | undefined;
+let savedVercel: string | undefined;
 let savedBaseUrl: string | undefined;
 let savedApiKey: string | undefined;
 const sockets = new Set<Socket>();
@@ -134,8 +137,17 @@ function createRes(): { res: NextApiResponse; state: IResState } {
 
 beforeAll(async () => {
   savedRateMax = process.env.AI_RATE_LIMIT_MAX;
+  savedDailyMax = process.env.AI_RATE_LIMIT_DAILY_MAX;
+  savedGlobalMax = process.env.AI_GLOBAL_RATE_LIMIT_MAX;
+  savedVercel = process.env.VERCEL;
   savedBaseUrl = process.env.AI_PROVIDER_BASE_URL;
   savedApiKey = process.env.AI_PROVIDER_API_KEY;
+
+  // R1/R6: without the VERCEL marker the resolver collapses every request
+  // onto socket 127.0.0.1 and the XFF coverage disappears.
+  process.env.VERCEL = "1";
+  delete process.env.AI_RATE_LIMIT_DAILY_MAX;
+  delete process.env.AI_GLOBAL_RATE_LIMIT_MAX;
 
   server = http.createServer((req, res) => {
     if (!req.url || !req.url.endsWith("/chat/completions")) {
@@ -199,13 +211,19 @@ afterAll(async () => {
   restore("AI_PROVIDER_BASE_URL", savedBaseUrl);
   restore("AI_PROVIDER_API_KEY", savedApiKey);
   restore("AI_RATE_LIMIT_MAX", savedRateMax);
+  restore("AI_RATE_LIMIT_DAILY_MAX", savedDailyMax);
+  restore("AI_GLOBAL_RATE_LIMIT_MAX", savedGlobalMax);
+  restore("VERCEL", savedVercel);
 });
 
 beforeEach(() => {
   resetRateLimits();
+  delete process.env.AI_RATE_LIMIT_DAILY_MAX;
+  delete process.env.AI_GLOBAL_RATE_LIMIT_MAX;
   mockMode = "pass";
   providerSawAbort = false;
   vi.spyOn(console, "error").mockImplementation(() => {});
+  vi.spyOn(console, "info").mockImplementation(() => {});
 });
 
 afterEach(() => {
@@ -277,6 +295,12 @@ describe("POST /api/chat — guardrail SSE gate", () => {
     expect(state.headers["Retry-After"]).toBe("30");
     expect(state.jsonBody).toMatchObject({ error: "rate_limit" });
     expect(state.events).toEqual([]);
+    expect(console.info).toHaveBeenCalledTimes(1);
+    expect(console.info).toHaveBeenCalledWith("[chat] rate limited:", {
+      reason: "upstream",
+      ipHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      retryAfter: 30,
+    });
   });
 
   it("maps upstream 5xx before the first delta to HTTP 503", async () => {
@@ -322,5 +346,99 @@ describe("POST /api/chat — guardrail SSE gate", () => {
     expect(second.state.headWritten).toBe(false);
     expect(second.state.statusCode).toBe(429);
     expect(second.state.jsonBody).toMatchObject({ error: "rate_limit" });
+  });
+
+  it("emits exactly one structured log with reason and ipHash on a limiter 429", async () => {
+    process.env.AI_RATE_LIMIT_MAX = "1";
+    resetRateLimits();
+
+    const first = createRes();
+    await handler(createReq("hola", "198.51.100.20"), first.res);
+    expect(first.state.statusCode).toBe(200);
+
+    const second = createRes();
+    await handler(createReq("hola de nuevo", "198.51.100.20"), second.res);
+    expect(second.state.statusCode).toBe(429);
+
+    expect(console.info).toHaveBeenCalledTimes(1);
+    expect(console.info).toHaveBeenCalledWith("[chat] rate limited:", {
+      reason: "minute",
+      ipHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      retryAfter: expect.any(Number),
+    });
+    const logged = JSON.stringify(vi.mocked(console.info).mock.calls);
+    expect(logged).not.toContain("198.51.100.20");
+    expect(logged).not.toContain("hola de nuevo");
+  });
+
+  it("keeps the 429 contract and logs reason daily on a daily-cap rejection", async () => {
+    process.env.AI_RATE_LIMIT_MAX = "1000";
+    process.env.AI_RATE_LIMIT_DAILY_MAX = "1";
+    resetRateLimits();
+
+    const first = createRes();
+    await handler(createReq("hola", "198.51.100.21"), first.res);
+    expect(first.state.statusCode).toBe(200);
+
+    const second = createRes();
+    await handler(createReq("hola de nuevo", "198.51.100.21"), second.res);
+    expect(second.state.headWritten).toBe(false);
+    expect(second.state.statusCode).toBe(429);
+    expect(second.state.headers["Retry-After"]).toBeDefined();
+    expect(second.state.jsonBody).toMatchObject({
+      error: "rate_limit",
+      message: "Please wait a moment before sending another message.",
+    });
+    expect(console.info).toHaveBeenCalledTimes(1);
+    expect(console.info).toHaveBeenCalledWith(
+      "[chat] rate limited:",
+      expect.objectContaining({ reason: "daily" })
+    );
+  });
+
+  it("keeps the 429 contract and logs reason global on a global-cap rejection", async () => {
+    process.env.AI_GLOBAL_RATE_LIMIT_MAX = "1";
+    resetRateLimits();
+
+    const first = createRes();
+    await handler(createReq("hola", "198.51.100.22"), first.res);
+    expect(first.state.statusCode).toBe(200);
+
+    const second = createRes();
+    await handler(createReq("hola de nuevo", "198.51.100.23"), second.res);
+    expect(second.state.headWritten).toBe(false);
+    expect(second.state.statusCode).toBe(429);
+    expect(second.state.headers["Retry-After"]).toBeDefined();
+    expect(second.state.jsonBody).toMatchObject({ error: "rate_limit" });
+    expect(console.info).toHaveBeenCalledWith(
+      "[chat] rate limited:",
+      expect.objectContaining({ reason: "global" })
+    );
+  });
+
+  it("ignores a spoofed XFF header when the VERCEL marker is unset", async () => {
+    const previousVercel = process.env.VERCEL;
+    delete process.env.VERCEL;
+    try {
+      process.env.AI_RATE_LIMIT_MAX = "1";
+      resetRateLimits();
+
+      // Every stubbed socket is 127.0.0.1; only the forged XFF differs.
+      const first = createRes();
+      await handler(createReq("hola", "203.0.113.90"), first.res);
+      expect(first.state.statusCode).toBe(200);
+
+      const second = createRes();
+      await handler(createReq("hola de nuevo", "198.51.100.90"), second.res);
+      // Same socket bucket → 429 proves the forged XFF never keyed the limiter.
+      expect(second.state.statusCode).toBe(429);
+      expect(console.info).toHaveBeenCalledWith(
+        "[chat] rate limited:",
+        expect.objectContaining({ reason: "minute" })
+      );
+    } finally {
+      if (previousVercel === undefined) delete process.env.VERCEL;
+      else process.env.VERCEL = previousVercel;
+    }
   });
 });
