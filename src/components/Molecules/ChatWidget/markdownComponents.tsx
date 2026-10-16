@@ -2,6 +2,37 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import type { Components } from "react-markdown";
 
+const HTML_BR = /<br\s*\/?>/gi;
+
+/**
+ * react-markdown escapes raw HTML as literal text (no rehype plugins and no
+ * dangerouslySetInnerHTML — a deliberate security choice). Models sometimes
+ * emit `<br>` for line breaks, most often inside GFM table cells where
+ * markdown has no other way to break a line. Split those text nodes and
+ * render real React <br /> elements instead of enabling raw HTML globally.
+ */
+export function withLineBreaks(children: React.ReactNode): React.ReactNode {
+  if (typeof children === "string") {
+    if (!children.toLowerCase().includes("<br")) return children;
+    return children.split(HTML_BR).flatMap((part, index) =>
+      index === 0
+        ? part
+        : [
+            <React.Fragment key={index}>
+              <br />
+            </React.Fragment>,
+            part,
+          ]
+    );
+  }
+  if (Array.isArray(children)) {
+    return children.map((child, index) => (
+      <React.Fragment key={index}>{withLineBreaks(child)}</React.Fragment>
+    ));
+  }
+  return children;
+}
+
 /**
  * Tailwind overrides for react-markdown elements (FR-1 / NFR-6).
  *
@@ -45,7 +76,7 @@ export const markdownComponents: Components = {
   ),
   p: ({ node, className, children, ...props }) => (
     <p className={cn("my-1.5 first:mt-0 last:mb-0", className)} {...props}>
-      {children}
+      {withLineBreaks(children)}
     </p>
   ),
   strong: ({ node, className, children, ...props }) => (
@@ -92,7 +123,7 @@ export const markdownComponents: Components = {
       )}
       {...props}
     >
-      {children}
+      {withLineBreaks(children)}
     </li>
   ),
   code: ({ node, className, children, ...props }) => (
@@ -162,7 +193,7 @@ export const markdownComponents: Components = {
       )}
       {...props}
     >
-      {children}
+      {withLineBreaks(children)}
     </th>
   ),
   td: ({ node, className, children, ...props }) => (
@@ -170,7 +201,7 @@ export const markdownComponents: Components = {
       className={cn("border border-border/60 px-2 py-1 text-left", className)}
       {...props}
     >
-      {children}
+      {withLineBreaks(children)}
     </td>
   ),
   img: ({ node, className, ...props }) => (
