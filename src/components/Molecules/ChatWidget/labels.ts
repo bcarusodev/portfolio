@@ -18,7 +18,6 @@ export interface IChatLabels {
   dismiss: string;
   conversation: string;
   inputLabel: string;
-  langToggle: string;
   charCount: string;
   error: Record<
     "rate_limit" | "network" | "provider" | "invalid" | "too_long" | "unknown",
@@ -32,7 +31,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     subtitle: "Chatbot sobre su trayectoria profesional",
     placeholder: "Escribe tu pregunta…",
     send: "Enviar",
-    newChat: "Nuevo chat",
+    newChat: "Limpiar chat",
     thinking: "Pensando…",
     typing: "Escribiendo…",
     emptyState:
@@ -41,7 +40,6 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     dismiss: "Cerrar",
     conversation: "Conversación con el asistente de Bruno",
     inputLabel: "Mensaje para el asistente",
-    langToggle: "Cambiar idioma",
     charCount: "caracteres",
     error: {
       rate_limit:
@@ -59,7 +57,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     subtitle: "AI chatbot about his career",
     placeholder: "Type your question…",
     send: "Send",
-    newChat: "New chat",
+    newChat: "Clear chat",
     thinking: "Thinking…",
     typing: "Typing…",
     emptyState: "Ask me about Bruno's experience, skills, or projects.",
@@ -67,7 +65,6 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     dismiss: "Dismiss",
     conversation: "Conversation with Bruno's assistant",
     inputLabel: "Message for the assistant",
-    langToggle: "Change language",
     charCount: "characters",
     error: {
       rate_limit:

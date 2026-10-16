@@ -4,7 +4,7 @@ import { MessageInput } from "./MessageInput";
 import { getLabels } from "./labels";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { X } from "lucide-react";
 import type { IChatErrorCode, IChatMessage, IChatStatus, ILang } from "./types";
 
 const LANG_STORAGE_KEY = "chat-lang:v1";
@@ -66,7 +66,7 @@ const ChatWidget = ({ className }: IChatWidgetProps) => {
   const [status, setStatus] = useState<IChatStatus>("idle");
   const [errorCode, setErrorCode] = useState<IChatErrorCode | null>(null);
   const [input, setInput] = useState("");
-  const [language, setLanguage] = useState<ILang>(readStoredLanguage);
+  const [language] = useState<ILang>(readStoredLanguage);
   const lastSendRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -278,42 +278,22 @@ const ChatWidget = ({ className }: IChatWidgetProps) => {
             {labels.subtitle}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <div
-            role="group"
-            aria-label={labels.langToggle}
-            className="flex items-center rounded-lg border border-border/60 p-0.5"
-          >
-            {(["es", "en"] as ILang[]).map((code) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setLanguage(code)}
-                aria-pressed={language === code}
-                className={cn(
-                  "rounded-md px-2 py-0.5 text-xs font-medium uppercase transition-colors",
-                  language === code
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {code}
-              </button>
-            ))}
+        {messages.length > 0 ? (
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleNewChat}
+              aria-label={labels.newChat}
+              title={labels.newChat}
+              className="h-7 gap-1 px-2 text-xs"
+            >
+              <X className="h-3.5 w-3.5" />
+              {labels.newChat}
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={handleNewChat}
-            aria-label={labels.newChat}
-            title={labels.newChat}
-            className="h-7 gap-1 px-2 text-xs"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            {labels.newChat}
-          </Button>
-        </div>
+        ) : null}
       </header>
 
       <MessageList messages={messages} status={status} language={language} />
