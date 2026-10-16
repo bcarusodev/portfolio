@@ -3,8 +3,40 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import constants from "@/constants";
+
+/**
+ * Where the heading stops, as a fraction of the viewport height. 0.2 keeps
+ * the title in the upper fifth so the chat card is visible below it; 0.5
+ * (true center) pushed the section too far down.
+ */
+const HEADING_TOP_RATIO = 0.2;
 
 export const ContactButtons = () => {
+  /**
+   * "Explore My Story" opens the assistant instead of navigating: the chat
+   * answers questions about the trajectory. When the chat is disabled the
+   * section is absent, so the link falls back to /about.
+   */
+  const handleExploreClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = document.getElementById(constants.ASSISTANT_HEADING_ID);
+    if (!target) return;
+    event.preventDefault();
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    // scrollIntoView cannot express "upper fifth", so compute the position:
+    // document offset of the heading minus where we want it in the viewport.
+    const destination =
+      window.scrollY +
+      target.getBoundingClientRect().top -
+      window.innerHeight * HEADING_TOP_RATIO;
+    window.scrollTo({
+      top: Math.max(destination, 0),
+      behavior: reducedMotion ? "auto" : "smooth",
+    });
+  };
+
   return (
     <div className={"flex justify-center"}>
       <div
@@ -16,6 +48,7 @@ export const ContactButtons = () => {
           href="/about"
           rel="noopener noreferrer"
           className={"w-full md:w-1/2"}
+          onClick={handleExploreClick}
         >
           <RainbowButton className={"text-sm w-full h-10 tracking-tight"}>
             Explore My Story
