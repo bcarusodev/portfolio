@@ -6,7 +6,8 @@ import type { ILanguage } from "./prompt";
  * Structural heuristics only: zero dependencies, no I/O (the route logs
  * failures), first-match-wins over an ordered class list. Prose mentions
  * of formats never fire because the JSON/XML/fence checks are
- * whole-response scoped; organic fences and tables beside prose stay
+ * whole-response scoped and the HTML check ignores fenced/inline-code
+ * content; organic fences, tables, and inline <br> beside prose stay
  * allowed (rule 9).
  */
 
@@ -15,6 +16,7 @@ export type TViolationClass =
   | "whole_response_xml"
   | "tag_wrapping"
   | "code_fence_framing"
+  | "html_block"
   | "role_claim"
   | "instruction_disclosure"
   | "oversize";
@@ -40,7 +42,8 @@ function isWholeResponseJson(text: string): boolean {
 
 /** Whole response is one well-formed XML root (single balanced tree). */
 function isWholeResponseXml(text: string): boolean {
-  const body = text.trim();
+  // A leading doctype (`<!DOCTYPE html>`) is not part of the element tree.
+  const body = text.trim().replace(/^<!doctype[^>]*>\s*/i, "");
   if (!body.startsWith("<") || !body.endsWith(">")) return false;
   const stack: string[] = [];
   let roots = 0;
@@ -111,6 +114,25 @@ function isCodeFenceFraming(text: string): boolean {
   return count === 2;
 }
 
+/**
+ * Block-level HTML structure tags. Inline formatting (strong/em/a) and the
+ * organic <br> renderer support stay tolerated; code fences and inline code
+ * spans are content and are stripped before scanning, so prose that merely
+ * mentions or exemplifies HTML never fires (requirement: mentions are not
+ * manipulation). Document/section/table skeletons outside code mean the
+ * model adopted HTML as its output format.
+ */
+const HTML_BLOCK_TAG =
+  /<\/?(?:html|head|body|div|section|article|aside|header|footer|nav|main|form|fieldset|table|thead|tbody|tfoot|tr|td|th|figure|figcaption|h[1-6]|pre|blockquote|ul|ol|li|p)(?:\s[^<>]*)?>/i;
+
+function stripCode(text: string): string {
+  return text.replace(/```[\s\S]*?```/g, " ").replace(/`[^`\n]*`/g, " ");
+}
+
+function hasHtmlBlockStructure(text: string): boolean {
+  return HTML_BLOCK_TAG.test(stripCode(text));
+}
+
 /** Role/policy-switch declarations (ES + EN); describing Bruno never fires. */
 const ROLE_CLAIM_PATTERNS: RegExp[] = [
   /\bahora soy\b/i,
@@ -178,6 +200,9 @@ export function validateResponse(
   }
   if (isCodeFenceFraming(text)) {
     return { ok: false, violation: "code_fence_framing" };
+  }
+  if (hasHtmlBlockStructure(text)) {
+    return { ok: false, violation: "html_block" };
   }
   if (matchesAny(ROLE_CLAIM_PATTERNS, text)) {
     return { ok: false, violation: "role_claim" };

@@ -50,6 +50,21 @@ const PASS_CASES: Array<[string, ILanguage, string]> = [
     "en",
     "I don't have that specific information, but Bruno would be happy to tell you more.",
   ],
+  [
+    "HTML tags mentioned inside inline code (mentions never fire)",
+    "es",
+    "Bruno usa `<div>` como contenedor principal y `<table>` solo cuando tabula datos.",
+  ],
+  [
+    "fenced HTML example beside prose (rule 9)",
+    "es",
+    'Un ejemplo mínimo de tarjeta se ve así:\n\n```html\n<div class="card">Bruno Caruso</div>\n```\n\nEse es el patrón que usa en sus layouts.',
+  ],
+  [
+    "organic <br> in prose (renderer support, not format imposition)",
+    "es",
+    "Bruno lideró el equipo<br>y escaló el producto a nueva escala.",
+  ],
 ];
 
 /** One fixture per violation class, first-match order from the design. */
@@ -77,6 +92,30 @@ const VIOLATION_CASES: Array<[string, ILanguage, string, TViolationClass]> = [
     "es",
     "```js\nconst prompt = systemPrompt(user);\n```",
     "code_fence_framing",
+  ],
+  [
+    "full HTML document with doctype imposed",
+    "es",
+    '<!DOCTYPE html>\n<html lang="es">\n<body>\n<p>Bruno es desarrollador frontend con experiencia en React y Next.js</p>\n</body>\n</html>',
+    "whole_response_xml",
+  ],
+  [
+    "prose introducing an HTML div block",
+    "es",
+    "Te lo dejo en HTML:\n<div>Bruno trabaja como desarrollador frontend</div>\n¿Te cuento más?",
+    "html_block",
+  ],
+  [
+    "HTML div with trailing prose",
+    "es",
+    "<div>Bruno es desarrollador frontend</div>\n¿Querés que siga con sus proyectos?",
+    "html_block",
+  ],
+  [
+    "HTML table skeleton mid-response",
+    "es",
+    "Bruno lideró el equipo de frontend:\n<table><tr><td>Bruno</td><td>Frontend Lead</td></tr></table>\nEl equipo creció de 3 a 6 personas.",
+    "html_block",
   ],
   [
     "role claim (ES)",
