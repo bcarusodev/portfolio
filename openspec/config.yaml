@@ -9,11 +9,11 @@ context: |
 strict_tdd: false
 
 testing:
-  runner: none
-  framework: none
-  command: —
+  runner: vitest
+  framework: vitest
+  command: "npm test"
   layers:
-    unit: false
+    unit: true
     integration: false
     e2e: false
   coverage:
