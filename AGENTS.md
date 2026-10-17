@@ -1,172 +1,97 @@
-# AGENTS.md - Developer Guidelines
+# AGENTS.md — Portfolio (Next.js + Velite + Tailwind)
 
-## Project Overview
+Personal portfolio site. Atomic Design components over the Next.js **Pages Router**.
 
-Personal portfolio website built with:
+## Stack (verified against code — trust this over README.md)
 
-- **Framework**: Next.js 15 (Pages Router)
-- **Language**: TypeScript
-- **UI Libraries**: Chakra UI, Tailwind CSS, Radix UI
-- **Content**: ContentLayer for markdown content management
-- **Design Pattern**: Atomic Design (Atoms, Molecules, Organisms)
+- **Next.js 16** (Pages Router), **React 18**, TypeScript, Node 18+.
+- **Styling**: Tailwind CSS + Radix UI + CVA (shadcn/ui, "new-york"). See `components.json`.
+- **Content**: **Velite** (migrated _from_ ContentLayer; `@velite` is the generated module).
+- **Tests**: Vitest, node environment, no jsdom.
+- `README.md` is stale: it claims **Chakra UI** and **ContentLayer**. Chakra is gone (not in
+  `package.json`, zero imports); content is Velite. Do not reintroduce either.
 
-## Installed Skills
+## Commands
 
-Skills available in `.agents/skills/`:
+| Command              | Runs                               | Notes                                                       |
+| -------------------- | ---------------------------------- | ----------------------------------------------------------- |
+| `npm install`        | deps                               | Run first on a fresh checkout.                              |
+| `npm run dev`        | `velite && next dev`               | `velite` (no subcommand) builds content **once and exits**. |
+| `npm run build`      | `velite build && next build`       |                                                             |
+| `npm test`           | `vitest run`                       | Single file: `npx vitest run src/lib/ai/guardrails.test.ts` |
+| `npm run test:watch` | `vitest`                           | Watch mode — the TDD loop.                                  |
+| `npm run lint`       | `eslint --ext .ts,.tsx,.js,.jsx .` | Fails on error-level rules only; warnings do not fail.      |
+| `npm run lint:fix`   | same, with `--fix`                 |                                                             |
+| `npm run typecheck`  | `tsc --noEmit`                     | Writes cache to `node_modules/.cache/`, not the repo.       |
 
-- **next-best-practices**: Next.js file conventions, RSC boundaries, async patterns, error handling
-- **vercel-react-best-practices**: React/Next.js performance optimization (57 rules across 8 categories)
+## Tooling traps
 
-Always invoke relevant skills before coding tasks.
+- **`npm run lint` fails on errors, not warnings.** `no-var` and similar are configured as
+  warnings and pass; `no-undef` and `import/no-duplicates` are errors and fail the run. A green
+  lint run does not mean zero findings.
+- **`.velite/` is generated and gitignored.** `@velite` imports (e.g. `src/pages/work.tsx`,
+  `data/work/loader.ts`) resolve to `.velite/index`. On a fresh checkout, run `npx velite`
+  before `tsc` / `next build`, or the import is unresolvable.
+- **Editing project markdown does not hot-reload.** `npm run dev` runs `velite` once, then
+  `next dev`. After editing `data/work/*.md`, rerun `npx velite`, or run `npx velite dev` in a
+  second terminal for watch mode.
+- **Tests are node-environment only.** `vitest.config.ts` includes `src/**/*.test.{ts,tsx}` with
+  `environment: "node"`. Component tests go through `renderToStaticMarkup` (see
+  `markdownComponents.test.ts`); there is no jsdom or Testing Library — do not add them without a
+  deliberate decision. Aliases `@`, `@data`, `@velite` mirror `tsconfig.json`, and Vite matches
+  aliases by prefix **in declaration order**, so `@data` / `@velite` must stay before the bare
+  `@`. `src/lib/aliases.test.tsx` guards that ordering.
+- **The stale root `tsconfig.tsbuildinfo` is a leftover.** `typecheck` now writes build info to
+  `node_modules/.cache/`, so that tracked file is never regenerated. It should be
+  `git rm --cached` and gitignored — do not treat it as build output you need to commit.
 
-## Build/Lint/Test Commands
+## Path aliases (`tsconfig.json`)
 
-| Command           | Description              |
-| ----------------- | ------------------------ |
-| `npm run dev`     | Start development server |
-| `npm run build`   | Production build         |
-| `npm run start`   | Start production server  |
-| `npm run lint`    | Run ESLint               |
-| `npm run prepare` | Install Husky hooks      |
+- `@/*` → `src/*`
+- `@data/*` → `data/*`
+- `@velite`, `@velite/*` → `.velite/index`, `.velite/*`
 
-```bash
-# Run ESLint
-npm run lint
+## Layout
 
-# Fix with Prettier
-npx prettier --write --ignore-unknown .
-```
+- `src/components/{Atoms,Molecules,Organisms}/` — Atomic Design. `src/components/ui/` holds
+  shadcn/ui primitives; add via the shadcn CLI using `components.json` (`@/lib/utils` exports `cn()`).
+- `src/pages/` — **Pages Router only** (`_app`, `_document`, `index`, `about`, `work`,
+  `work/[id]`, `api/chat`). There is no App Router. **Never add `"use client"`** — that is an
+  App Router directive and is meaningless here.
+- `data/*.ts` — static content (Hero, Skills, Experience, NavItems, Technologies).
+- `data/work/*.md` — project markdown, schema in `velite.config.ts`; `data/work/loader.ts` owns
+  `getStaticProps`/`getStaticPaths` and `stacksMap` (stack key → icon/color).
+- `src/constants.ts` — shared IDs/constants.
 
-**Note**: No test suite configured. Do not add tests unless explicitly requested.
+## AI chat agent (`/api/chat`)
 
-## Code Style Guidelines
+- `src/pages/api/chat.ts` — POST SSE streaming endpoint; failures are JSON status codes
+  (400/429/503) before the stream opens, in-band `error` events after.
+- `src/lib/ai/` — `provider.ts` (`groq|cerebras|openai`), `guardrails.ts`, `rateLimit.ts`,
+  `knowledge.ts`, `prompt.ts`, `clientIp.ts`.
+- **Rate limiting is in-memory per process** — resets on restart and is not shared across
+  instances. Do not treat it as a distributed limit.
+- The knowledge base is read once per process from
+  `assets/agent-knowledge/knowledge-base-complete.md`, resolved from **`process.cwd()`** and
+  cached in a module-level variable. Tests that touch it depend on that path; a missing file
+  makes the route answer 503.
+- Gated by `NEXT_PUBLIC_AI_CHAT_ENABLED` (checked in `src/pages/index.tsx`); the widget is
+  loaded with `next/dynamic` + `ssr: false`.
+- `AI_PROVIDER_API_KEY` is **server-only**. Never prefix it with `NEXT_PUBLIC_`.
+  `.env.example` is the source of truth for every env var.
+- **`docs/sdd/ai-agent-portfolio-design.md` is the as-built authority** for this feature and
+  supersedes `README.md`.
 
-### General Principles
+## Notes
 
-- Keep components small and focused
-- Use functional components with hooks
-- Prefer composition over inheritance
-- Use TypeScript types over `any`
-
-### Imports & Path Aliases
-
-```typescript
-// Use @/* for src directory
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-// Use @data/* for data directory
-import { NAV_ITEMS } from "@data/NavItems";
-```
-
-### File Organization
-
-```
-src/
-├── components/
-│   ├── Atoms/          # Smallest reusable components
-│   ├── Molecules/      # Composed from atoms
-│   ├── Organisms/      # Complex UI sections
-│   └── ui/             # Reusable UI primitives (shadcn-style)
-├── lib/                # Utilities
-├── pages/              # Next.js pages (Pages Router)
-├── providers/          # React context providers
-└── types/              # TypeScript type definitions
-```
-
-### Naming Conventions
-
-- **Components**: PascalCase (e.g., `NavBar`, `Button`, `ProjectCard`)
-- **Files**: `index.tsx` for component folders, PascalCase for files
-- **CSS/Tailwind classes**: kebab-case
-- **Variables**: camelCase
-- **Constants**: UPPER_SNAKE_CASE
-- **Interfaces**: Prefix with `I` or use descriptive names (e.g., `ButtonProps`)
-
-### TypeScript Guidelines
-
-- Use explicit types for function parameters and return values when not obvious
-- Use `interface` for object shapes, `type` for unions/intersections
-- Avoid `any` - use `unknown` when type is truly unknown
-
-```typescript
-// Good
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "destructive" | "outline";
-}
-
-// Avoid
-const something: any = ...
-```
-
-### React/Component Patterns
-
-- Use `React.forwardRef` for components that need ref forwarding
-- Set `displayName` for forwarded refs
-- Use `cn()` utility for conditional Tailwind classes
-- Use `cva` (class-variance-authority) for component variants
-
-```typescript
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Button.displayName = "Button";
-```
-
-### CSS & Tailwind
-
-- Use Tailwind utility classes for styling
-- Use Chakra UI components for layout (Box, Flex, Grid, etc.)
-- Use custom colors from `tailwind.config.js` (e.g., `bg-primary`, `text-foreground`)
-- Use `cn()` utility for conditional class merging
-
-### Error Handling
-
-- Use error boundaries for component failures
-- Handle loading states gracefully
-- Use TypeScript null checks for optional data
-
-### Pre-commit Hooks
-
-Husky with lint-staged runs Prettier on all files before commit.
-
-## ESLint Configuration
-
-Extends: `plugin:react/recommended`, `standard`, `prettier`, `plugin:@next/next/recommended`
-
-Key rules:
-
-- `react/react-in-jsx-scope`: off (JSX runtime is automatic)
-- Prop-types disabled for UI components in `src/components/ui/`
-
-## Git Workflow
-
-### Do NOT Use Git Worktrees
-
-This repository uses **ContentLayer** which generates files in `.contentlayer/`. Git worktrees can cause issues with ContentLayer's generated content and build caching. Always work in the main working directory.
-
-### Standard Workflow
-
-```bash
-git checkout -b feature/my-feature
-git add .
-git commit -m "feat: add new feature"
-git push -u origin feature/my-feature
-```
-
-## Important Notes
-
-1. **Pages Router**: This project uses Next.js Pages Router, not App Router
-2. **ContentLayer**: Markdown content is managed via ContentLayer in the `data/` directory
-3. **No Tests**: There are no test files or test configuration - do not add tests
-4. **Strict Mode Off**: `strict: false` is set in tsconfig.json
-5. **Node Version**: Use Node.js 18+ for compatibility with Next.js 15
+- `tsconfig.json` sets `strict: false` — type errors will not fail the build. Be deliberate.
+- `next.config.mjs` enables Turbopack and `transpilePackages: ["geist"]`.
+- Version skew: Next 16 with `eslint-config-next` 14 and `@next/eslint-plugin-next` 13. Lint works,
+  but the rules are calibrated to an older Next major.
+- Worktrees are not banned (the old ContentLayer reason is obsolete), but `.velite/` and
+  `node_modules/` are per-checkout, so each worktree needs its own `npm install` + `npx velite`.
+- `.agents/skills/` holds `next-best-practices` and `vercel-react-best-practices` (plus `bmad-*`);
+  `.atl/skill-registry.md` is the index. Load the relevant one before UI/Next.js work.
+- `odd/tasks/` holds in-repo feature documents for tracked multi-step work.
+- `opencode.json`: `default_agent` is `gentle-orchestrator`; the `gentleman` primary agent loads
+  this file as its prompt.
