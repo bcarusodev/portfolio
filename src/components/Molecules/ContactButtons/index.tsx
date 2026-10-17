@@ -15,8 +15,10 @@ const HEADING_TOP_RATIO = 0.2;
 export const ContactButtons = () => {
   /**
    * "Explore My Story" opens the assistant instead of navigating: the chat
-   * answers questions about the trajectory. When the chat is disabled the
-   * section is absent, so the link falls back to /about.
+   * answers questions about the trajectory. The page scrolls the heading to
+   * the upper fifth of the viewport and hands the caret to the input so the
+   * user can start typing right away. When the chat is disabled the section
+   * is absent, so the link falls back to /about.
    */
   const handleExploreClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const target = document.getElementById(constants.ASSISTANT_HEADING_ID);
@@ -35,6 +37,13 @@ export const ContactButtons = () => {
       top: Math.max(destination, 0),
       behavior: reducedMotion ? "auto" : "smooth",
     });
+
+    // preventScroll keeps our smooth scroll authoritative: a plain focus()
+    // would yank the viewport to the input and cut the animation short.
+    const input = document.getElementById(constants.ASSISTANT_INPUT_ID);
+    if (input instanceof HTMLTextAreaElement) {
+      input.focus({ preventScroll: true });
+    }
   };
 
   return (

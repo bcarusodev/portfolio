@@ -14,6 +14,8 @@ interface IMessageInputProps {
   disabled?: boolean;
   language: ILang;
   maxLength?: number;
+  /** Stable DOM id so the page can focus the input (hero CTA). */
+  id?: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export const MessageInput = ({
   disabled = false,
   language,
   maxLength = 2000,
+  id,
 }: IMessageInputProps) => {
   const labels = getLabels(language);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -54,9 +57,10 @@ export const MessageInput = ({
   };
 
   return (
-    <div className="border-t border-border/60 p-3">
+    <div className="border-t border-border-strong p-3">
       <div className="flex items-end gap-2">
         <textarea
+          id={id}
           ref={textareaRef}
           value={value}
           onChange={(event) => onChange(event.target.value)}

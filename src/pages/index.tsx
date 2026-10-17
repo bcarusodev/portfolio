@@ -33,7 +33,7 @@ const Index = () => {
                 </BlurFade>
               </div>
               <BlurFade delay={constants.BLUR_FADE_DELAY * 7} inView>
-                <ChatWidget />
+                <ChatWidget inputId={constants.ASSISTANT_INPUT_ID} />
               </BlurFade>
             </div>
           ) : null}

@@ -51,6 +51,8 @@ function readStoredLanguage(): ILang {
 
 interface IChatWidgetProps {
   className?: string;
+  /** DOM id for the message input, so the page can focus it. */
+  inputId?: string;
 }
 
 /**
@@ -61,7 +63,7 @@ interface IChatWidgetProps {
  * messages, aborts in-flight requests on unmount/new chat, and offers
  * retry after stream drops (E-01).
  */
-const ChatWidget = ({ className }: IChatWidgetProps) => {
+const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
   const [messages, setMessages] = useState<IChatMessage[]>([]);
   const [status, setStatus] = useState<IChatStatus>("idle");
   const [errorCode, setErrorCode] = useState<IChatErrorCode | null>(null);
@@ -267,11 +269,11 @@ const ChatWidget = ({ className }: IChatWidgetProps) => {
     <section
       aria-label={labels.title}
       className={cn(
-        "w-full overflow-hidden rounded-2xl border border-border/60 bg-background/90 shadow-lg backdrop-blur",
+        "w-full overflow-hidden rounded-2xl border border-border-strong bg-background/70 shadow-lg backdrop-blur-md",
         className
       )}
     >
-      <header className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-3">
+      <header className="flex items-center justify-between gap-3 border-b border-border-strong px-4 py-3">
         <div className="min-w-0">
           <h2 className="truncate text-sm font-semibold">{labels.title}</h2>
           <p className="truncate text-xs text-muted-foreground">
@@ -330,6 +332,7 @@ const ChatWidget = ({ className }: IChatWidgetProps) => {
       ) : null}
 
       <MessageInput
+        id={inputId}
         value={input}
         onChange={setInput}
         onSubmit={handleSubmit}
