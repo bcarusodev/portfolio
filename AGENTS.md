@@ -68,9 +68,39 @@ Personal portfolio site. Atomic Design components over the Next.js **Pages Route
 - `src/pages/api/chat.ts` — POST SSE streaming endpoint; failures are JSON status codes
   (400/429/503) before the stream opens, in-band `error` events after.
 - `src/lib/ai/` — `provider.ts` (`groq|cerebras|openai`), `guardrails.ts`, `rateLimit.ts`,
-  `knowledge.ts`, `prompt.ts`, `clientIp.ts`.
+  `answerCache.ts`, `knowledge.ts`, `prompt.ts`, `clientIp.ts`.
 - **Rate limiting is in-memory per process** — resets on restart and is not shared across
-  instances. Do not treat it as a distributed limit.
+  instances. Do not treat it as a distributed limit. The **answer cache**
+  (`src/lib/ai/answerCache.ts`) has the same scope: repeated history-less questions are
+  served from memory for zero upstream tokens.
+- **The provider's free tier is the binding constraint** (Groq gpt-oss: 8K TPM / 200K TPD
+  per organisation, cached tokens excluded). Anything that grows the per-request budget —
+  `AI_MAX_KB_TOKENS`, `AI_MAX_COMPLETION_TOKENS`, history, a bigger pinned core — trades
+  directly against how many answers a day the site can serve. `src/lib/ai/knowledge.ts`
+  keeps the heading index + identity core byte-identical across queries so the provider can
+  cache that prefix; keep that stable-prefix ordering intact.
+- **The completion cap must sit above the natural answer length.** Measured completions on
+  the free tier ran 313, 435 and 536 tokens; at `AI_MAX_COMPLETION_TOKENS=480` a measured
+  answer ended with `finish_reason: "length"` at exactly 480 completion tokens and shipped
+  truncated as if it were complete. `chat.ts` now continues a truncated answer once
+  (`AI_CONTINUATIONS_MAX`) and reports a truncation that survives the budget as
+  `code: "truncated"` instead of a `done`; keep reading `finish_reason` before changing any
+  of this. A continuation re-sends the whole prompt, so it costs far more than a
+  comfortably larger cap — never buy rate-limit headroom by cutting the cap into the
+  answer distribution.
+- **How Groq accounts the cap toward the token rate limit is NOT established.** Do not
+  repeat the earlier "debits `prompt + max_completion_tokens` as declared" claim: that
+  reading came from a request that was truncated _at_ its cap, so declared and actual were
+  the same number. A later probe with a tiny prompt and `cap 700` reported 619 window
+  tokens consumed for a request whose actual usage was 102 and whose prompt+cap was 783 —
+  matching neither. What IS observed: Groq answers HTTP 413 `rate_limit_exceeded` when
+  `prompt + declared cap` exceeds the 8K TPM window, so the declared cap does participate
+  in admission even though its effect on accounting is unresolved.
+- **A continuation usually re-emits the words around the cut.** Appending it verbatim
+  ships a visible seam (`…ligeras parabases de datos ligeras para…`, measured live).
+  `trimSeamOverlap()` in `provider.ts` drops the repeated run and is applied in `chat.ts`
+  before anything reaches the client; the `[chat] completion truncated:` log carries
+  `seamTrims` so the rate stays measurable.
 - The knowledge base is read once per process from
   `assets/agent-knowledge/knowledge-base-complete.md`, resolved from **`process.cwd()`** and
   cached in a module-level variable. Tests that touch it depend on that path; a missing file

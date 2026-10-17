@@ -51,7 +51,7 @@ not by widget props.
 ```typescript
 messages: IChatMessage[];      // full conversation
 status: IChatStatus;           // "idle" | "thinking" | "streaming" | "error"
-errorCode: IChatErrorCode | null; // rate_limit|network|provider|invalid|too_long|unknown
+errorCode: IChatErrorCode | null; // rate_limit|network|provider|invalid|too_long|truncated|unknown
 input: string;                 // controlled textarea value
 language: ILang;               // "es" | "en"
 ```
@@ -159,7 +159,7 @@ Inline validation (no Zod dependency):
 | Provider misconfigured / unknown key | 503                 | `{"error":"provider_unavailable",...}`      |
 
 `history` is sanitized (only `{role,content}` pairs with string content) and
-trimmed to the last 8 messages / ≤1.5K tokens by `trimHistory()`.
+trimmed to the last 6 messages / ≤800 tokens by `trimHistory()`.
 
 ### SSE Streaming
 
@@ -186,7 +186,7 @@ type IChatEvent =
   | { type: "done" }
   | {
       type: "error";
-      code: "rate_limit" | "provider" | "invalid";
+      code: "rate_limit" | "provider" | "invalid" | "truncated";
       message: string;
     };
 ```
@@ -226,6 +226,7 @@ export interface IProviderAdapter {
 
 export class ProviderError extends Error {
   readonly status?: number; // upstream HTTP status → 429/503 mapping
+  readonly retryAfterMs?: number; // upstream retry-after, when it sent one
 }
 ```
 
@@ -237,6 +238,13 @@ export class ProviderError extends Error {
 - Auth header from the server-only `AI_PROVIDER_API_KEY`.
 - `AI_MODEL` overrides the config default; `AI_PROVIDER_BASE_URL` overrides the
   endpoint (proxies / local mock harness).
+- `parseRetryAfter()` turns the upstream `retry-after` (seconds or HTTP-date)
+  into `retryAfterMs`; the route uses it to decide whether a retry is worth it
+  and what to send back in `Retry-After`.
+- Groq sends `reasoning_effort: "low"` by default (`AI_REASONING_EFFORT`
+  overrides it; unsupported values drop the field). gpt-oss spends reasoning
+  tokens out of `max_completion_tokens` and counts them against the free-tier
+  budget, and this assistant needs almost no reasoning.
 
 ---
 
@@ -278,42 +286,154 @@ The KB is read once at module-level cache (NFR-02); no per-request fs reads.
 
 ### Auto Mode (token budget)
 
-The free tier is ~8K TPM, and the full KB is ~10K tokens — shipping the full KB
-on every request would 429. `selectKnowledge()` therefore:
+The free tier is ~8K TPM / 200K TPD, and the full KB is ~9.3K tokens — shipping
+the full KB on every request would 429. `selectKnowledge()` therefore:
 
-1. Returns the **full KB** when `estimateTokens(raw) + digest ≤ maxTokens`
-   (`AI_MAX_KB_TOKENS`, default 5000).
-2. Otherwise splits on `##` headings, scores sections by accent-normalized
-   keyword overlap (heading hits weighted higher, stop-words removed for both
-   ES and EN), greedily fills the budget in document order, and always appends
-   the **heading digest** so the model can say "I don't have that info" instead
-   of hallucinating (FR-21).
+1. Returns the **full KB** when `estimateTokens(raw) + index ≤ maxTokens`
+   (`AI_MAX_KB_TOKENS`, default 2500).
+2. Otherwise it assembles, in this order:
+   - the **heading index** (always, so the model can say "I don't have that
+     info" instead of hallucinating — FR-21);
+   - the **pinned identity core** (`AI_KB_CORE_SECTIONS`, default
+     `Identity,Elevator Pitch,Current Role`, ~300 tokens) so a greeting or an
+     off-topic question still gets a grounded identity;
+   - **keyword-ranked chunks** filling the rest of the budget.
+3. Chunks are the smallest retrievable unit: a `###` subsection, or a `##`
+   section that carries its own body. Ranking matches accent-normalized
+   keywords against the chunk body, its heading (×3) and its parent heading
+   (×2), stop-words removed for both ES and EN. Consecutive level-3 chunks
+   render under one `## Parent` heading.
+4. With no keyword overlap the fallback is document order (Bio first, then
+   experience), so greetings still get grounded context.
+5. `## System Prompt Context` is retrieval-excluded: it duplicates the
+   guardrail instructions already in `prompt.ts`.
 
-Shipped KB measures ~10,017 tokens, so production runs in sections mode
-(~4,880 tokens).
+The index and the pinned core are **byte-identical for every query**, which is
+what makes the provider's automatic prompt caching (Groq: cached tokens do not
+count towards rate limits) hit on that prefix. Only the retrieved chunks and
+the optional language hint vary.
+
+Chunk retrieval replaced whole-`##` selection: the old `## Work Experience`
+section alone was 4,144 tokens, so a single "experience" question consumed the
+entire per-minute budget.
 
 ### System Prompt Construction
 
 **Location**: `src/lib/ai/prompt.ts` — `buildSystemPrompt({ selection, language })`
 
-Assembles: fixed guardrail instructions (~300 tokens, 8 rules covering scope,
+Assembles: fixed guardrail instructions (~706 tokens, 12 rules covering scope,
 polite redirect, NDA refusal, "don't have that info", same-language replies,
-conciseness, portfolio page suggestions, "never Bruno himself") + optional
-language hint (only a fallback when the message language is ambiguous — the
-model auto-detects ES/EN) + `KNOWLEDGE BASE:` + selected content.
+answer-length discipline, portfolio page suggestions, "never Bruno himself") +
+`KNOWLEDGE
+BASE:` + the selected content + the optional language hint **last** (only a
+fallback when the message language is ambiguous — the model auto-detects
+ES/EN). The hint is last on purpose: it varies per visitor, so keeping it out
+of the prefix preserves the cacheable part of the prompt.
 
-`trimHistory(history, maxMessages = 8, maxTokens = 1500)` keeps requests inside
-the history budget.
+`trimHistory(history, maxMessages = 6, maxTokens = 800)` keeps requests inside
+the history budget; a long chat can no longer inflate every request.
 
 ### Request Token Budget
 
-| Segment                 | Cap                |
-| ----------------------- | ------------------ |
-| Instructions            | ~300 tok           |
-| KB full/selected        | ≤ 5,000            |
-| History (last 8)        | ≤ 1,500            |
-| `max_completion_tokens` | 700                |
-| **Request target**      | **≤ ~7K < 8K TPM** |
+| Segment                 | Cap                                |
+| ----------------------- | ---------------------------------- |
+| Instructions            | ~706 tok                           |
+| KB index + pinned core  | ~665 tok (cacheable prefix)        |
+| KB retrieved chunks     | ≤ ~1,835 (AI_MAX_KB_TOKENS 2,500)  |
+| History (last 6)        | ≤ 800                              |
+| `max_completion_tokens` | 1,000 (including reasoning tokens) |
+| **Request target**      | **≤ ~5K**                          |
+
+Groq's HTTP 413 `rate_limit_exceeded` (raised when `prompt + declared cap`
+exceeds the 8K TPM window) confirms the declared cap takes part in **admission**.
+How it takes part in **accounting** is not established, and the earlier reading
+here — "Groq debits `prompt + max_completion_tokens` as declared" — must not be
+repeated: it came from a request that was truncated _at_ its cap, so declared and
+actual were the same number. A later probe (tiny prompt, `cap 700`) reported 619
+window tokens consumed for a request whose actual usage was 102 and whose
+prompt+cap was 783, matching neither. The cap is sized from the answer-length
+distribution instead, because a continuation re-sends the whole prompt (~2.8K)
+and therefore costs far more than a comfortably larger cap.
+
+Raw requests are ≤ ~5K; the metered figure is lower because cached tokens are
+excluded from the rate limits (the KB index + core prefix above is byte-stable
+across visitors), and the answer cache serves repeats at zero upstream cost.
+
+### Answer Cache
+
+**Location**: `src/lib/ai/answerCache.ts`
+
+The same handful of questions arrives over and over on a portfolio, so a
+repeated question is served from memory and costs **zero** upstream tokens:
+
+- Key: canonicalized question (lowercase, accent-free, punctuation-free,
+  whitespace-collapsed) + guardrail language.
+- Only **history-less** questions are eligible: a follow-up depends on the
+  turns before it and must not be replayed out of context.
+- Only guardrail-validated text is stored, and a hit is re-validated before it
+  is served.
+- Bounded by `AI_ANSWER_CACHE_MAX` (default 50; `0` disables) and
+  `AI_ANSWER_CACHE_TTL_MS` (default 900000 = 15 min).
+- Process-local, like the rate limiter: it resets on redeploy and is not shared
+  between instances.
+
+### Upstream 429 Recovery
+
+A per-minute 429 resets in seconds, so the route waits instead of failing when
+that is cheap: `openStream()` retries **once**, only before the stream opens (no
+half-written answer) and only when the provider's `retry-after` is at most
+`AI_RETRY_MAX_WAIT_MS` (default 6000). The wait is abortable, so a client that
+disconnects mid-retry releases the handler. When the hint is longer than the cap
+(or absent) the request fails fast with the upstream value propagated in
+`Retry-After`.
+
+An empty completion (a reasoning model spending the whole cap on reasoning) is
+reported as an in-band `error` event instead of a blank bubble.
+
+### Truncated Completion Recovery
+
+`finish_reason` is the only signal that separates a finished answer from one the
+provider cut off at `max_completion_tokens`, so `streamChat()` returns it as its
+generator's terminal value (`IStreamFinish`) and the route acts on it.
+
+Measured on the free tier, `AI_MAX_COMPLETION_TOKENS: 480` returned
+`finish_reason: "length"` with `completion_tokens: 480` — and 32 of those were
+reasoning tokens, so a `reasoning_effort: "low"` answer only got ~448 tokens of
+visible text. The same prompt with a 2,000 cap finished on its own at 435
+tokens, which is the point: 480 sat _inside_ the natural answer-length
+distribution, so truncation looked random and a full answer was unreachable.
+
+When a completion ends at the cap the route calls the provider again with the
+partial answer appended as an `assistant` turn plus `CONTINUATION_INSTRUCTION`
+(`prompt.ts`) as a synthetic `user` turn, and merges both into the same SSE
+reply — the visitor sees one continuous answer, not a continuation request.
+Constraints that matter:
+
+- The instruction travels as a **message**, never in the system prompt, or it
+  would break the byte-stable prefix the provider caches.
+- The continuation reuses the same system prompt for the same reason.
+- `AI_CONTINUATIONS_MAX` (default 1, `0` disables) bounds the extra upstream
+  calls; each one is another real request against RPD and the TPM window.
+- A continuation that fails keeps the partial answer and reports the
+  truncation (`[chat] continuation failed:`); the partial text is more useful
+  than an error alone.
+- A truncated answer is **never** written to the answer cache — replaying a cut
+  answer to every visitor would make the defect sticky.
+- **The seam is stitched, not trusted.** The provider usually re-emits the words
+  around the cut before resuming: measured live, the partial ended
+  `…servidores de juego, bases de datos ligeras para` and the continuation
+  reopened with `bases de datos ligeras para almacenar…`, so a plain append
+  shipped `…bases de datos ligeras parabases de datos ligeras para…`.
+  `trimSeamOverlap()` (`provider.ts`) drops the longest repeated word run that is
+  also a prefix of the continuation, requires at least 16 characters, keeps the
+  separator that followed it verbatim, and returns the remainder ready to append.
+  A single repeated word at the boundary therefore survives as content instead of
+  being silently deleted.
+- If the truncation survives the budget the route emits
+  `{type:"error", code:"truncated"}` after the partial deltas instead of a
+  `done` that would present half an answer as complete. It also logs
+  `[chat] completion truncated:` with the continuation count and the number of
+  seams trimmed, so the real truncation rate is measurable rather than inferred.
 
 ---
 
@@ -321,9 +441,11 @@ the history budget.
 
 ### Backend
 
-`chat.ts` iterates the provider's `AsyncGenerator<string>` and writes one SSE
-event per delta (see Section 2). Headers include `no-transform` and
-`X-Accel-Buffering: no` so proxies do not buffer the stream.
+`chat.ts` iterates the provider's `AsyncGenerator<string, IStreamFinish>` and
+writes one SSE event per delta (see Section 2). Headers include `no-transform`
+and `X-Accel-Buffering: no` so proxies do not buffer the stream. Because the
+answer is buffered until validation passes, a truncated answer is continued
+_before_ anything reaches the client: the merge is invisible to the transport.
 
 ### Frontend
 
@@ -352,7 +474,7 @@ window), correct SSE headers — true streaming, not a single blob.
 | Conversation history                                   | Memory only                    | Resets on refresh; nothing persisted             |
 | In-flight request                                      | `AbortController` ref          | Aborted on unmount / new chat / retry            |
 
-The server independently trims history (last 8 / ≤1.5K tokens), so a tampered
+The server independently trims history (last 6 / ≤800 tokens), so a tampered
 client cannot inflate requests.
 
 ---
@@ -401,6 +523,7 @@ Inline in the page flow — **no fixed positioning anywhere**:
 | >2000 chars                   | 400 `message_too_long`                        | counter turns red; `too_long` banner (E-04)                                   |
 | IP over window                | 429 + `Retry-After`                           | `rate_limit` banner + Retry (E-02)                                            |
 | Stream drop / no `done`       | in-band `error` event                         | `network` banner + Retry (E-01)                                               |
+| Answer cut off at the cap     | continued once, then in-band `error` event    | `truncated` banner + Retry                                                    |
 | Provider down / unknown key   | 503 pre-stream                                | `provider` banner + Retry (E-05)                                              |
 | KB missing                    | 503 `knowledge_unavailable`                   | `provider` banner (widget stays mounted; the feature flag is the kill switch) |
 | Client disconnects pre-stream | 499 (non-standard nginx code; known nit V-06) | n/a                                                                           |
@@ -430,8 +553,29 @@ AI_PROVIDER_API_KEY=
 # Model override — Groq IDs require the vendor namespace
 AI_MODEL=openai/gpt-oss-120b
 
+# Reasoning effort for gpt-oss (low | medium | high). Groq defaults to low
+# here: reasoning tokens come out of the same free-tier budget.
+# AI_REASONING_EFFORT=low
+
 # KB token budget per request
-AI_MAX_KB_TOKENS=5000
+AI_MAX_KB_TOKENS=2500
+
+# Headings pinned to every request (identity context for greetings).
+# Empty value disables the pinned core.
+AI_KB_CORE_SECTIONS=Identity,Elevator Pitch,Current Role
+
+# Completion cap (includes gpt-oss reasoning tokens)
+AI_MAX_COMPLETION_TOKENS=1000
+
+# Extra calls allowed when the provider stopped at the cap (0 disables)
+# AI_CONTINUATIONS_MAX=1
+
+# Answer cache for repeated history-less questions (0 disables)
+AI_ANSWER_CACHE_MAX=50
+AI_ANSWER_CACHE_TTL_MS=900000
+
+# Retry once after an upstream 429 when its retry-after is at most this long
+AI_RETRY_MAX_WAIT_MS=6000
 
 # In-memory per-IP limiter (defaults = Groq free tier)
 AI_RATE_LIMIT_MAX=30
@@ -461,14 +605,15 @@ src/
 │       └── chat.ts                # POST validate → rate limit → KB → SSE stream
 └── lib/
     └── ai/
-        ├── knowledge.ts           # KB cache, token estimate, heading split, ranking, digest
+        ├── knowledge.ts           # KB cache, chunk split, ranking, stable prefix, digest
         ├── prompt.ts              # guardrail system prompt + trimHistory
+        ├── answerCache.ts         # in-memory TTL cache for repeated questions
         ├── rateLimit.ts           # in-memory per-IP sliding window
         └── provider.ts            # OpenAI-compatible SSE client + getProvider() factory
 
 assets/
 └── agent-knowledge/
-    └── knowledge-base-complete.md # single source of truth (~10K tokens)
+    └── knowledge-base-complete.md # single source of truth (~9.3K tokens)
 
 .env.example                       # all AI_* / NEXT_PUBLIC_AI_* vars documented
 ```
@@ -502,20 +647,21 @@ conditional), no code removal required.
 | 4     | Flag-gated `next/dynamic` integration in `index.tsx` + `.env.example`                                  | ✅ T-12                      |
 | 5     | Verification: `tsc`/`lint`/`build` clean, Node E2E harnesses, live Groq smoke, maintainer browser pass | ✅ automated matrix + manual |
 
-No test suite was added (project rule: no tests unless explicitly requested).
+Automated suites cover the provider, prompt, knowledge selection, answer cache and
+the `/api/chat` route (`vitest run`, node environment); see §11 for the full matrix.
 
 ---
 
 ## 12. Risks & Mitigations (as shipped)
 
-| Risk                                             | Mitigation                                                                                                 | Residual                                                                                                            |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Free tier exhausted / aggressive upstream limits | App-side 30 RPM/IP limiter with friendly 429 + `Retry-After`; TPM budget keeps requests under 8K           | **Accepted** — Groq free tier 429s aggressively under bursts (verify V-02); a lighter model is the documented lever |
-| Hallucination                                    | KB-only grounding, heading digest, fixed refusal copy, temperature 0.4                                     | Low — live A-03/A-04/A-05 probes passed                                                                             |
-| Rate limiter per-instance on serverless          | In-memory Map, documented                                                                                  | Acceptable for a portfolio; swap for Redis if needed                                                                |
-| SSE buffering behind proxies                     | `no-transform` + `X-Accel-Buffering: no`                                                                   | Verified live                                                                                                       |
-| Key leakage to client                            | Server-only `AI_PROVIDER_API_KEY`; only `NEXT_PUBLIC_AI_CHAT_ENABLED`/`NEXT_PUBLIC_AI_PROVIDER` are public | Verified: 0 leaks in 39 client bundles                                                                              |
-| Client disconnect mid-stream                     | `res.on("close")` → `AbortController.abort()`                                                              | 499 status is non-standard (V-06, harmless)                                                                         |
+| Risk                                             | Mitigation                                                                                                                                                                                                                                                                                                                  | Residual                                                                                                                                                                             |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Free tier exhausted / aggressive upstream limits | App-side 30 RPM/IP limiter with friendly 429 + `Retry-After`; a ≤ ~5K per-request budget inside the 8K TPM window; stable prompt prefix for provider caching (cached tokens are excluded from limits); zero-token answer cache for repeated questions; one bounded retry when the 429 names a wait ≤ `AI_RETRY_MAX_WAIT_MS` | **Reduced** — the daily `TPD` ceiling (~200K, per organisation, shared across every key) remains the hard limit; a second provider/key or the Developer tier is the documented lever |
+| Hallucination                                    | KB-only grounding, heading digest, fixed refusal copy, temperature 0.4                                                                                                                                                                                                                                                      | Low — live A-03/A-04/A-05 probes passed                                                                                                                                              |
+| Rate limiter per-instance on serverless          | In-memory Map, documented                                                                                                                                                                                                                                                                                                   | Acceptable for a portfolio; swap for Redis if needed                                                                                                                                 |
+| SSE buffering behind proxies                     | `no-transform` + `X-Accel-Buffering: no`                                                                                                                                                                                                                                                                                    | Verified live                                                                                                                                                                        |
+| Key leakage to client                            | Server-only `AI_PROVIDER_API_KEY`; only `NEXT_PUBLIC_AI_CHAT_ENABLED`/`NEXT_PUBLIC_AI_PROVIDER` are public                                                                                                                                                                                                                  | Verified: 0 leaks in 39 client bundles                                                                                                                                               |
+| Client disconnect mid-stream                     | `res.on("close")` → `AbortController.abort()`                                                                                                                                                                                                                                                                               | 499 status is non-standard (V-06, harmless)                                                                                                                                          |
 
 Known non-blocking leftovers from verification: `labels.thinking` is unused —
 the typing indicator reuses `labels.typing` (V-05).
@@ -532,16 +678,17 @@ the typing indicator reuses `labels.typing` (V-05).
    `next/dynamic` `ssr:false`, gated by `NEXT_PUBLIC_AI_CHAT_ENABLED`.
 4. **KB strategy**: markdown single source of truth, read once per process;
    "auto mode" full-KB-if-it-fits, else keyword-ranked `##` sections + heading
-   digest under a 5K token budget (no RAG, no JSON duplicate).
+   digest under a 2.5K token budget (no RAG, no JSON duplicate).
 5. **Transport**: POST + SSE frames `{type: delta|done|error}`; first delta is
    pulled before headers so upstream errors map to real status codes.
 6. **Rate limiting**: in-memory per-IP sliding window, 30 req/min (not per day).
-7. **History**: last 8 messages / ≤1.5K tokens client-side and server-side; no
-   persistence.
+7. **History**: last 8 messages client-side / last 6 or ≤800 tokens
+   server-side; no persistence.
 8. **Bilingual**: ES/EN UI dictionaries in `labels.ts` with a toggle; answer
    language auto-detected by the model via the system prompt.
-9. **No tests**: verification via `tsc`/`lint`/`build`, Node E2E harnesses, and a
-   live browser pass (project has no test runner).
+9. **Tests**: `vitest run` (node environment, no jsdom); the AI feature has
+   dedicated suites for the provider, prompt, knowledge selection, answer cache
+   and the `/api/chat` route, plus `tsc`/`lint`/`build` and a live browser pass.
 
 ---
 

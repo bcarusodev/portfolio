@@ -20,7 +20,13 @@ export interface IChatLabels {
   inputLabel: string;
   charCount: string;
   error: Record<
-    "rate_limit" | "network" | "provider" | "invalid" | "too_long" | "unknown",
+    | "rate_limit"
+    | "network"
+    | "provider"
+    | "invalid"
+    | "too_long"
+    | "truncated"
+    | "unknown",
     string
   >;
 }
@@ -49,6 +55,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
         "El asistente no está disponible ahora. Prueba en unos minutos.",
       invalid: "No se pudo enviar el mensaje. Prueba de nuevo.",
       too_long: "El mensaje es demasiado largo (máximo 2000 caracteres).",
+      truncated: "La respuesta se cortó antes de terminar. Probá de nuevo.",
       unknown: "Algo salió mal. Prueba de nuevo.",
     },
   },
@@ -73,6 +80,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
       provider: "The assistant is unavailable right now. Try again shortly.",
       invalid: "The message could not be sent. Please try again.",
       too_long: "The message is too long (2000 characters max).",
+      truncated: "The answer was cut off before it finished. Please try again.",
       unknown: "Something went wrong. Please try again.",
     },
   },

@@ -19,4 +19,5 @@ export type IChatErrorCode =
   | "provider"
   | "invalid"
   | "too_long"
+  | "truncated"
   | "unknown";

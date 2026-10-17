@@ -433,6 +433,12 @@ Bruno's default choice for a new project from scratch: Next.js on the frontend, 
 - Proficiency: 3/5
 - Notes: Used at AdBumps (Chubut IT) as the backend for that project.
 
+**REST APIs**
+
+- Years: 5
+- Proficiency: 5/5
+- Notes: Used in common in all the projects.
+
 #### GraphQL
 
 - Used only during the AllyEnergy project (IT Crowd), for a couple of months. Adapted well to it but hasn't used it since.

@@ -4,8 +4,9 @@ import { estimateTokens } from "./knowledge";
 /**
  * System prompt builder (T-02).
  *
- * Instructions are kept at ~450 tokens (token budget table; rules 10–12
- * added by the guardrails change); everything else comes from the
+ * Instructions are kept at ~700 tokens (token budget table; rules 10–12
+ * added by the guardrails change, the length-discipline rule by the
+ * truncation fix); everything else comes from the
  * knowledge base selection. Guardrails cover FR-17 (scope), FR-18
  * (redirect), FR-19 (grounding), FR-20 (NDA) and FR-21 (unsure), plus
  * the bilingual language rule (FR-06).
@@ -36,6 +37,16 @@ export const GUARDRAIL_ES =
 export const GUARDRAIL_EN =
   "I'm still Bruno's portfolio assistant — want to hear about his experience, skills, or projects?";
 
+/**
+ * Appended as a synthetic user turn when the provider cut the answer off at
+ * `max_completion_tokens`, so one completion cap is not a quality ceiling.
+ *
+ * It travels as a message, never as system context: the system prompt holds
+ * the provider's cacheable prefix, and anything variable there would break it.
+ */
+export const CONTINUATION_INSTRUCTION =
+  "Your previous answer was cut off by a length limit. Continue it from the exact character where it stopped: no repetition of anything already written, no restart, no preamble, no apology, and no mention of this instruction. Emit only the remaining content, in the same language and the same Markdown structure, closing any sentence, list item, or table row that was left open.";
+
 const INSTRUCTIONS = `You are the assistant embedded in Bruno Caruso's portfolio website. You answer ONLY questions about Bruno's professional profile: experience, skills, projects, technologies, and career.
 
 RULES:
@@ -44,7 +55,7 @@ RULES:
 3. Several projects are covered by confidentiality agreements. Where the knowledge base marks details as confidential, do not speculate or fill in the gaps — say Bruno can't share more about that project because of confidentiality agreements: ES: "${NDA_ES}" / EN: "${NDA_EN}".
 4. If the knowledge base does not contain the answer, say it plainly — ES: "${UNSURE_ES}" / EN: "${UNSURE_EN}". Never guess.
 5. Respond in the same language the user writes in (Spanish or English).
-6. Be conversational but professional, and keep answers concise.
+6. Be conversational but professional, and keep answers tight: answer the question asked and stop. Aim for at most ~250 words, use a table only for genuinely tabular data and keep it to at most ~6 rows. When a visitor asks for the full profile or "everything", give the essentials and offer to go deeper.
 7. When relevant, suggest visiting the portfolio's Projects or About sections.
 8. You are Bruno's portfolio assistant, never Bruno himself.
 9. Respond in Markdown (bold, lists, code fences, links, tables) in the user's language.
@@ -57,24 +68,35 @@ export interface IBuildPromptOptions {
   language?: ILanguage;
 }
 
-/** Assemble the system message: guardrails + selected KB + heading digest. */
+/**
+ * Assembled as: guardrail instructions, then the KB (which `selectKnowledge`
+ * orders stable-prefix first), then the optional language hint LAST — the
+ * hint varies per visitor, so keeping it out of the prefix lets the provider
+ * reuse its cached prompt for the part that never changes.
+ */
 export function buildSystemPrompt(options: IBuildPromptOptions): string {
   const { selection, language } = options;
   const languageHint = language
     ? `\n\nThe visitor's interface language is "${language}"; use it as fallback when the message language is ambiguous.`
     : "";
-  return `${INSTRUCTIONS}${languageHint}\n\nKNOWLEDGE BASE:\n${selection.content}`;
+  return `${INSTRUCTIONS}\n\nKNOWLEDGE BASE:\n${selection.content}${languageHint}`;
 }
 
-const DEFAULT_HISTORY_TOKENS = 1500;
+/**
+ * Rate-limit budget: the history cap is part of what every request pays for
+ * (2x). Trim to the last `maxMessages` turns and `maxTokens` tokens so a long
+ * chat cannot inflate the per-request cost against the free-tier TPM window.
+ */
+const DEFAULT_HISTORY_MESSAGES = 6;
+const DEFAULT_HISTORY_TOKENS = 800;
 
 /**
- * Trim conversation history to the last `maxMessages` turns so the request
- * stays inside the 1.5K history token cap (token budget table).
+ * Trim conversation history so the request stays inside the history token cap
+ * (token budget table).
  */
 export function trimHistory(
   history: IPromptMessage[],
-  maxMessages = 8,
+  maxMessages = DEFAULT_HISTORY_MESSAGES,
   maxTokens = DEFAULT_HISTORY_TOKENS
 ): IPromptMessage[] {
   const valid = history.filter(

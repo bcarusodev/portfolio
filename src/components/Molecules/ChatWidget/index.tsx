@@ -205,7 +205,8 @@ const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
               streamError =
                 event.code === "rate_limit" ||
                 event.code === "provider" ||
-                event.code === "invalid"
+                event.code === "invalid" ||
+                event.code === "truncated"
                   ? event.code
                   : "unknown";
             }

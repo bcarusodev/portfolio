@@ -5,8 +5,20 @@ import path from "path";
  * Knowledge base loader (T-01).
  *
  * Reads the markdown KB once per process (NFR-02) and serves it either in
- * full or as keyword-ranked sections when the full text exceeds the token
+ * full or as keyword-ranked chunks when the full text exceeds the token
  * budget for the free-tier provider (design decision #4: "auto mode").
+ *
+ * Rate-limit budget change (chatbot rate limits):
+ *
+ * - Retrieval is chunked at `###` granularity, so one question ships the
+ *   relevant subsections instead of a whole multi-thousand-token `##`
+ *   section (the old `## Work Experience` alone was 4.1K tokens).
+ * - The heading index and the pinned identity core are placed FIRST and are
+ *   byte-identical for every query, which is what lets Groq's automatic
+ *   prompt caching treat that prefix as cached (cached tokens do not count
+ *   towards rate limits).
+ * - The `## System Prompt Context` section is retrieval-excluded: it
+ *   duplicates the guardrail instructions already in `prompt.ts`.
  */
 
 const KB_PATH = path.join(
@@ -31,13 +43,41 @@ export interface IKBSection {
   index: number;
 }
 
+/**
+ * Smallest retrievable unit: a `###` subsection, or a `##` section that has
+ * no subsections of its own. Heading-only chunks are never emitted, so a
+ * level-3 chunk renders under the parent heading that `renderChunks` emits
+ * from `parentTitle`.
+ */
+export interface IKBChunk {
+  /** Stable id derived from document order. */
+  id: string;
+  level: 2 | 3;
+  title: string;
+  /** Owning `##` title for level-3 chunks; `""` for level 2. */
+  parentTitle: string;
+  /** Raw markdown of the chunk, heading line included. */
+  content: string;
+  /** Document order index, used to restore reading order. */
+  index: number;
+  /** Precomputed `estimateTokens(content)` — chunks are ranked per request. */
+  tokens: number;
+}
+
 export interface IKnowledgeBase {
   raw: string;
+  /** Level-2 sections (unchanged contract: heading + nested subsections). */
   sections: IKBSection[];
+  /** Retrieval units used by `selectKnowledge`. */
+  chunks: IKBChunk[];
 }
 
 export interface IKBSelection {
-  /** KB content to place in the system prompt (sections or full text). */
+  /**
+   * KB content to place in the system prompt. Starts with the stable block
+   * (heading index + pinned core) and continues with the query-specific
+   * chunks, so the provider sees a cacheable prefix.
+   */
   content: string;
   /** Compact index of every heading, always included (FR-21 support). */
   digest: string;
@@ -157,43 +197,120 @@ const STOP_WORDS = new Set([
   "bruno", // name is everywhere, it never discriminates sections
 ]);
 
+/**
+ * Sections that exist to brief the extraction prompt, not to answer
+ * visitors; `prompt.ts` already ships those rules as guardrails.
+ */
+const META_SECTION_TITLES = new Set(["System Prompt Context"]);
+
+/**
+ * Identity context pinned to every request (see `AI_KB_CORE_SECTIONS`):
+ * ~300 tokens that answer "who is this" without a retrieval match. The rest
+ * of the Bio (philosophy, preferences, workflow) is retrieved on demand.
+ */
+const DEFAULT_CORE_SECTIONS = ["Identity", "Elevator Pitch", "Current Role"];
+
+const HEADING_2 = /^##\s+/;
+const HEADING_3 = /^###\s+/;
+
+const INDEX_LABEL =
+  "## Section Index (headings available in the full knowledge base)";
+
 interface ICache {
   kb: IKnowledgeBase;
 }
 
 let cache: ICache | null = null;
 
-/** Split raw markdown into `##` sections (level-3 headings stay inside). */
-function splitSections(raw: string): IKBSection[] {
+/**
+ * Single pass that produces both representations:
+ * - `sections`: level-2 sections including their nested subsections.
+ * - `chunks`: level-3 subsections under their `##` parent, plus level-2
+ *   sections that carry their own body.
+ */
+function splitKnowledge(raw: string): {
+  sections: IKBSection[];
+  chunks: IKBChunk[];
+} {
   const lines = raw.split(/\r?\n/);
   const sections: IKBSection[] = [];
-  let current: string[] | null = null;
-  let title = "";
-  let index = 0;
+  const chunks: IKBChunk[] = [];
 
-  const push = () => {
-    if (current && current.join("\n").trim().length > 0) {
-      sections.push({ level: 2, title, content: current.join("\n"), index });
-      index += 1;
+  let sectionLines: string[] | null = null;
+  let sectionTitle = "";
+  let sectionIndex = 0;
+
+  let chunkLines: string[] = [];
+  let chunkLevel: 2 | 3 = 2;
+  let chunkTitle = "";
+  let chunkParent = "";
+  let chunkIndex = 0;
+
+  const flushChunk = () => {
+    const content = chunkLines.join("\n").trim();
+    // A chunk that is only its own heading retrieves nothing: the parent
+    // heading is re-emitted by `renderChunks` from `parentTitle`.
+    if (content.length > 0 && content.split("\n").length > 1) {
+      chunks.push({
+        id: `chunk-${chunkIndex}`,
+        level: chunkLevel,
+        title: chunkTitle,
+        parentTitle: chunkParent,
+        content,
+        index: chunkIndex,
+        tokens: estimateTokens(content),
+      });
     }
-    current = null;
+    chunkIndex += 1;
+    chunkLines = [];
+  };
+
+  const flushSection = () => {
+    if (sectionLines && sectionLines.join("\n").trim().length > 0) {
+      sections.push({
+        level: 2,
+        title: sectionTitle,
+        content: sectionLines.join("\n"),
+        index: sectionIndex,
+      });
+      sectionIndex += 1;
+    }
+    sectionLines = null;
   };
 
   for (const line of lines) {
-    if (/^##\s+/.test(line)) {
-      push();
-      title = line.replace(/^##\s+/, "").trim();
-      current = [line];
-    } else if (current) {
-      current.push(line);
-    } else {
-      // Preamble before the first `##` heading (the document title).
-      current = [line];
-      title = "";
+    if (HEADING_2.test(line)) {
+      flushChunk();
+      flushSection();
+      sectionTitle = line.replace(HEADING_2, "").trim();
+      sectionLines = [line];
+      chunkLevel = 2;
+      chunkTitle = sectionTitle;
+      chunkParent = "";
+      chunkLines = [line];
+      continue;
     }
+
+    if (HEADING_3.test(line) && sectionLines && sectionTitle !== "") {
+      flushChunk();
+      chunkLevel = 3;
+      chunkTitle = line.replace(HEADING_3, "").trim();
+      chunkParent = sectionTitle;
+      chunkLines = [line];
+    } else {
+      chunkLines.push(line);
+    }
+
+    if (!sectionLines) {
+      sectionTitle = "";
+      sectionLines = [];
+    }
+    sectionLines.push(line);
   }
-  push();
-  return sections;
+
+  flushChunk();
+  flushSection();
+  return { sections, chunks };
 }
 
 /**
@@ -203,7 +320,7 @@ function splitSections(raw: string): IKBSection[] {
 export function getKnowledgeBase(): IKnowledgeBase {
   if (cache) return cache.kb;
   const raw = fs.readFileSync(KB_PATH, "utf8");
-  const kb: IKnowledgeBase = { raw, sections: splitSections(raw) };
+  const kb: IKnowledgeBase = { raw, ...splitKnowledge(raw) };
   cache = { kb };
   return kb;
 }
@@ -222,10 +339,16 @@ function tokenize(text: string): string[] {
     .filter((token) => token.length >= 3 && !STOP_WORDS.has(token));
 }
 
+/** Owning `##` title of a chunk (its own title when already level 2). */
+function ownerTitle(chunk: IKBChunk): string {
+  return chunk.level === 3 ? chunk.parentTitle : chunk.title;
+}
+
 /** Compact `## / ###` index so the model knows what the KB does not cover. */
 function buildDigest(kb: IKnowledgeBase): string {
   const lines: string[] = [];
   for (const section of kb.sections) {
+    if (META_SECTION_TITLES.has(section.title)) continue;
     if (section.title) lines.push(`- ${section.title}`);
     const sub = section.content.match(/^###\s+.+$/gm);
     if (sub) {
@@ -237,85 +360,148 @@ function buildDigest(kb: IKnowledgeBase): string {
   return lines.join("\n");
 }
 
-function rankSections(
-  sections: IKBSection[],
-  keywords: string[]
-): IKBSection[] {
-  if (keywords.length === 0) return sections.map((s) => s);
-  const scored = sections.map((section) => {
-    const haystack = normalizeText(section.content);
-    const heading = normalizeText(section.title);
+/**
+ * `AI_KB_CORE_SECTIONS` — comma-separated headings pinned to every request.
+ * A heading matches either a chunk's own `###` title or its owning `##`
+ * title (`Bio` pins all of Bio). Unset uses the default; an empty value
+ * disables the pinned core. Titles no longer in the KB are skipped.
+ */
+function coreTitlesFromEnv(): string[] {
+  const raw = process.env.AI_KB_CORE_SECTIONS;
+  if (raw === undefined) return DEFAULT_CORE_SECTIONS;
+  return raw
+    .split(",")
+    .map((title) => title.trim())
+    .filter((title) => title.length > 0);
+}
+
+function rankChunks(chunks: IKBChunk[], keywords: string[]): IKBChunk[] {
+  if (keywords.length === 0) return chunks.map((chunk) => chunk);
+  const scored = chunks.map((chunk) => {
+    const haystack = normalizeText(chunk.content);
+    const heading = normalizeText(chunk.title);
+    const parent = normalizeText(chunk.parentTitle);
     let score = 0;
     for (const keyword of keywords) {
       const inBody = haystack.split(keyword).length - 1;
       if (inBody > 0) score += 1 + Math.min(inBody, 5) / 10;
       if (heading.includes(keyword)) score += 3;
+      if (parent.length > 0 && parent.includes(keyword)) score += 2;
     }
     // Normalize by query length so scores stay comparable across queries.
-    return { section, score: score / keywords.length };
+    return { chunk, score: score / keywords.length };
   });
   return scored
     .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || a.section.index - b.section.index)
-    .map((entry) => entry.section);
+    .sort((a, b) => b.score - a.score || a.chunk.index - b.chunk.index)
+    .map((entry) => entry.chunk);
+}
+
+/**
+ * Render selected chunks in document order. Consecutive level-3 chunks share
+ * one `## Parent` heading instead of repeating the parent title per chunk.
+ */
+function renderChunks(chunks: IKBChunk[]): string {
+  const parts: string[] = [];
+  let openParent = "";
+  for (const chunk of chunks) {
+    if (chunk.level === 3 && chunk.parentTitle !== openParent) {
+      openParent = chunk.parentTitle;
+      parts.push(`## ${chunk.parentTitle}`);
+    }
+    parts.push(chunk.content);
+  }
+  return parts.join("\n\n");
 }
 
 /**
  * Select KB content for a query under `maxTokens` (AI_MAX_KB_TOKENS).
  *
  * - Full KB when it fits the budget ("auto mode").
- * - Otherwise: keyword-ranked `##` sections greedily fill the budget,
- *   followed by the heading digest (always) so the model can answer
- *   "I don't have that info" instead of hallucinating (FR-21).
+ * - Otherwise: the heading index, then the pinned identity core, then
+ *   keyword-ranked chunks greedily filling the budget. The index and core
+ *   come first and never change between queries, so the provider can cache
+ *   that prefix (cached tokens do not count towards rate limits).
+ *
+ * The index is always present so the model can answer "I don't have that
+ * info" instead of hallucinating (FR-21).
  */
 export function selectKnowledge(
   query: string,
-  maxTokens: number = Number(process.env.AI_MAX_KB_TOKENS || 5000)
+  maxTokens: number = Number(process.env.AI_MAX_KB_TOKENS || 2500)
 ): IKBSelection {
   const kb = getKnowledgeBase();
   const digest = buildDigest(kb);
-  const digestTokens = estimateTokens(digest) + 2; // leading label
+  const indexBlock = `${INDEX_LABEL}\n${digest}`;
+  const stableTokens = estimateTokens(indexBlock) + 1;
 
-  if (estimateTokens(kb.raw) + digestTokens <= maxTokens) {
+  if (estimateTokens(kb.raw) + stableTokens <= maxTokens) {
     return {
       content: kb.raw,
       digest,
       mode: "full",
-      tokens: estimateTokens(kb.raw) + digestTokens,
+      tokens: estimateTokens(kb.raw) + stableTokens,
     };
   }
 
-  const budget = Math.max(0, maxTokens - digestTokens);
-  const keywords = tokenize(query);
-  const ranked = rankSections(kb.sections, keywords);
+  let remaining = maxTokens - stableTokens;
+  if (remaining <= 0) {
+    // The budget cannot even hold the index: ship the index alone so the
+    // model still knows what the KB covers.
+    return {
+      content: indexBlock,
+      digest,
+      mode: "sections",
+      tokens: estimateTokens(indexBlock),
+    };
+  }
 
+  const pool = kb.chunks.filter(
+    (chunk) => !META_SECTION_TITLES.has(ownerTitle(chunk))
+  );
+  const wanted = coreTitlesFromEnv().map((title) => title.toLowerCase());
+  const core = pool.filter(
+    (chunk) =>
+      wanted.includes(chunk.title.toLowerCase()) ||
+      wanted.includes(ownerTitle(chunk).toLowerCase())
+  );
+  const coreIds = new Set(core.map((chunk) => chunk.id));
+
+  const selected: IKBChunk[] = [];
+  for (const chunk of core) {
+    if (chunk.tokens <= remaining) {
+      selected.push(chunk);
+      remaining -= chunk.tokens;
+    }
+  }
+
+  const rest = pool.filter((chunk) => !coreIds.has(chunk.id));
+  const ranked = rankChunks(rest, tokenize(query));
   // No keyword overlap: fall back to document order (Bio first, then
   // experience) so greetings still get a grounded identity context.
-  const candidates = ranked.length > 0 ? ranked : kb.sections;
+  const candidates = ranked.length > 0 ? ranked : rest;
 
-  const selected: IKBSection[] = [];
-  let used = 0;
-  for (const section of candidates) {
-    const tokens = estimateTokens(section.content);
-    if (used + tokens <= budget) {
-      selected.push(section);
-      used += tokens;
-      continue;
+  for (const chunk of candidates) {
+    if (chunk.tokens <= remaining) {
+      selected.push(chunk);
+      remaining -= chunk.tokens;
     }
-    if (selected.length === 0) {
-      // A single section larger than the whole budget: truncate it.
-      const truncated = truncateToTokens(section.content, budget);
-      selected.push({ ...section, content: truncated });
-      used = budget;
-      break;
-    }
-    // Otherwise skip the oversized section and keep trying smaller ones.
+    // Chunks that do not fit are skipped so smaller relevant ones still land.
+  }
+
+  if (selected.length === 0 && candidates.length > 0) {
+    // Nothing fits: truncate the best-ranked chunk rather than ship nothing.
+    const head = truncateToTokens(candidates[0].content, remaining);
+    selected.push({
+      ...candidates[0],
+      content: head,
+      tokens: estimateTokens(head),
+    });
   }
 
   selected.sort((a, b) => a.index - b.index);
-  const content =
-    selected.map((section) => section.content.trim()).join("\n\n") +
-    `\n\n## Section Index (headings available in the full knowledge base)\n${digest}`;
+  const body = selected.length > 0 ? renderChunks(selected) : "";
+  const content = body.length > 0 ? `${indexBlock}\n\n${body}` : indexBlock;
 
   return {
     content,
