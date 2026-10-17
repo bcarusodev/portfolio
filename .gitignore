@@ -41,3 +41,14 @@ yarn-error.log*
 
 .worktrees
 .contentlayer
+
+# AI chat agent secrets
+.env
+
+# SDD temp
+server.log
+
+# Agent tooling
+.gga
+.atl/
+.codegraph/
