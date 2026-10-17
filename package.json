@@ -4,8 +4,11 @@
     "dev": "velite && next dev",
     "build": "velite build && next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx .",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx . --fix",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:watch": "vitest",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -46,6 +49,10 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.5",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-react": "^7.37.5",
     "gray-matter": "^4.0.3",
     "husky": "^8.0.3",

@@ -2,9 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getClientIp, hashIp } from "@/lib/ai/clientIp";
 import { validateResponse } from "@/lib/ai/guardrails";
 import { getKnowledgeBase, selectKnowledge } from "@/lib/ai/knowledge";
-import { buildSystemPrompt, trimHistory } from "@/lib/ai/prompt";
-import { GUARDRAIL_EN, GUARDRAIL_ES } from "@/lib/ai/prompt";
-import type { IPromptMessage, ILanguage } from "@/lib/ai/prompt";
+import {
+  buildSystemPrompt,
+  trimHistory,
+  GUARDRAIL_EN,
+  GUARDRAIL_ES,
+  type IPromptMessage,
+  type ILanguage,
+} from "@/lib/ai/prompt";
 import { checkRateLimit } from "@/lib/ai/rateLimit";
 import { getProvider, ProviderError } from "@/lib/ai/provider";
 

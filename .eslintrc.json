@@ -42,8 +42,9 @@
   },
   "ignorePatterns": [
     "node_modules/",
-    ".contentlayer/",
     ".next/",
+    ".velite/",
+    "coverage/",
     "dist/",
     "build/"
   ]

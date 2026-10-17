@@ -233,7 +233,8 @@ const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
   const handleSubmit = () => {
     const text = input;
     setInput("");
-    void send(text);
+    // Fire-and-forget: send() handles its own failures, so it never rejects.
+    send(text);
   };
 
   const handleRetry = () => {
@@ -248,7 +249,8 @@ const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
     setMessages(base);
     setErrorCode(null);
     setStatus("idle");
-    void send(lastUser.content, base);
+    // Fire-and-forget: send() handles its own failures, so it never rejects.
+    send(lastUser.content, base);
   };
 
   const handleNewChat = () => {
