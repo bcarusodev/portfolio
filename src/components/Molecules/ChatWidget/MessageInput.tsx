@@ -70,10 +70,13 @@ export const MessageInput = ({
           aria-invalid={isOverLimit}
           rows={1}
           className={cn(
-            "max-h-[140px] min-h-[44px] w-full resize-none rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm leading-relaxed",
-            "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+            "max-h-[140px] min-h-[44px] w-full resize-none rounded-xl border bg-background px-3.5 py-2.5 text-sm leading-relaxed",
+            "transition-[border-color,box-shadow] duration-200 ease-out",
+            "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1",
             "disabled:cursor-not-allowed disabled:opacity-50",
-            isOverLimit && "border-destructive focus-visible:ring-destructive"
+            isOverLimit
+              ? "border-destructive focus-visible:ring-destructive"
+              : "border-input focus-visible:border-ring focus-visible:ring-ring"
           )}
         />
         <Button
