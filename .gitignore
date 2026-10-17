@@ -52,3 +52,7 @@ server.log
 .gga
 .atl/
 .codegraph/
+_bmad/
+_bmad-output/
+.opencode/
+.agents/
