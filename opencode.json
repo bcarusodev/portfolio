@@ -173,10 +173,6 @@
       },
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
-    },
-    "engram": {
-      "command": ["/usr/local/bin/engram", "mcp", "--tools=agent"],
-      "type": "local"
     }
   },
   "share": "disabled"
