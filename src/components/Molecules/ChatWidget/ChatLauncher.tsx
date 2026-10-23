@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ChevronRight, MessageCircle } from "lucide-react";
 import ChatWidget from "./index";
 import { getLabels } from "./labels";
-import { readStoredLanguage } from "./language";
+import { LANG_STORAGE_KEY, readStoredLanguage } from "./language";
+import { useChatSession } from "./useChatSession";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import type { ILang } from "./types";
@@ -25,6 +26,10 @@ interface IChatLauncherProps {
  * target that opens the same widget fullscreen in a modal dialog, so the
  * conversation gets the whole viewport and the composer stays reachable
  * above the keyboard.
+ *
+ * The chat session is owned here, above both shells: the dialog unmounts its
+ * content on close, so dismissing it or crossing the breakpoint keeps the
+ * thread (and any in-flight answer) instead of resetting it.
  */
 const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
   const [language] = useState<ILang>(readStoredLanguage);
@@ -37,6 +42,15 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
 
   const labels = getLabels(language);
+  const session = useChatSession(language);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, language);
+    } catch {
+      // Ignore quota/private-mode failures.
+    }
+  }, [language]);
 
   useEffect(() => {
     const query = window.matchMedia(NARROW_VIEWPORT_QUERY);
@@ -71,7 +85,14 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
   }, [open]);
 
   if (!narrow) {
-    return <ChatWidget className={className} inputId={inputId} />;
+    return (
+      <ChatWidget
+        session={session}
+        language={language}
+        className={className}
+        inputId={inputId}
+      />
+    );
   }
 
   return (
@@ -122,6 +143,8 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
         >
           <DialogTitle className="sr-only">{labels.title}</DialogTitle>
           <ChatWidget
+            session={session}
+            language={language}
             variant="fullscreen"
             inputId={inputId}
             onClose={() => setOpen(false)}
