@@ -10,11 +10,15 @@ import { Button } from "@/components/ui/button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import constants from "@/constants";
 
-// Client-only chat widget: keeps the bundle chunk out of the initial load
-// and avoids SSR/localStorage hydration issues (FR-27, NFR-01).
-const ChatWidget = dynamic(() => import("@/components/Molecules/ChatWidget"), {
-  ssr: false,
-});
+// Client-only chat entry point: keeps the bundle chunk out of the initial load
+// and avoids SSR/localStorage hydration issues (FR-27, NFR-01). Renders the
+// inline card on desktop and a fullscreen launcher on mobile.
+const ChatLauncher = dynamic(
+  () => import("@/components/Molecules/ChatWidget/ChatLauncher"),
+  {
+    ssr: false,
+  }
+);
 
 const AI_CHAT_ENABLED = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === "true";
 
@@ -33,7 +37,7 @@ const Index = () => {
                 </BlurFade>
               </div>
               <BlurFade delay={constants.BLUR_FADE_DELAY * 7} inView>
-                <ChatWidget inputId={constants.ASSISTANT_INPUT_ID} />
+                <ChatLauncher inputId={constants.ASSISTANT_INPUT_ID} />
               </BlurFade>
             </div>
           ) : null}

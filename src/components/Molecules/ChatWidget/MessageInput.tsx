@@ -57,7 +57,7 @@ export const MessageInput = ({
   };
 
   return (
-    <div className="border-t border-border-strong p-3">
+    <div className="shrink-0 border-t border-border-strong p-3">
       <div className="flex items-end gap-2">
         <textarea
           id={id}
@@ -70,7 +70,10 @@ export const MessageInput = ({
           aria-invalid={isOverLimit}
           rows={1}
           className={cn(
-            "max-h-[140px] min-h-[44px] w-full resize-none rounded-xl border bg-background px-3.5 py-2.5 text-sm leading-relaxed",
+            "max-h-[140px] min-h-[44px] w-full resize-none rounded-xl border bg-background px-3.5 py-2.5 leading-relaxed",
+            // 16px on small viewports: iOS Safari zooms any focused field
+            // whose computed font-size is below that.
+            "text-base md:text-sm",
             "transition-[border-color,box-shadow] duration-200 ease-out",
             "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1",
             "disabled:cursor-not-allowed disabled:opacity-50",

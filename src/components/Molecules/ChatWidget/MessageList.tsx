@@ -1,12 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { MessageBubble } from "./MessageBubble";
 import { getLabels } from "./labels";
+import { cn } from "@/lib/utils";
 import type { IChatMessage, IChatStatus, ILang } from "./types";
 
 interface IMessageListProps {
   messages: IChatMessage[];
   status: IChatStatus;
   language: ILang;
+  /** Layout overrides (the fullscreen shell lets the log grow). */
+  className?: string;
 }
 
 /**
@@ -18,6 +21,7 @@ export const MessageList = ({
   messages,
   status,
   language,
+  className,
 }: IMessageListProps) => {
   const labels = getLabels(language);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -38,7 +42,10 @@ export const MessageList = ({
       role="log"
       aria-live="polite"
       aria-label={labels.conversation}
-      className="flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto px-4 py-4"
+      className={cn(
+        "flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto px-4 py-4",
+        className
+      )}
     >
       {messages.length === 0 ? (
         <p className="my-auto text-center text-sm text-muted-foreground">

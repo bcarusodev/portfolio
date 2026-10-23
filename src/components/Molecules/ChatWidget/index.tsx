@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { getLabels } from "./labels";
+import { LANG_STORAGE_KEY, readStoredLanguage } from "./language";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import type { IChatErrorCode, IChatMessage, IChatStatus, ILang } from "./types";
 
-const LANG_STORAGE_KEY = "chat-lang:v1";
 const HISTORY_LIMIT = 8;
 const MAX_MESSAGE_CHARS = 2000;
 const RESEND_GUARD_MS = 300;
@@ -38,21 +38,17 @@ function createId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function readStoredLanguage(): ILang {
-  if (typeof window === "undefined") return "en";
-  try {
-    const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-    if (stored === "es" || stored === "en") return stored;
-  } catch {
-    // localStorage unavailable (private mode) — fall through.
-  }
-  return window.navigator.language.toLowerCase().startsWith("es") ? "es" : "en";
-}
-
 interface IChatWidgetProps {
   className?: string;
   /** DOM id for the message input, so the page can focus it. */
   inputId?: string;
+  /**
+   * `inline` is the page card; `fullscreen` fills its container (the mobile
+   * dialog) and lets the message log grow instead of capping it at 420px.
+   */
+  variant?: "inline" | "fullscreen";
+  /** Renders a dismiss control in the header. Required by `fullscreen`. */
+  onClose?: () => void;
 }
 
 /**
@@ -63,7 +59,12 @@ interface IChatWidgetProps {
  * messages, aborts in-flight requests on unmount/new chat, and offers
  * retry after stream drops (E-01).
  */
-const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
+const ChatWidget = ({
+  className,
+  inputId,
+  variant = "inline",
+  onClose,
+}: IChatWidgetProps) => {
   const [messages, setMessages] = useState<IChatMessage[]>([]);
   const [status, setStatus] = useState<IChatStatus>("idle");
   const [errorCode, setErrorCode] = useState<IChatErrorCode | null>(null);
@@ -272,36 +273,60 @@ const ChatWidget = ({ className, inputId }: IChatWidgetProps) => {
     <section
       aria-label={labels.title}
       className={cn(
-        "w-full overflow-hidden rounded-2xl border border-border-strong bg-background/70 shadow-lg backdrop-blur-md",
+        variant === "fullscreen"
+          ? "flex h-full w-full flex-col bg-background"
+          : "w-full overflow-hidden rounded-2xl border border-border-strong bg-background/70 shadow-lg backdrop-blur-md",
         className
       )}
     >
-      <header className="flex items-center justify-between gap-3 border-b border-border-strong px-4 py-3">
+      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-border-strong px-4 py-3">
         <div className="min-w-0">
           <h2 className="truncate text-sm font-semibold">{labels.title}</h2>
           <p className="truncate text-xs text-muted-foreground">
             {labels.subtitle}
           </p>
         </div>
-        {messages.length > 0 ? (
+        {messages.length > 0 || onClose ? (
           <div className="flex shrink-0 items-center gap-2">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleNewChat}
-              aria-label={labels.newChat}
-              title={labels.newChat}
-              className="h-7 gap-1 px-2 text-xs"
-            >
-              <X className="h-3.5 w-3.5" />
-              {labels.newChat}
-            </Button>
+            {messages.length > 0 ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleNewChat}
+                aria-label={labels.newChat}
+                title={labels.newChat}
+                className="h-7 gap-1 px-2 text-xs"
+              >
+                <X className="h-3.5 w-3.5" />
+                {labels.newChat}
+              </Button>
+            ) : null}
+            {onClose ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                aria-label={labels.closeChat}
+                title={labels.closeChat}
+                className="h-11 w-11 shrink-0 rounded-xl"
+              >
+                <ChevronDown className="h-5 w-5" />
+              </Button>
+            ) : null}
           </div>
         ) : null}
       </header>
 
-      <MessageList messages={messages} status={status} language={language} />
+      <MessageList
+        messages={messages}
+        status={status}
+        language={language}
+        className={
+          variant === "fullscreen" ? "min-h-0 max-h-[none] flex-1" : undefined
+        }
+      />
 
       {errorCode ? (
         <div

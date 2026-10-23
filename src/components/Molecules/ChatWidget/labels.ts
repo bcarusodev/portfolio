@@ -16,6 +16,7 @@ export interface IChatLabels {
   emptyState: string;
   retry: string;
   dismiss: string;
+  closeChat: string;
   conversation: string;
   inputLabel: string;
   charCount: string;
@@ -44,6 +45,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
       "Preguntame sobre la experiencia, habilidades o proyectos de Bruno.",
     retry: "Reintentar",
     dismiss: "Cerrar",
+    closeChat: "Cerrar el chat",
     conversation: "Conversación con el asistente de Bruno",
     inputLabel: "Mensaje para el asistente",
     charCount: "caracteres",
@@ -70,6 +72,7 @@ export const CHAT_LABELS: Record<ILang, IChatLabels> = {
     emptyState: "Ask me about Bruno's experience, skills, or projects.",
     retry: "Retry",
     dismiss: "Dismiss",
+    closeChat: "Close chat",
     conversation: "Conversation with Bruno's assistant",
     inputLabel: "Message for the assistant",
     charCount: "characters",
