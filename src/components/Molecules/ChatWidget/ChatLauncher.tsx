@@ -39,7 +39,10 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
       : window.matchMedia(NARROW_VIEWPORT_QUERY).matches
   );
   const [open, setOpen] = useState(false);
-  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+  const [viewportBox, setViewportBox] = useState<{
+    top: number;
+    height: number;
+  } | null>(null);
 
   const labels = getLabels(language);
   const session = useChatSession(language);
@@ -65,16 +68,18 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
     if (!narrow) setOpen(false);
   }, [narrow]);
 
-  // `100dvh` follows browser chrome but not the software keyboard; the visual
-  // viewport is the only measurement that shrinks with it on iOS.
+  // `100dvh` follows browser chrome but not the software keyboard, and iOS
+  // scrolls the visual viewport instead of resizing the layout one. Pin the
+  // sheet to both axes of the visual viewport so no page can show beneath it.
   useEffect(() => {
     if (!open) {
-      setViewportHeight(null);
+      setViewportBox(null);
       return;
     }
     const viewport = window.visualViewport;
     if (!viewport) return;
-    const update = () => setViewportHeight(viewport.height);
+    const update = () =>
+      setViewportBox({ top: viewport.offsetTop, height: viewport.height });
     update();
     viewport.addEventListener("resize", update);
     viewport.addEventListener("scroll", update);
@@ -134,7 +139,17 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
             event.preventDefault();
             input.focus({ preventScroll: true });
           }}
-          style={viewportHeight ? { height: `${viewportHeight}px` } : undefined}
+          style={
+            viewportBox
+              ? {
+                  top: `${viewportBox.top}px`,
+                  height: `${viewportBox.height}px`,
+                }
+              : undefined
+          }
+          // Opaque backdrop: a translucent one lets the page show through any
+          // sliver the sheet does not cover (iOS keyboard + toolbar chrome).
+          overlayClassName="bg-background"
           className={cn(
             "left-0 top-0 flex h-[100dvh] w-full max-w-none translate-x-0 translate-y-0",
             "flex-col gap-0 overflow-hidden rounded-none border-0 p-0",

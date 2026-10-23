@@ -43,7 +43,7 @@ export const MessageList = ({
       aria-live="polite"
       aria-label={labels.conversation}
       className={cn(
-        "flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto px-4 py-4",
+        "flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4",
         className
       )}
     >

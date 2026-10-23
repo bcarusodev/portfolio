@@ -20,7 +20,7 @@ const INPUT_ID = "assistant-input";
 const INLINE_SECTION_CLASS =
   "w-full overflow-hidden rounded-2xl border border-border-strong bg-background/70 shadow-lg backdrop-blur-md";
 const INLINE_LOG_CLASS =
-  "flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto px-4 py-4";
+  "flex max-h-[420px] min-h-[240px] flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4";
 
 function makeSession(overrides: Partial<IChatSession> = {}): IChatSession {
   return {
