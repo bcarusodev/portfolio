@@ -50,11 +50,12 @@ export interface IChatSession {
 /**
  * Owns the conversation and the SSE transport for the assistant.
  *
- * This lives above the presentation shells on purpose: the fullscreen dialog
- * unmounts its content when it closes, so state kept inside the widget would
- * be destroyed on every dismiss (and on every breakpoint crossing). Here the
- * thread — and any in-flight stream — survives closing the dialog; the abort
- * only fires when the page itself goes away.
+ * This lives above the presentation shells on purpose: the mobile launcher
+ * navigates to a dedicated `/chat` page, and state kept inside either page
+ * would be destroyed by that navigation (as it would by a breakpoint crossing
+ * that swaps shells). Here the thread — and any in-flight stream — survives
+ * moving between the inline card and the fullscreen page; the abort only fires
+ * when the app itself unmounts.
  */
 export function useChatSession(language: ILang): IChatSession {
   const [messages, setMessages] = useState<IChatMessage[]>([]);

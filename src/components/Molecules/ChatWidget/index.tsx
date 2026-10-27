@@ -6,7 +6,7 @@ import { MAX_MESSAGE_CHARS } from "./useChatSession";
 import type { IChatSession } from "./useChatSession";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import type { ILang } from "./types";
 
 interface IChatWidgetProps {
@@ -17,8 +17,8 @@ interface IChatWidgetProps {
   /** DOM id for the message input, so the page can focus it. */
   inputId?: string;
   /**
-   * `inline` is the page card; `fullscreen` fills its container (the mobile
-   * dialog) and lets the message log grow instead of capping it at 420px.
+   * `inline` is the page card; `fullscreen` fills its container (the `/chat`
+   * page) and lets the message log grow instead of capping it at 420px.
    */
   variant?: "inline" | "fullscreen";
   /** Renders a dismiss control in the header. Required by `fullscreen`. */
@@ -28,9 +28,9 @@ interface IChatWidgetProps {
 /**
  * Presentational chat shell (T-11 / FR-01..07).
  *
- * Renders a session it does not own: the state lives in `useChatSession`, one
- * level up, so closing the fullscreen dialog and crossing the breakpoint keep
- * the conversation instead of resetting it.
+ * Renders a session it does not own: the state lives in
+ * `ChatSessionProvider`, above the page, so navigating to `/chat` and back —
+ * or crossing the breakpoint — keeps the conversation instead of resetting it.
  */
 const ChatWidget = ({
   session,
@@ -99,7 +99,7 @@ const ChatWidget = ({
                 title={labels.closeChat}
                 className="h-11 w-11 shrink-0 rounded-xl"
               >
-                <ChevronDown className="h-5 w-5" />
+                <ArrowLeft className="h-5 w-5" />
               </Button>
             ) : null}
           </div>

@@ -3,16 +3,19 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ChatWidget from "./index";
 import ChatLauncher from "./ChatLauncher";
+import ChatScreen from "./ChatScreen";
+import { ChatSessionProvider } from "@/providers/ChatSessionProvider";
 import type { IChatSession } from "./useChatSession";
 
 /**
  * Structural contract tests (node environment, no jsdom).
  *
- * The dialog itself cannot run here — Radix needs a real `document` — so the
- * value is pinning the shells' markup: the desktop card must stay exactly as
- * it was, the fullscreen shell must fill its container, and only one widget
- * instance may ever be mounted (the input id must stay unique). The session is
- * supplied as data, which is possible because the widget is presentational.
+ * Routing and the on-screen keyboard cannot be executed here, so the value is
+ * pinning the shells' contracts: the desktop card must stay exactly as it was,
+ * the mobile launcher must be a real link to `/chat` (not an overlay), the
+ * fullscreen page must cover the viewport, and only one widget instance may
+ * ever be mounted (the input id must stay unique). The session is supplied as
+ * data, which is possible because the widget is presentational.
  */
 
 const INPUT_ID = "assistant-input";
@@ -49,7 +52,11 @@ function stubBrowser(narrow: boolean): void {
         addEventListener: () => undefined,
         removeEventListener: () => undefined,
       }),
-      localStorage: { getItem: () => null, setItem: () => undefined },
+      localStorage: {
+        getItem: () => null,
+        setItem: () => undefined,
+        removeItem: () => undefined,
+      },
       navigator: { language: "en-US" },
       visualViewport: undefined,
     },
@@ -58,6 +65,12 @@ function stubBrowser(narrow: boolean): void {
 
 function occurrences(html: string, needle: string): number {
   return html.split(needle).length - 1;
+}
+
+function renderWithSession(node: React.ReactElement): string {
+  return renderToStaticMarkup(
+    <ChatSessionProvider>{node}</ChatSessionProvider>
+  );
 }
 
 afterEach(() => {
@@ -125,8 +138,8 @@ describe("chat session ownership", () => {
   it("keeps ChatWidget free of state hooks so the session outlives it", () => {
     // Calling the shell directly runs it outside React's render phase, so any
     // useState/useEffect/useRef inside would throw "Invalid hook call". That
-    // would mean the conversation had moved back into the shell the dialog
-    // unmounts on close.
+    // would mean the conversation had moved back into a shell that page
+    // navigation destroys.
     expect(() =>
       ChatWidget({ session: makeSession(), language: "en", inputId: INPUT_ID })
     ).not.toThrow();
@@ -134,14 +147,15 @@ describe("chat session ownership", () => {
 });
 
 describe("ChatLauncher", () => {
-  it("renders a dialog trigger instead of the widget on mobile", () => {
+  it("links to the dedicated chat page instead of the widget on mobile", () => {
     stubBrowser(true);
 
-    const html = renderToStaticMarkup(<ChatLauncher inputId={INPUT_ID} />);
+    const html = renderWithSession(<ChatLauncher inputId={INPUT_ID} />);
 
-    expect(html).toContain('aria-haspopup="dialog"');
-    expect(html).toContain('aria-expanded="false"');
-    expect(html).toContain("<button");
+    expect(html).toContain('href="/chat"');
+    expect(html).toContain("<a ");
+    expect(html).not.toContain("<button");
+    expect(html).not.toContain('aria-haspopup="dialog"');
     expect(occurrences(html, INPUT_ID)).toBe(0);
     expect(html).not.toContain('role="log"');
   });
@@ -149,10 +163,24 @@ describe("ChatLauncher", () => {
   it("renders exactly one inline widget on desktop", () => {
     stubBrowser(false);
 
-    const html = renderToStaticMarkup(<ChatLauncher inputId={INPUT_ID} />);
+    const html = renderWithSession(<ChatLauncher inputId={INPUT_ID} />);
 
     expect(html).toContain(`class="${INLINE_SECTION_CLASS}"`);
-    expect(html).not.toContain('aria-haspopup="dialog"');
+    expect(html).not.toContain('href="/chat"');
     expect(occurrences(html, INPUT_ID)).toBe(1);
+  });
+});
+
+describe("ChatScreen", () => {
+  it("covers the viewport so no page shows beneath the chat", () => {
+    stubBrowser(true);
+
+    const html = renderWithSession(<ChatScreen onClose={() => undefined} />);
+
+    expect(html).toContain("fixed inset-0 z-30 overflow-hidden bg-background");
+    expect(html).toContain("absolute inset-x-0 flex flex-col");
+    expect(html).toContain("height:100dvh");
+    expect(html).toContain("flex h-full w-full flex-col bg-background");
+    expect(html).toContain('aria-label="Close chat"');
   });
 });

@@ -6,30 +6,41 @@ import { AnimatePresence } from "framer-motion";
 import "../styles/globals.css";
 import React from "react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { ChatSessionProvider } from "@/providers/ChatSessionProvider";
 import { AnimatedBackground } from "@/components/Molecules/AnimatedBackground";
 import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+/** Routes that own the whole viewport and suppress the site chrome. */
+const FULLSCREEN_ROUTES = new Set(["/chat"]);
+
 function MyApp({ Component, pageProps, router }: AppProps) {
   const url = `https://bcaruso.dev${router.route}`;
+  const fullscreen = FULLSCREEN_ROUTES.has(router.pathname);
+
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Head>
-        <title>Portfolio - Bruno Caruso</title>
-      </Head>
-      <AnimatedBackground />
-      <NavBar />
-      <AnimatePresence mode="wait" initial={true}>
-        <Component {...pageProps} canonical={url} key={url} />
-        <>
-          <GoogleAnalytics gaId="G-LYHVRF7R6V" />
-          <SpeedInsights />
-        </>
-      </AnimatePresence>
-      <Toaster position="bottom-center" />
-      <Footer />
-    </ThemeProvider>
+    // The chat session lives above the router outlet: the mobile launcher
+    // navigates to /chat, and a session owned by either page would be
+    // destroyed by that navigation.
+    <ChatSessionProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Head>
+          <title>Portfolio - Bruno Caruso</title>
+        </Head>
+        <AnimatedBackground />
+        {fullscreen ? null : <NavBar />}
+        <AnimatePresence mode="wait" initial={true}>
+          <Component {...pageProps} canonical={url} key={url} />
+          <>
+            <GoogleAnalytics gaId="G-LYHVRF7R6V" />
+            <SpeedInsights />
+          </>
+        </AnimatePresence>
+        <Toaster position="bottom-center" />
+        {fullscreen ? null : <Footer />}
+      </ThemeProvider>
+    </ChatSessionProvider>
   );
 }
 
