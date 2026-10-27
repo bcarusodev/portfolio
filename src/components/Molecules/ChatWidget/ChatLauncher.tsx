@@ -5,12 +5,7 @@ import ChatWidget from "./index";
 import { getLabels } from "./labels";
 import { useChatSessionContext } from "@/providers/ChatSessionProvider";
 import { cn } from "@/lib/utils";
-
-/**
- * Matches Tailwind's `md` boundary (768px), so exactly the viewports that
- * lose the inline card get the launcher: 767px and below.
- */
-const NARROW_VIEWPORT_QUERY = "(max-width: 767px)";
+import constants from "@/constants";
 
 interface IChatLauncherProps {
   className?: string;
@@ -33,13 +28,13 @@ const ChatLauncher = ({ className, inputId }: IChatLauncherProps) => {
   const [narrow, setNarrow] = useState<boolean>(() =>
     typeof window === "undefined"
       ? false
-      : window.matchMedia(NARROW_VIEWPORT_QUERY).matches
+      : window.matchMedia(constants.NARROW_VIEWPORT_QUERY).matches
   );
 
   const labels = getLabels(language);
 
   useEffect(() => {
-    const query = window.matchMedia(NARROW_VIEWPORT_QUERY);
+    const query = window.matchMedia(constants.NARROW_VIEWPORT_QUERY);
     const handleChange = () => setNarrow(query.matches);
     query.addEventListener("change", handleChange);
     return () => query.removeEventListener("change", handleChange);

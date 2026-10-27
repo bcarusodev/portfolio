@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -12,15 +13,30 @@ import constants from "@/constants";
  */
 const HEADING_TOP_RATIO = 0.2;
 
+const AI_CHAT_ENABLED = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === "true";
+
 export const ContactButtons = () => {
+  const router = useRouter();
+
   /**
    * "Explore My Story" opens the assistant instead of navigating: the chat
-   * answers questions about the trajectory. The page scrolls the heading to
+   * answers questions about the trajectory.
+   *
+   * On a phone the assistant is a fullscreen page, not a card below the fold,
+   * so scrolling to it would only land on the launcher — the tap goes straight
+   * to `/chat`. On desktop the chat is inline: the page scrolls its heading to
    * the upper fifth of the viewport and hands the caret to the input so the
-   * user can start typing right away. When the chat is disabled the section
-   * is absent, so the link falls back to /about.
+   * user can start typing right away. When the chat is disabled the section is
+   * absent, so the link falls back to /about.
    */
   const handleExploreClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const narrow = window.matchMedia(constants.NARROW_VIEWPORT_QUERY).matches;
+    if (narrow && AI_CHAT_ENABLED) {
+      event.preventDefault();
+      router.push("/chat");
+      return;
+    }
+
     const target = document.getElementById(constants.ASSISTANT_HEADING_ID);
     if (!target) return;
     event.preventDefault();
