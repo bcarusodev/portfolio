@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import ChatWidget from "./index";
 import ChatLauncher from "./ChatLauncher";
 import ChatScreen from "./ChatScreen";
+import { ChatViewport } from "./ChatViewport";
 import { ChatSessionProvider } from "@/providers/ChatSessionProvider";
 import type { IChatSession } from "./useChatSession";
 
@@ -87,7 +88,7 @@ describe("ChatWidget inline shell", () => {
     expect(html).toContain(`class="${INLINE_LOG_CLASS}"`);
     expect(occurrences(html, INPUT_ID)).toBe(1);
     expect(html).not.toContain('aria-label="Close chat"');
-    expect(html).not.toContain("flex h-full w-full flex-col");
+    expect(html).not.toContain("flex min-h-0 w-full flex-1 flex-col");
   });
 
   it("renders the session it is given instead of owning one", () => {
@@ -125,7 +126,7 @@ describe("ChatWidget fullscreen shell", () => {
       />
     );
 
-    expect(html).toContain("flex h-full w-full flex-col bg-background");
+    expect(html).toContain("flex min-h-0 w-full flex-1 flex-col bg-background");
     expect(html).toContain("min-h-0 max-h-[none] flex-1");
     expect(html).toContain("shrink-0 border-t border-border-strong p-3");
     expect(html).toContain('aria-label="Close chat"');
@@ -190,16 +191,47 @@ describe("ChatLauncher", () => {
   });
 });
 
-describe("ChatScreen", () => {
-  it("covers the viewport so no page shows beneath the chat", () => {
-    stubBrowser(true);
-
-    const html = renderWithSession(<ChatScreen onClose={() => undefined} />);
+describe("ChatViewport", () => {
+  it("covers the viewport and pins the header inside it", () => {
+    const html = renderToStaticMarkup(
+      <ChatViewport box={null} header={<p>site-header-marker</p>}>
+        <p>chat-body-marker</p>
+      </ChatViewport>
+    );
 
     expect(html).toContain("fixed inset-0 z-30 overflow-hidden bg-background");
     expect(html).toContain("absolute inset-x-0 flex flex-col");
     expect(html).toContain("height:100dvh");
-    expect(html).toContain("flex h-full w-full flex-col bg-background");
+
+    // The header belongs inside the pinned box, before the chat: outside it,
+    // it would scroll away the moment the keyboard opens.
+    const pinnedBox = html.indexOf("absolute inset-x-0 flex flex-col");
+    const header = html.indexOf("site-header-marker");
+    expect(header).toBeGreaterThan(pinnedBox);
+    expect(html.indexOf("chat-body-marker")).toBeGreaterThan(header);
+  });
+
+  it("follows the visual viewport once it has been measured", () => {
+    const html = renderToStaticMarkup(
+      <ChatViewport box={{ top: 48, height: 600 }}>
+        <p>chat-body-marker</p>
+      </ChatViewport>
+    );
+
+    expect(html).toContain("top:48px");
+    expect(html).toContain("height:600px");
+    expect(html).not.toContain("height:100dvh");
+  });
+});
+
+describe("ChatScreen", () => {
+  it("fills the surface it is given instead of positioning itself", () => {
+    stubBrowser(true);
+
+    const html = renderWithSession(<ChatScreen onClose={() => undefined} />);
+
+    expect(html).toContain("flex min-h-0 w-full flex-1 flex-col bg-background");
     expect(html).toContain('aria-label="Close chat"');
+    expect(html).not.toContain("fixed inset-0");
   });
 });

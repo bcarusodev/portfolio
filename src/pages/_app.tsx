@@ -12,7 +12,14 @@ import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-/** Routes that own the whole viewport and suppress the site chrome. */
+/**
+ * Routes that own the viewport and render their own chrome.
+ *
+ * `/chat` pins its surface to the visual viewport, so its header has to live
+ * *inside* that surface — an app-level nav left in the document flow would
+ * scroll away as soon as the keyboard opens. The app-level nav and footer are
+ * suppressed here and composed by the page instead.
+ */
 const FULLSCREEN_ROUTES = new Set(["/chat"]);
 
 function MyApp({ Component, pageProps, router }: AppProps) {

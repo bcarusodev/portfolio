@@ -61,7 +61,7 @@ const ChatWidget = ({
       aria-label={labels.title}
       className={cn(
         variant === "fullscreen"
-          ? "flex h-full w-full flex-col bg-background"
+          ? "flex min-h-0 w-full flex-1 flex-col bg-background"
           : "w-full overflow-hidden rounded-2xl border border-border-strong bg-background/70 shadow-lg backdrop-blur-md",
         className
       )}
