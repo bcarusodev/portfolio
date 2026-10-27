@@ -11,10 +11,10 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
   const handleClick = children ? () => setIsOpen(!isOpen) : undefined;
 
   return (
-    <div className="space-y-8 px-2" onClick={handleClick}>
+    <div className="px-2" onClick={handleClick}>
       <Link
         href={href ?? "#"}
-        className="flex py-3 justify-between items-center no-underline hover:no-underline"
+        className="flex py-2 justify-between items-center no-underline hover:no-underline"
       >
         <span
           className={`group inline-flex items-center text-xl relative after:block after:content-[''] after:absolute after:h-[2px] after:mt-8 after:bg-black after:dark:bg-white after:w-full after:transition after:duration-300 after:origin-right ${
@@ -36,7 +36,6 @@ export const MobileNavItem = ({ label, children, href }: NavItem) => {
         className={`overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
-        style={{ marginTop: "0!important" }}
       >
         <div className="mt-2 pl-4 border-l border-gray-200 dark:border-gray-700 flex flex-col items-start">
           {children &&

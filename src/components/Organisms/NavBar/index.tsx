@@ -36,7 +36,7 @@ export default function NavBar() {
               </DrawerTrigger>
               <DrawerContent>
                 <div
-                  className="overflow-auto p-6 space-y-2"
+                  className="overflow-auto p-6 space-y-1"
                   onClick={() => setIsOpen(false)}
                 >
                   {NAV_ITEMS.map(
