@@ -132,6 +132,25 @@ describe("ChatWidget fullscreen shell", () => {
     expect(occurrences(html, INPUT_ID)).toBe(1);
     expect(html).not.toContain(INLINE_SECTION_CLASS);
   });
+
+  it("leads with the dismiss control and keeps the composer at 16px", () => {
+    const html = renderToStaticMarkup(
+      <ChatWidget
+        session={makeSession()}
+        language="en"
+        variant="fullscreen"
+        inputId={INPUT_ID}
+        onClose={() => undefined}
+      />
+    );
+
+    // Reachable edge on a phone: dismiss sits before the title in the header.
+    expect(html.indexOf('aria-label="Close chat"')).toBeLessThan(
+      html.indexOf("<h2")
+    );
+    // WebKit focus-zoom threshold; `md:` would hand tablets a 14px input.
+    expect(html).toContain("text-base lg:text-sm");
+  });
 });
 
 describe("chat session ownership", () => {

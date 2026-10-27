@@ -66,43 +66,41 @@ const ChatWidget = ({
         className
       )}
     >
-      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-border-strong px-4 py-3">
-        <div className="min-w-0">
+      <header className="flex shrink-0 items-center gap-3 border-b border-border-strong px-4 py-3">
+        {/* The dismiss control leads the fullscreen header: on a phone the
+            leading edge is the reachable one, and "back" reads left to right. */}
+        {onClose ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            aria-label={labels.closeChat}
+            title={labels.closeChat}
+            className="h-11 w-11 shrink-0 rounded-xl"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        ) : null}
+        <div className="min-w-0 flex-1">
           <h2 className="truncate text-sm font-semibold">{labels.title}</h2>
           <p className="truncate text-xs text-muted-foreground">
             {labels.subtitle}
           </p>
         </div>
-        {messages.length > 0 || onClose ? (
-          <div className="flex shrink-0 items-center gap-2">
-            {messages.length > 0 ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={newChat}
-                aria-label={labels.newChat}
-                title={labels.newChat}
-                className="h-7 gap-1 px-2 text-xs"
-              >
-                <X className="h-3.5 w-3.5" />
-                {labels.newChat}
-              </Button>
-            ) : null}
-            {onClose ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={onClose}
-                aria-label={labels.closeChat}
-                title={labels.closeChat}
-                className="h-11 w-11 shrink-0 rounded-xl"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            ) : null}
-          </div>
+        {messages.length > 0 ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={newChat}
+            aria-label={labels.newChat}
+            title={labels.newChat}
+            className="h-7 shrink-0 gap-1 px-2 text-xs"
+          >
+            <X className="h-3.5 w-3.5" />
+            {labels.newChat}
+          </Button>
         ) : null}
       </header>
 
