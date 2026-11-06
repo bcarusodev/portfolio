@@ -21,7 +21,7 @@ export default function Hero() {
               brunocaruso
             </BlurFade>
             <BlurFade delay={constants.BLUR_FADE_DELAY * 4}>
-              <span className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-center text-4xl md:text-5xl lg:text-6xl font-bold leading-none tracking-tighter text-transparent">
+              <span className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-r from-teal-600 via-emerald-500 to-emerald-400 bg-clip-text text-center text-4xl md:text-5xl lg:text-6xl font-bold leading-none tracking-tighter text-transparent dark:from-[#5fe6ea] dark:via-[#84eeda] dark:to-[#a7f3d0]">
                 passionate
               </span>
             </BlurFade>

@@ -9,9 +9,15 @@ export function AnimatedBackground() {
       transition={{ duration: 1, ease: "easeInOut" }}
     >
       {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white dark:from-slate-800/50 dark:to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white dark:from-[#0b1113] dark:via-[#08090b] dark:to-[#050607]" />
       {/* Side shadows */}
-      <div className="absolute inset-0 opacity-85 bg-gradient-to-r from-gray-50 via-transparent to-gray-50 dark:from-black/90 dark:via-transparent dark:to-black/100" />
+      <div className="absolute inset-0 opacity-85 bg-gradient-to-r from-gray-50 via-transparent to-gray-50 dark:from-black/70 dark:via-transparent dark:to-black/80" />
+
+      {/* Teal corner glow */}
+      <div className="pointer-events-none absolute inset-0 hidden dark:block">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(110,200,195,0.38),rgba(110,200,195,0.12)_22%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_100%,rgba(110,200,195,0.32),rgba(110,200,195,0.10)_22%,transparent_45%)]" />
+      </div>
 
       {/* Background pattern */}
       <div className="absolute inset-0 overflow-hidden mix-blend-soft-light opacity-90 md:opacity-50 dark:opacity-80">
